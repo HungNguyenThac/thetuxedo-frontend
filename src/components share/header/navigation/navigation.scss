@@ -1,0 +1,16 @@
+.navigation {
+  display: flex;
+}
+
+h1 {
+  background-color: bisque;
+}
+
+.link--navigation {
+  display: inline-block;
+  padding-left: 20px;
+}
+
+.selected {
+  color: red;
+}
