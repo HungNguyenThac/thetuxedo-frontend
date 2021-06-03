@@ -5,6 +5,7 @@ import "./ao.scss";
 import "../../img/ao1.jpg";
 import MinusOutlined from "@ant-design/icons";
 import axios from "axios";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 AoPage.propTypes = {};
 
@@ -41,9 +42,11 @@ function AoPage(props) {
                   </div>
                   <h2 className="tex-h2-shirt">{userao.tenSP}</h2>
                   <span className="span-shirt">{/* <MinusOutlined /> */}</span>
-                  <h3 className="h3-shirt-text">{userao.gia}</h3>
+                  <h3 className="h3-shirt-text">{userao.gia}vnd</h3>
                   <div className="border-shopping">
-                    <p className="p-center">Thêm vào giỏ</p>
+                    <p className="p-center">
+                      <ShoppingCartIcon className="icon-shirt"/>
+                      Thêm vào giỏ</p>
                     <div className="display-block"></div>
                   </div>
                 </div>
