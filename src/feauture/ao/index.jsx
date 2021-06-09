@@ -1,13 +1,15 @@
 import React from "react";
-import PropTypes from "prop-types";
-import "./aosomi.scss";
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import "./ao.scss";
+import "../../img/ao1.jpg";
 import MinusOutlined from "@ant-design/icons";
 import axios from "axios";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-AoSoMi.propTypes = {};
 
-function AoSoMi(props) {
+AoPage.propTypes = {};
+
+function AoPage(props) {
   let [listUserao, setListUserao] = useState([]);
   useEffect(() => {
     async function blocksau() {
@@ -56,4 +58,4 @@ function AoSoMi(props) {
   );
 }
 
-export default AoSoMi;
+export default AoPage;
