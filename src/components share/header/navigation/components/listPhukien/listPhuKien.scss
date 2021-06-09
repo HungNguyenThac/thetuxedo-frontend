@@ -1,0 +1,162 @@
+.menu-phukien {
+  position: absolute;
+  left: -52px;
+  top: 40px;
+  background-color: white;
+  width: 188px;
+  border-radius: 2px;
+  display: none;
+  z-index: 2;
+  will-change: opacity;
+  animation: animation-for-phukien_menu 0.5s linear;
+  &::after {
+    content: "";
+    border: 12px solid;
+    border-color: transparent transparent rgb(255, 255, 255) transparent;
+    position: absolute;
+    left: 86px;
+    top: -18px;
+  }
+  &::before {
+    content: "";
+    height: 12px;
+    width: 188px;
+    position: absolute;
+    top: -12px;
+    display: none;
+  }
+}
+
+@keyframes animation-for-phukien_menu {
+  0% {
+    opacity: 0;
+    left: -52px;
+    top: 62px;
+  }
+  100% {
+    opacity: 1;
+    left: -52px;
+    top: 40px;
+  }
+}
+
+.list-phukien {
+  background-color: rgb(245, 240, 227);
+  margin: 6px 0;
+  width: 188px;
+}
+
+.after:after {
+  content: "";
+  transition: 0.5s all ease;
+  position: absolute;
+  height: 1px;
+  width: 0;
+  background-color: black !important;
+}
+.first:after {
+  left: 0;
+}
+
+.after2:after {
+  content: "";
+  transition: 0.5s all ease;
+  position: absolute;
+  height: 1px;
+  width: 36px;
+  top: 33px;
+  background-color: black !important;
+}
+
+.after3:after {
+  content: "";
+  transition: 0.5s all ease;
+  position: absolute;
+  height: 1px;
+  width: 53px;
+  top: 33px;
+  background-color: black !important;
+}
+
+.after4:after {
+  content: "";
+  transition: 0.5s all ease;
+  position: absolute;
+  height: 1px;
+  width: 53px;
+  top: 33px;
+  background-color: black !important;
+}
+.after5:after {
+  content: "";
+  transition: 0.5s all ease;
+  position: absolute;
+  height: 1px;
+  width: 65px;
+  top: 33px;
+  background-color: black !important;
+}
+.after6:after {
+  content: "";
+  transition: 0.5s all ease;
+  position: absolute;
+  height: 1px;
+  width: 73px;
+  top: 33px;
+  background-color: black !important;
+}
+
+.first2:after {
+  left: 0;
+}
+
+.li-phukien {
+  width: 188px;
+  height: 36px;
+  line-height: 36px;
+  padding-left: 24px;
+  transition: all 0.25s ease-in-out 0.1s;
+  &:hover {
+    color: black;
+    background-color: white;
+
+    & .after::after {
+      width: 100%;
+    }
+  }
+}
+
+.navling-phukien {
+  color: black;
+  position: relative;
+  display: inline-block;
+  width: 164px;
+  &:hover {
+    color: black;
+  }
+}
+
+.name-phukien {
+  width: 100%;
+  color: black;
+  font-size: 1rem;
+  position: relative;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 998px) {
+  .menu-phukien {
+    left: -60px;
+  }
+  @keyframes animation-for-phukien_menu {
+    0% {
+      opacity: 0;
+      left: -60px;
+      top: 62px;
+    }
+    100% {
+      opacity: 1;
+      left: -60px;
+      top: 40px;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+.menu-right_icon {
+  font-size: 1.6rem;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  border-radius: 6px;
+  z-index: 1;
+}
+
+.menu-right {
+  transition: all 0.25s ease-in-out 0.2s;
+  border-radius: 6px;
+}
+.menu-right:hover {
+  .Menu-list,
+  .Menu-list::after {
+    display: block;
+  }
+}

@@ -19,14 +19,18 @@ function Banner(props) {
   const bannerStyle = bannerURL ? { backgroundImage: `url(${bannerURL})` } : {};
 
   return (
-    <Carousel autoplay>
-      <section className="banner4" style={bannerStyle}>
-        <h1 className="banner__title">{title}</h1>
-      </section>
-      <section className="banner3" style={bannerStyle}>
-        <h1 className="banner__title">{title}</h1>
-      </section>
-    </Carousel>
+    <div className="carousel">
+      <Carousel autoplay>
+        <img
+          src="http://thetuxedo.vn/wp-content/uploads/2018/01/BANNER-03.png"
+          alt=""
+        />
+        <img
+          src="http://thetuxedo.vn/wp-content/uploads/2018/01/BANNER-WEB-TU2.png"
+          alt=""
+        />
+      </Carousel>
+    </div>
   );
 }
 

@@ -1,0 +1,19 @@
+.SearchForm2 {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+  border: 2px solid rgb(254, 195, 93);
+  border-radius: 4px;
+  z-index: 1;
+  top: 5px;
+}
+
+.SearchForm2.active {
+  display: block;
+}
+
+hr {
+  border: 1px solid rgb(254, 195, 93);
+}

@@ -1,0 +1,56 @@
+.list--data2 {
+  background-color: white;
+  &__li {
+    width: 100%;
+    padding-left: 8px;
+    display: flex;
+    height: 42px;
+    margin-bottom: 2px;
+    &__img {
+      height: 42px;
+      width: 28px;
+    }
+    &__content {
+      overflow: hidden;
+      height: 42px;
+      width: 352px;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.list--data__li__content2 {
+  width: 94%;
+}
+.list--data2__li {
+  background-color: rgb(245, 240, 227);
+  transition: all 0.25s ease-in-out 0.05s;
+
+  &:hover {
+    background-color: white;
+  }
+}
+.image--search2 {
+  height: 42px;
+  width: 28px;
+  object-fit: cover;
+}
+.content--data__search2 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: justify;
+  text-overflow: ellipsis;
+  height: 42px;
+  line-height: 42px;
+  width: 85%;
+  font-weight: 300;
+  font-size: 0.795rem;
+  margin: 0 8px 0 12px;
+  color: black;
+  text-decoration: none;
+  background-color: rgb(245, 240, 227);
+  transition: all 0.25s ease-in-out 0.05s;
+  &:hover {
+    background-color: white;
+  }
+}
