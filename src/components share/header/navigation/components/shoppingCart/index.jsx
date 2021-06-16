@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./shoppingCart.scss";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { addItemToDetail } from "../../../../../actions/itemDetail";
 CartPopup.propTypes = {
   items: PropTypes.string,
 };
@@ -12,54 +13,130 @@ CartPopup.defaultProps = {
 };
 
 function CartPopup(props) {
-  // const { item } = props;
-  const { imgItem, nameItem, priceItem } = props;
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.itemCart.itemCart);
+  function handleClickSendItemToDetailPage(item) {
+    const itemSelected = addItemToDetail(item);
+    dispatch(itemSelected);
+  }
 
-  // const imgItem = true;
-  // const nameItem =
-  //   "Quần âu cao cấp nhập khẩu chính hãng US cao cấp số 1 việt nam hàng chính hãng cao cấp, mua ngay kẻo lỡ";
-  // const priceItem = "750.000";
-
-  return imgItem && nameItem && priceItem ? (
+  return items.length ? (
     <div className="cart-popup">
       <header className="cart-popup_header">
         <span className="cart-popup_header_title">Sản phẩm đã chọn</span>
       </header>
       <body className="cart-popup_body">
         <ul className="list-item">
-          <li className="item-selected">
-            <Link className="item-selected_link" to="/">
-              <div className="item-selected_left">
-                <img className="item-selected_left_img" src={imgItem} alt="" />
-              </div>
-              <div className="item-selected_right">
-                <span className="item-selected_right_name first after">
-                  {nameItem}
-                </span>
-                <span className="item-selected_right_price">
-                  {priceItem} vnđ
-                </span>
-              </div>
-            </Link>
-          </li>
-          <li className="item-selected">
-            <Link className="item-selected_link" to="/">
-              <div className="item-selected_left">
-                <img className="item-selected_left_img" src={imgItem} alt="" />
-              </div>
-              <div className="item-selected_right">
-                <span className="item-selected_right_name">{nameItem}</span>
-                <span className="item-selected_right_price">
-                  {priceItem} vnđ
-                </span>
-              </div>
-            </Link>
-          </li>
+          {items.map((item) => {
+            // tạo dấu . trong giá tiền
+            let Gia = "";
+            if (item.gia !== undefined) {
+              const stringGia = item.gia.toString();
+              const arrayGia = [];
+              for (let i = 0; i < stringGia.length / 3; i++) {
+                if (stringGia.length - 3 * (i + 1) > 0) {
+                  arrayGia.push(
+                    stringGia.slice(
+                      stringGia.length - 3 * (i + 1),
+                      stringGia.length - 3 * i
+                    )
+                  );
+                } else {
+                  arrayGia.push(stringGia.slice(0, stringGia.length - 3 * i));
+                }
+              }
+              Gia = arrayGia.reverse().join(".");
+            }
+
+            // tạo dấu . trong giảm giá tiền
+            let giamGiaString = "";
+            if (item.giamGia !== undefined) {
+              const stringGiamGia = item.giamGia.toString();
+              const arrayGiamGia = [];
+              for (let i = 0; i < stringGiamGia.length / 3; i++) {
+                if (stringGiamGia.length - 3 * (i + 1) > 0) {
+                  arrayGiamGia.push(
+                    stringGiamGia.slice(
+                      stringGiamGia.length - 3 * (i + 1),
+                      stringGiamGia.length - 3 * i
+                    )
+                  );
+                } else {
+                  arrayGiamGia.push(
+                    stringGiamGia.slice(0, stringGiamGia.length - 3 * i)
+                  );
+                }
+              }
+              giamGiaString = arrayGiamGia.reverse().join(".");
+            }
+            return (
+              <li
+                className="item-selected"
+                onClick={() => handleClickSendItemToDetailPage(item)}
+              >
+                <Link className="item-selected_link" to="/feature/detail">
+                  <div className="item-selected_left">
+                    <img
+                      className="item-selected_left_img"
+                      src={item.anhBia}
+                      alt=""
+                    />
+                  </div>
+                  <div className="item-selected_right">
+                    <span className="item-selected_right_name first after">
+                      {item.tenSP}
+                    </span>
+                    <div className="item-selected_right_bottom">
+                      <span className="item-selected_right_bottom-left">
+                        Số lượng:
+                        <span className="number_item_in_cart">
+                          {item.soLuong}
+                        </span>
+                      </span>
+                      <span className="item-selected_right_bottom-mid">
+                        Size:
+                        <span className="number_item_in_cart">{item.size}</span>
+                      </span>
+                      {item.giamGia ? (
+                        <div className="item-detail-page_price">
+                          <span className="item-detail-page_price-sale">
+                            {giamGiaString}
+                            <span className="price-detail-page">đ</span>
+                          </span>
+                          <div>
+                            <span className="item-detail-page_price-real_sale">
+                              {Gia}
+                              <span className="price-sale">đ</span>
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="item-detail_price-real">
+                          {Gia}
+                          <span className="price">đ</span>
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </body>
+      <footer className="cart-popup_footer">
+        <Link to="/feature/cartPage" className="cart-popup_footer-link-left">
+          <span className="cart-popup_footer-right_title">Xem Giỏ Hàng</span>
+        </Link>
+        <Link to="/" className="cart-popup_footer-link-right">
+          <span className="cart-popup_footer-right_title">
+            Tiến Hành Thanh Toán
+          </span>
+        </Link>
+      </footer>
     </div>
   ) : (
-    <Link className="cart-popup_no_item_link" to="/">
+    <Link className="cart-popup_no_item_link">
       <div className="cart-popup_no_item">
         <div className="No-item-selected"></div>
         <span>Chưa có sản phẩm nào được chọn</span>

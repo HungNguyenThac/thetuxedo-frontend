@@ -2,56 +2,98 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./aosomi.scss";
 import { useEffect, useState } from "react";
-import MinusOutlined from "@ant-design/icons";
 import axios from "axios";
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import RenderAo from "./components/renderAo";
+import BannerAoSoMi from "./components/banner";
+import queryString from "query-string";
 AoSoMi.propTypes = {};
 
 function AoSoMi(props) {
-  let [listUserao, setListUserao] = useState([]);
-  useEffect(() => {
-    async function blocksau() {
-      try {
-        let response = await axios({
-          method: "GET",
-          url: "http://localhost:1337/san-phams",
-        });
-        console.log(response);
+  const [listItem, setListItem] = useState([]);
+  const [totalItem, setTotalItem] = useState(0);
+  const [filters, setFilters] = useState({
+    _limit: 12,
+    _start: 0,
+    gia_gte: 0,
+    _sort: "tenSP:DESC",
+  });
 
-        if (response.status === 200) {
-          setListUserao(response.data);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const pagination = queryString.stringify(filters);
+        let responseItems = await axios({
+          method: "GET",
+          url: `http://localhost:1337/products?phanLoai_containss=aosomi&${pagination}`,
+        });
+        let responseCount = await axios({
+          method: "GET",
+          url: "http://localhost:1337/products/count?phanLoai_contains=quan",
+        });
+        if (responseItems.status === 200) {
+          setListItem(responseItems.data);
+        }
+        if (responseCount.status === 200) {
+          setTotalItem(responseCount.data);
         }
       } catch (error) {
-        // console.log("lỗi")
+        console.log(error);
       }
     }
-    blocksau();
-  }, []);
-  console.log(listUserao, 33);
+    getData();
+  }, [filters]);
+
+  function handlePageChange1(Page) {
+    const newFilters = {
+      ...filters,
+      _start: (Page - 1) * 12,
+    };
+    setFilters(newFilters);
+  }
+
+  function handlePageChange2(newPage) {
+    const newFilters = {
+      ...filters,
+      _start: (newPage - 1) * 12,
+    };
+    setFilters(newFilters);
+  }
+
+  function handleFilter(value) {
+    const arrayFilter = value.split("-");
+    const gtPrice = arrayFilter[0];
+    const ltPrice = arrayFilter[1];
+    let newFilter = {
+      ...filters,
+      _start: 0,
+      gia_gte: gtPrice,
+      gia_lte: ltPrice,
+    };
+    setFilters(newFilter);
+  }
+
+  function handleSort(value) {
+    console.log(value);
+    let newFilter = {
+      ...filters,
+      _start: 0,
+      _sort: value,
+    };
+    setFilters(newFilter);
+  }
+
   return (
-    <div className="dislay-flex">
-      <div className="total">
-        {listUserao.length
-          ? listUserao.map((userao, index) => {
-              return (
-                <div className="border-shirt">
-                  <div className="border-img">
-                    <img src={userao.anhBia} alt="" className="img-shirt" />
-                  </div>
-                  <h2 className="tex-h2-shirt">{userao.tenSP}</h2>
-                  <span className="span-shirt">{/* <MinusOutlined /> */}</span>
-                  <h3 className="h3-shirt-text">{userao.gia}vnd</h3>
-                  <div className="border-shopping">
-                    <p className="p-center">
-                      <ShoppingCartIcon className="icon-shirt"/>
-                      Thêm vào giỏ</p>
-                    <div className="display-block"></div>
-                  </div>
-                </div>
-              );
-            })
-          : null}
-      </div>
+    <div>
+      <BannerAoSoMi />
+      <RenderAo
+        totalItem={totalItem}
+        items={listItem}
+        pagination={filters}
+        onPageChange1={handlePageChange1}
+        onPageChange2={handlePageChange2}
+        onSelectFilter={handleFilter}
+        onSelectSort={handleSort}
+      />
     </div>
   );
 }

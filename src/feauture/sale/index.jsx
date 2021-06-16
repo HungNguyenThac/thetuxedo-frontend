@@ -1,11 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./sale.scss";
 
-SalePage.propTypes = {};
+Sale.propTypes = {};
 
-function SalePage(props) {
-  return <div>ĐÂY LÀ TRANG SALE</div>;
+function Sale(props) {
+  return <div></div>;
 }
 
-export default SalePage;
+export default Sale;

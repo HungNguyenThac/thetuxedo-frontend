@@ -8,24 +8,25 @@
   background-color: white;
   border-radius: 4px;
   display: none;
+  border: 0.5px solid black;
 
   &::after {
     content: "";
-    width: 46px;
-    height: 30px;
+    width: 52px;
+    height: 62px;
+    top: -54px;
     position: absolute;
-    top: -28px;
     right: 0px;
     display: none;
   }
 
   &_header {
-    border-radius: 4px;
     width: 100%;
     height: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 4px;
     background-color: rgb(225, 220, 220);
     &_title {
       font-weight: 300;
@@ -85,7 +86,7 @@
     font-size: 1rem;
     font-weight: 300;
     display: inline-block;
-    margin-left: 12px;
+    margin-left: 18px;
     color: black;
     position: relative;
   }
@@ -111,10 +112,10 @@
   z-index: 2;
   &:after {
     content: "";
-    width: 46px;
-    height: 30px;
+    width: 52px;
+    height: 62px;
+    top: -54px;
     position: absolute;
-    top: -28px;
     right: 0px;
     display: none;
   }
@@ -145,4 +146,68 @@
   background-position: center;
   background-size: cover;
   object-fit: cover;
+}
+
+.item-selected_right_bottom {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  &-left,
+  &-mid {
+    font-size: 1rem;
+    color: black;
+    font-weight: 300;
+  }
+}
+.number_item_in_cart {
+  font-weight: 500;
+  padding-left: 6px;
+}
+
+.cart-popup_footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  background-color: rgb(225, 220, 220);
+  cursor: default;
+}
+
+.cart-popup_footer-link-left,
+.cart-popup_footer-link-right {
+  line-height: 42px;
+  width: 32%;
+  height: 42px;
+  border-radius: 4px;
+  color: black;
+  display: inline-block;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 300;
+  transition: all 0.25s ease-in-out 0s;
+}
+
+.cart-popup_footer-link-left {
+  background-color: black;
+  color: white;
+  &:hover {
+    background-color: rgb(206, 25, 27);
+    color: white;
+  }
+}
+
+.cart-popup_footer-link-right {
+  background-color: rgb(206, 25, 27);
+  color: white;
+  &:hover {
+    background-color: red;
+    color: white;
+  }
+}
+
+.cart-popup_footer-left {
+  width: 100%;
 }

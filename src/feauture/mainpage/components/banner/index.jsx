@@ -3,17 +3,17 @@ import PropTypes from "prop-types";
 import "./banner.scss";
 import { Carousel } from "antd";
 
-Banner.propTypes = {
+BannerMainPage.propTypes = {
   bannerURL: PropTypes.string,
   title: PropTypes.string,
 };
 
-Banner.defaultProps = {
+BannerMainPage.defaultProps = {
   bannerURL: "",
   title: "",
 };
 
-function Banner(props) {
+function BannerMainPage(props) {
   const { bannerURL, title } = props;
 
   const bannerStyle = bannerURL ? { backgroundImage: `url(${bannerURL})` } : {};
@@ -34,4 +34,4 @@ function Banner(props) {
   );
 }
 
-export default Banner;
+export default BannerMainPage;

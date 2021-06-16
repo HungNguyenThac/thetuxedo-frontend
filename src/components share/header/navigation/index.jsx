@@ -163,8 +163,8 @@ function Navigation(props) {
               <li>
                 <NavLink
                   exact
+                  to="/feature/cartPage"
                   className="link__right-icon"
-                  to="/feature/login"
                   activeClassName="first68-4 after68-4"
                 >
                   <span className="gach-chan_right2 first86 after86">
@@ -183,7 +183,7 @@ function Navigation(props) {
                 <NavLink
                   exact
                   className="link__right-icon"
-                  to="/feature/login"
+                  to="/feature/cartPage"
                   activeClassName="first68-4 after68-4"
                 >
                   <span className="gach-chan_right2 first86 after86">

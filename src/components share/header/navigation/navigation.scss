@@ -171,6 +171,7 @@ ul {
   display: inline-block;
   text-decoration: none;
   color: black;
+  align-items: center;
   &:hover {
     color: black;
     .cart-popup_no_item_link,
@@ -178,7 +179,7 @@ ul {
     .cart-popup,
     .cart-popup::after {
       transform-origin: 100% 0%;
-      animation: hiddenShow 0.4s ease-in-out 0s;
+      animation: hiddenShow 0.2s ease-in-out 0s;
       display: block;
     }
   }
@@ -234,7 +235,7 @@ ul {
   background-color: black !important;
 }
 .first68-4:after {
-  left: -10px;
+  left: 248px;
 }
 
 .after99:after {

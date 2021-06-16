@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Route, Switch } from "react-router-dom";
+
 const main = React.lazy(() => import("../../feauture/mainpage"));
 const notFound = React.lazy(() => import("../notFound"));
 const vest = React.lazy(() => import("../../feauture/vestcollection"));
@@ -28,6 +29,9 @@ const thatlung = React.lazy(() => import("../../feauture/phukien/thatlung"));
 const login = React.lazy(() => import("../../feauture/trangdangnhap"));
 const userpage = React.lazy(() => import("../../feauture/trangcanhan"));
 const lienhe = React.lazy(() => import("../../feauture/tranglienhe"));
+const chitiet = React.lazy(() => import("../../feauture/detail"));
+const cartPage = React.lazy(() => import("../../feauture/cartPage"));
+
 RouterApp.propTypes = {};
 
 function RouterApp(props) {
@@ -63,6 +67,8 @@ function RouterApp(props) {
       <Route exact path="/feature/login" component={login} />
       <Route exact path="/feature/userpage" component={userpage} />
       <Route exact path="/feature/connectwithus" component={lienhe} />
+      <Route exact path="/feature/detail" component={chitiet} />
+      <Route exact path="/feature/cartPage" component={cartPage} />
       <Route component={notFound} />
     </Switch>
   );
