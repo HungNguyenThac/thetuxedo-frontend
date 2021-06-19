@@ -4,6 +4,7 @@ import "./shoppingCart.scss";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addItemToDetail } from "../../../../../actions/itemDetail";
+import { themDauChamVaoGiaTien } from "../../../../../shareFunction/numberToString";
 CartPopup.propTypes = {
   items: PropTypes.string,
 };
@@ -31,46 +32,17 @@ function CartPopup(props) {
             // tạo dấu . trong giá tiền
             let Gia = "";
             if (item.gia !== undefined) {
-              const stringGia = item.gia.toString();
-              const arrayGia = [];
-              for (let i = 0; i < stringGia.length / 3; i++) {
-                if (stringGia.length - 3 * (i + 1) > 0) {
-                  arrayGia.push(
-                    stringGia.slice(
-                      stringGia.length - 3 * (i + 1),
-                      stringGia.length - 3 * i
-                    )
-                  );
-                } else {
-                  arrayGia.push(stringGia.slice(0, stringGia.length - 3 * i));
-                }
-              }
-              Gia = arrayGia.reverse().join(".");
+              Gia = themDauChamVaoGiaTien(item.gia);
             }
 
             // tạo dấu . trong giảm giá tiền
             let giamGiaString = "";
             if (item.giamGia !== undefined) {
-              const stringGiamGia = item.giamGia.toString();
-              const arrayGiamGia = [];
-              for (let i = 0; i < stringGiamGia.length / 3; i++) {
-                if (stringGiamGia.length - 3 * (i + 1) > 0) {
-                  arrayGiamGia.push(
-                    stringGiamGia.slice(
-                      stringGiamGia.length - 3 * (i + 1),
-                      stringGiamGia.length - 3 * i
-                    )
-                  );
-                } else {
-                  arrayGiamGia.push(
-                    stringGiamGia.slice(0, stringGiamGia.length - 3 * i)
-                  );
-                }
-              }
-              giamGiaString = arrayGiamGia.reverse().join(".");
+              giamGiaString = themDauChamVaoGiaTien(item.giamGia);
             }
             return (
               <li
+                key={item.id}
                 className="item-selected"
                 onClick={() => handleClickSendItemToDetailPage(item)}
               >
@@ -128,7 +100,7 @@ function CartPopup(props) {
         <Link to="/feature/cartPage" className="cart-popup_footer-link-left">
           <span className="cart-popup_footer-right_title">Xem Giỏ Hàng</span>
         </Link>
-        <Link to="/" className="cart-popup_footer-link-right">
+        <Link to="/feature/payPage" className="cart-popup_footer-link-right">
           <span className="cart-popup_footer-right_title">
             Tiến Hành Thanh Toán
           </span>

@@ -5,6 +5,13 @@ import { Col } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  changeAllItemInCart,
+  DeleteItemInCart,
+} from "../../../../actions/itemCart";
+import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
+import { Link, useHistory } from "react-router-dom";
 
 RenderCartPage.propTypes = {
   itemDetails: PropTypes.object,
@@ -14,9 +21,38 @@ RenderCartPage.defaultProps = {
   itemDetails: {},
 };
 
-function RenderCartPage(props) {
-  const { itemDetails } = props;
+function sumPriceOfTotalItems(list) {
+  let listLength = list.length;
+  var total = 0;
+  for (let i = 0; i < listLength; i++) {
+    total += list[i].giamGia
+      ? list[i].giamGia * list[i].soLuong
+      : list[i].gia * list[i].soLuong;
+  }
+  return total;
+}
 
+function RenderCartPage(props) {
+  const disPatch = useDispatch();
+  const history = useHistory();
+  const { itemDetails } = props;
+  const totalPrice = sumPriceOfTotalItems(itemDetails);
+  const totalPriceString = themDauChamVaoGiaTien(totalPrice);
+  function handleClickToDeleteItem(index) {
+    console.log(index);
+    const itemDelete = DeleteItemInCart(index);
+    console.log(43, itemDetails);
+    disPatch(itemDelete);
+  }
+
+  function handleClickNextToPayPage() {
+    if (itemDetails.length === 0) {
+      let notification = document.querySelector(".notificatrion-In-CartPage");
+      notification.classList.add("active");
+    } else {
+      history.push("/feature/payPage");
+    }
+  }
   return (
     <body className="Body-cart">
       <div className="grid">
@@ -25,244 +61,397 @@ function RenderCartPage(props) {
         </div>
         <hr className="hr-title-page" />
         <div className="danhmuc-tieude">
-          <Col className="danhmuc-tieude-title" xxl={{ span: 8, offset: 4 }}>
+          <Col
+            className="danhmuc-tieude-title"
+            xxl={{ span: 8, offset: 4 }}
+            xl={{ span: 8, offset: 4 }}
+            lg={{ span: 8, offset: 4 }}
+            md={{ span: 9, offset: 2 }}
+            sm={{ span: 10, offset: 2 }}
+          >
             <span>Thông tin chi tiết sản phẩm</span>
           </Col>
-          <Col className="danhmuc-tieude-title" xxl={{ span: 3 }}>
+          <Col
+            className="danhmuc-tieude-title"
+            xxl={3}
+            xl={3}
+            lg={3}
+            md={3}
+            sm={2}
+          >
             <span>Size</span>
           </Col>
-          <Col className="danhmuc-tieude-title" xxl={{ span: 3 }}>
+          <Col
+            className="danhmuc-tieude-title"
+            xxl={3}
+            xl={3}
+            lg={3}
+            md={3}
+            sm={3}
+          >
             <span>Đơn giá</span>
           </Col>
-          <Col className="danhmuc-tieude-title" xxl={{ span: 3 }}>
+          <Col
+            className="danhmuc-tieude-title"
+            xxl={3}
+            xl={3}
+            lg={3}
+            md={3}
+            sm={3}
+          >
             <span>Số lượng</span>
           </Col>
-          <Col className="danhmuc-tieude-title" xxl={{ span: 3 }}>
+          <Col
+            className="danhmuc-tieude-title"
+            xxl={3}
+            xl={3}
+            lg={3}
+            md={4}
+            sm={4}
+          >
             <span>Tổng giá</span>
           </Col>
+        </div>
+        <div className="danhmuc-tieude-576">
+          <span className="danhmuc-tieude-title">
+            Thông tin chi tiết sản phẩm
+          </span>
         </div>
         <hr className="hr-title-page" />
         <ul className="ul-parent_cart-page">
           {itemDetails.map((item, index) => {
-            console.log(47, item, index);
             // tạo dấu . trong giá tiền
             let Gia = "";
             if (item.gia !== undefined) {
-              const stringGia = item.gia.toString();
-              const arrayGia = [];
-              for (let i = 0; i < stringGia.length / 3; i++) {
-                if (stringGia.length - 3 * (i + 1) > 0) {
-                  arrayGia.push(
-                    stringGia.slice(
-                      stringGia.length - 3 * (i + 1),
-                      stringGia.length - 3 * i
-                    )
-                  );
-                } else {
-                  arrayGia.push(stringGia.slice(0, stringGia.length - 3 * i));
-                }
-              }
-              Gia = arrayGia.reverse().join(".");
+              Gia = themDauChamVaoGiaTien(item.gia);
             }
 
-            function cong() {
-              item.soLuong = item.soLuong += 1;
-            }
             // tạo dấu . trong tổng giá tiền
             let tongGia = "";
             if (item.gia !== undefined) {
-              const stringGia = (item.gia * item.soLuong).toString();
-              const arrayGia = [];
-              for (let i = 0; i < stringGia.length / 3; i++) {
-                if (stringGia.length - 3 * (i + 1) > 0) {
-                  arrayGia.push(
-                    stringGia.slice(
-                      stringGia.length - 3 * (i + 1),
-                      stringGia.length - 3 * i
-                    )
-                  );
-                } else {
-                  arrayGia.push(stringGia.slice(0, stringGia.length - 3 * i));
-                }
-              }
-              tongGia = arrayGia.reverse().join(".");
+              tongGia = themDauChamVaoGiaTien(item.gia * item.soLuong);
             }
 
             // tạo dấu . trong giảm giá tiền
             let giamGiaString = "";
             if (item.giamGia !== undefined) {
-              const stringGiamGia = item.giamGia.toString();
-              const arrayGiamGia = [];
-              for (let i = 0; i < stringGiamGia.length / 3; i++) {
-                if (stringGiamGia.length - 3 * (i + 1) > 0) {
-                  arrayGiamGia.push(
-                    stringGiamGia.slice(
-                      stringGiamGia.length - 3 * (i + 1),
-                      stringGiamGia.length - 3 * i
-                    )
-                  );
-                } else {
-                  arrayGiamGia.push(
-                    stringGiamGia.slice(0, stringGiamGia.length - 3 * i)
-                  );
-                }
-              }
-              giamGiaString = arrayGiamGia.reverse().join(".");
+              giamGiaString = themDauChamVaoGiaTien(item.giamGia);
             }
 
             //tạo . trong tông giá tiền đã giảm
             let tongGiamGiaString = "";
             if (item.giamGia !== undefined) {
-              const stringGiamGia = (item.giamGia * item.soLuong).toString();
-              const arrayGiamGia = [];
-              for (let i = 0; i < stringGiamGia.length / 3; i++) {
-                if (stringGiamGia.length - 3 * (i + 1) > 0) {
-                  arrayGiamGia.push(
-                    stringGiamGia.slice(
-                      stringGiamGia.length - 3 * (i + 1),
-                      stringGiamGia.length - 3 * i
-                    )
-                  );
-                } else {
-                  arrayGiamGia.push(
-                    stringGiamGia.slice(0, stringGiamGia.length - 3 * i)
-                  );
-                }
-              }
-              tongGiamGiaString = arrayGiamGia.reverse().join(".");
+              tongGiamGiaString = themDauChamVaoGiaTien(
+                item.giamGia * item.soLuong
+              );
             }
             //thêm dấu . vào phần sub giảm giá
             let numberSale = "";
             if (item.gia && item.giamGia !== undefined) {
               const numberSale1 = item.gia - item.giamGia;
-              const stringGiamGia1 = numberSale1.toString();
-              const arrayGiamGia1 = [];
-              for (let i = 0; i < stringGiamGia1.length / 3; i++) {
-                if (stringGiamGia1.length - 3 * (i + 1) > 0) {
-                  arrayGiamGia1.push(
-                    stringGiamGia1.slice(
-                      stringGiamGia1.length - 3 * (i + 1),
-                      stringGiamGia1.length - 3 * i
-                    )
-                  );
-                } else {
-                  arrayGiamGia1.push(
-                    stringGiamGia1.slice(0, stringGiamGia1.length - 3 * i)
-                  );
-                }
-              }
-              numberSale = arrayGiamGia1.reverse().join(".");
+              numberSale = themDauChamVaoGiaTien(numberSale1);
             }
 
             function handleClickNumberChange(number) {
-              console.log(number);
+              let items = itemDetails.slice();
+              items[number[1]].soLuong = number[0];
+              const listItemsChange = changeAllItemInCart(items);
+              disPatch(listItemsChange);
             }
 
             return (
               <div>
-                <li className="thongtin-sanpham_trongcart" key={item.id}>
-                  <Col className="div-tung-muc-parent" xxl={4}>
-                    <div className="div-tung-muc-children">
-                      <img
-                        className="div-tung-muc-img_img"
-                        src={item.anhBia}
-                        alt="anhbia"
-                      />
-                    </div>
-                  </Col>
-                  <Col xxl={8}>
-                    <div className="div-tung-muc">
-                      <span className="content-of-product">{item.tenSP}</span>
-                    </div>
-                    <div className="div-tung-muc">
-                      {item.giamGia ? (
-                        <span className="sub-text_sale">
-                          (Bạn đã tiết kiệm được {numberSale}
-                          <span className="price">đ</span> trên mỗi sản phẩm)
+                <div className="lonHon-576px">
+                  <li className="thongtin-sanpham_trongcart" key={item.id}>
+                    <Col
+                      className="div-tung-muc-parent"
+                      xxl={4}
+                      xl={4}
+                      lg={4}
+                      md={2}
+                      sm={2}
+                    >
+                      <div className="div-tung-muc-children">
+                        <img
+                          className="div-tung-muc-img_img"
+                          src={item.anhBia}
+                          alt="anhbia"
+                        />
+                      </div>
+                    </Col>
+                    <Col xxl={8} xl={8} lg={8} md={9} sm={10}>
+                      <div className="div-tung-muc">
+                        <span className="content-of-product1">
+                          {item.tenSP}
                         </span>
-                      ) : (
-                        <p className="sub-text_sale">
-                          (Sản phẩm mới ra mắt, chưa áp dụng chính sách giảm
-                          giá)
-                        </p>
-                      )}
-                    </div>
-                  </Col>
-                  <Col xxl={3}>
-                    <div className="div-tung-muc">
-                      <span className="content-of-product">{item.size}</span>
-                    </div>
-                  </Col>
-                  <Col xxl={3}>
-                    <div className="div-tung-muc">
-                      <span>
+                      </div>
+                      <div className="div-tung-muc">
                         {item.giamGia ? (
-                          <div className="item-detail_price">
-                            <span className="item-detail_price-sale">
-                              {giamGiaString}
-                              <span className="price">đ</span>
-                            </span>
-                            <div>
-                              <span className="item-detail_price-real_sale">
-                                {Gia}
-                                <span className="price-sale">đ</span>
-                              </span>
-                            </div>
-                          </div>
+                          <span className="sub-text_sale1">
+                            (Bạn đã tiết kiệm được {numberSale}
+                            <span className="price">đ</span> trên mỗi SP)
+                          </span>
                         ) : (
-                          <p className="item-detail_price-real">
-                            {Gia}
-                            <span className="price">đ</span>
+                          <p className="sub-text_sale1">
+                            (Sản phẩm mới ra mắt, chưa áp dụng chính sách giảm
+                            giá)
                           </p>
                         )}
-                      </span>
-                    </div>
-                  </Col>
-                  <Col xxl={3}>
-                    <div className="div-tung-muc">
-                      <button
-                        disabled={item.soLuong <= 1}
-                        className="button-item-change"
-                        onClick={() => {
-                          handleClickNumberChange(item.soLuong - 1);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faMinus} />
-                      </button>
-                      <span className="number_so-luong">{item.soLuong}</span>
-                      <button
-                        className="button-item-change"
-                        onClick={() => {
-                          handleClickNumberChange(item.soLuong + 1);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faPlus} />
-                      </button>
-                    </div>
-                  </Col>
-                  <Col xxl={3}>
-                    <div className="div-tung-muc">
-                      {item.giamGia ? (
-                        <span className="content-of-product">
-                          {tongGiamGiaString}
-                          <span className="price">đ</span>
+                      </div>
+                    </Col>
+                    <Col xxl={3} xl={3} lg={3} md={3} sm={2}>
+                      <div className="div-tung-muc">
+                        <span className="content-of-product1">{item.size}</span>
+                      </div>
+                    </Col>
+                    <Col xxl={3} xl={3} lg={3} md={3} sm={3}>
+                      <div className="div-tung-muc">
+                        <span>
+                          {item.giamGia ? (
+                            <div className="item-detail_price">
+                              <span className="item-detail_price-sale">
+                                {giamGiaString}
+                                <span className="price">đ</span>
+                              </span>
+                              <div>
+                                <span className="item-detail_price-real_sale">
+                                  {Gia}
+                                  <span className="price-sale">đ</span>
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="item-detail_price-real">
+                              {Gia}
+                              <span className="price">đ</span>
+                            </p>
+                          )}
                         </span>
-                      ) : (
-                        <span className="content-of-product">
-                          {tongGia}
-                          <span className="price">đ</span>
-                        </span>
-                      )}
-                      <span></span>
-                    </div>
-                  </Col>
-                </li>
-                <hr className="hr-title-page" />
+                      </div>
+                    </Col>
+                    <Col xxl={3} xl={3} lg={3} md={3} sm={3}>
+                      <div className="div-tung-muc">
+                        <button
+                          disabled={item.soLuong <= 1}
+                          className="button-item-change1"
+                          onClick={() => {
+                            handleClickNumberChange([item.soLuong - 1, index]);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faMinus} />
+                        </button>
+                        <span className="number_so-luong1">{item.soLuong}</span>
+                        <button
+                          className="button-item-change1"
+                          onClick={() => {
+                            handleClickNumberChange([item.soLuong + 1, index]);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPlus} />
+                        </button>
+                      </div>
+                    </Col>
+                    <Col xxl={3} xl={3} lg={3} md={4} sm={4}>
+                      <div className="div-tung-muc">
+                        {item.giamGia ? (
+                          <div className="price-delete_item">
+                            <span className="content-of-product1 fontsize-1rem">
+                              {tongGiamGiaString}
+                              <span className="price">đ</span>
+                            </span>
+                            <button
+                              onClick={() => handleClickToDeleteItem(index)}
+                              className="click-to-remove-item"
+                            >
+                              Xoá SP
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="price-delete_item">
+                            <span className="content-of-product1 fontsize-1rem">
+                              {tongGia}
+                              <span className="price">đ</span>
+                            </span>
+                            <button
+                              className="click-to-remove-item"
+                              onClick={() => handleClickToDeleteItem(index)}
+                            >
+                              Xoá SP
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </Col>
+                  </li>
+                  <hr className="hr-title-page" />
+                </div>
+                {/* nhỏ hơn 576px */}
+                <div className="nhoHon-576px">
+                  <li className="li-nhoHon-576px" key={item.id}>
+                    <Col xs={8}>
+                      {/* chưa xong */}
+                      <div className="div-tung-muc-parent-576">
+                        <div className="div-tung-muc-children">
+                          <img
+                            className="div-tung-muc-img_img"
+                            src={item.anhBia}
+                            alt="anhbia"
+                          />
+                        </div>
+                      </div>
+                    </Col>
+                    <Col xs={16}>
+                      <div className="div-detail-item-right">
+                        <Col xs={24}>
+                          <div>
+                            <span className="content-of-product1">
+                              {item.tenSP}
+                            </span>
+                          </div>
+                        </Col>
+                        <div className="div-tung-muc">
+                          <span>
+                            {item.giamGia ? (
+                              <div className="item-detail_price">
+                                <span className="item-detail_price-sale">
+                                  Giá: {giamGiaString}
+                                  <span className="price">đ</span>
+                                </span>
+                                <div>
+                                  <span className="item-detail_price-real_sale">
+                                    {Gia}
+                                    <span className="price-sale">đ</span>
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <p className="item-detail_price-real">
+                                Giá :{Gia}
+                                <span className="price">đ</span>
+                              </p>
+                            )}
+                          </span>
+                        </div>
+                        <div className="div-tung-muc">
+                          {item.giamGia ? (
+                            <span className="sub-text_sale1">
+                              (Bạn đã tiết kiệm được {numberSale}
+                              <span className="price">đ</span> trên mỗi SP)
+                            </span>
+                          ) : (
+                            <p className="sub-text_sale1">
+                              (Sản phẩm mới ra mắt, chưa áp dụng chính sách giảm
+                              giá)
+                            </p>
+                          )}
+                        </div>
+                        <div className="div-tung-muc">
+                          <span className="content-of-product1">
+                            Size: {item.size}
+                          </span>
+                        </div>
+                        <div className="div-tung-muc">
+                          Số lượng:
+                          <button
+                            disabled={item.soLuong <= 1}
+                            className="button-item-change1"
+                            onClick={() => {
+                              handleClickNumberChange([
+                                item.soLuong - 1,
+                                index,
+                              ]);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faMinus} />
+                          </button>
+                          <span className="number_so-luong1">
+                            {item.soLuong}
+                          </span>
+                          <button
+                            className="button-item-change1"
+                            onClick={() => {
+                              handleClickNumberChange([
+                                item.soLuong + 1,
+                                index,
+                              ]);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faPlus} />
+                          </button>
+                        </div>
+                        <div className="div-tung-muc">
+                          {item.giamGia ? (
+                            <div className="total-price_remove-item">
+                              <span className="content-of-product1 fontsize-1rem">
+                                Tổng: {tongGiamGiaString}
+                                <span className="price">đ</span>
+                              </span>
+                              <button
+                                className="click-to-remove-item"
+                                onClick={() => handleClickToDeleteItem(index)}
+                              >
+                                Xoá SP
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="total-price_remove-item">
+                              <span className="content-of-product1 fontsize-1rem">
+                                Tổng: {tongGia}
+                                <span className="price">đ</span>
+                              </span>
+                              <button
+                                className="click-to-remove-item"
+                                onClick={() => handleClickToDeleteItem(index)}
+                              >
+                                Xoá SP
+                              </button>
+                            </div>
+                          )}
+                          <span></span>
+                        </div>
+                      </div>
+                    </Col>
+                  </li>
+                  <hr className="hr-title-page" />
+                </div>
               </div>
             );
           })}
         </ul>
         <hr className="hr-title-page" />
+        <footer className="footer-cartPage">
+          <div className="footer-cartPage_top">
+            <span className="footer-cartPage_top-title">Tổng Tiền:</span>
+            <span className="footer-cartPage_top-content">
+              {totalPriceString}
+              <span className="price">đ</span>
+            </span>
+          </div>
+          <div className="footer-cartPage_bottom">
+            <Link to="/feature/vestcollection">
+              <button className="button-add-item-cart">
+                <span className="button-add-item-cart_title">
+                  TIẾP TỤC MUA SẮM
+                </span>
+                <span className="button-add-item-cart_sub">
+                  Thêm nhiều sản phẩm
+                </span>
+              </button>
+            </Link>
+            <button
+              className="button-buy-now"
+              onClick={handleClickNextToPayPage}
+            >
+              <span className="button-buy-now_title">TIẾN HÀNH THANH TOÁN</span>
+              <span className="button-buy-now_sub">Nhận nhiều ưu đãi</span>
+            </button>
+          </div>
+          <div>
+            <span className="notificatrion-In-CartPage">
+              Giỏ hàng trống, vui lòng chọn sản phẩm trước khi Thanh toán
+            </span>
+          </div>
+        </footer>
       </div>
     </body>
   );

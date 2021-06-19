@@ -31,6 +31,7 @@ const userpage = React.lazy(() => import("../../feauture/trangcanhan"));
 const lienhe = React.lazy(() => import("../../feauture/tranglienhe"));
 const chitiet = React.lazy(() => import("../../feauture/detail"));
 const cartPage = React.lazy(() => import("../../feauture/cartPage"));
+const payPage = React.lazy(() => import("../../feauture/thanhToan"));
 
 RouterApp.propTypes = {};
 
@@ -69,6 +70,7 @@ function RouterApp(props) {
       <Route exact path="/feature/connectwithus" component={lienhe} />
       <Route exact path="/feature/detail" component={chitiet} />
       <Route exact path="/feature/cartPage" component={cartPage} />
+      <Route exact path="/feature/payPage" component={payPage} />
       <Route component={notFound} />
     </Switch>
   );

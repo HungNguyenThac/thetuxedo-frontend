@@ -7,6 +7,7 @@ import PaginationHanmade from "../pagination";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItemToDetail } from "../../../../actions/itemDetail";
+import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
 
 RenderAo.propTypes = {
   items: PropTypes.array,
@@ -41,7 +42,6 @@ function RenderAo(props) {
   } = props;
 
   const [idActive, setIdActive] = useState("");
-
   function handlePageChange1(Page) {
     if (onPageChange1) {
       onPageChange1(Page.number);
@@ -150,41 +150,12 @@ function RenderAo(props) {
             <Row gutter={[8, 8]}>
               {items.map((item) => {
                 // tạo dấu . trong giá tiền
-                const stringGia = item.gia.toString();
-                const arrayGia = [];
-                for (let i = 0; i < stringGia.length / 3; i++) {
-                  if (stringGia.length - 3 * (i + 1) > 0) {
-                    arrayGia.push(
-                      stringGia.slice(
-                        stringGia.length - 3 * (i + 1),
-                        stringGia.length - 3 * i
-                      )
-                    );
-                  } else {
-                    arrayGia.push(stringGia.slice(0, stringGia.length - 3 * i));
-                  }
-                }
-                let Gia = arrayGia.reverse().join(".");
+                let Gia = themDauChamVaoGiaTien(item.gia);
+
                 // tạo dấu . trong giảm giá tiền
                 let giamGiaString = "";
                 if (item.giamGia) {
-                  const stringGiamGia = item.giamGia.toString();
-                  const arrayGiamGia = [];
-                  for (let i = 0; i < stringGiamGia.length / 3; i++) {
-                    if (stringGiamGia.length - 3 * (i + 1) > 0) {
-                      arrayGiamGia.push(
-                        stringGiamGia.slice(
-                          stringGiamGia.length - 3 * (i + 1),
-                          stringGiamGia.length - 3 * i
-                        )
-                      );
-                    } else {
-                      arrayGiamGia.push(
-                        stringGiamGia.slice(0, stringGiamGia.length - 3 * i)
-                      );
-                    }
-                  }
-                  giamGiaString = arrayGiamGia.reverse().join(".");
+                  giamGiaString = themDauChamVaoGiaTien(item.giamGia);
                 }
 
                 //tạo % giảm giá

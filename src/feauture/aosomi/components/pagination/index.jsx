@@ -48,12 +48,14 @@ function PaginationHanmade(props) {
     if (onPageChange1) {
       onPageChange1(page);
     }
+    window.scrollTo(0, 0);
   }
 
   function handleClickButtonChangePage(newPage) {
     if (onPageChange2) {
       onPageChange2(newPage);
     }
+    window.scrollTo(0, 0);
   }
   const prevStyle = _page <= 1 ? { display: "none" } : { display: "block" };
   const nextStyle =

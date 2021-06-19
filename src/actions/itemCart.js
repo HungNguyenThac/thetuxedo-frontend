@@ -4,3 +4,24 @@ export const addItemToCart = (item) => {
     payload: item,
   };
 };
+
+export const changeAllItemInCart = (items) => {
+  return {
+    type: "CHANGE_ALL_ITEM_IN_CART",
+    payload: items,
+  };
+};
+
+export const DeleteItemInCart = (index) => {
+  return {
+    type: "DELETE_ITEM_IN_CART",
+    payload: index,
+  };
+};
+
+export const DeleteAllItemAndStorage = (array) => {
+  return {
+    type: "DELETE_ITEM_AND_STORAGE",
+    payload: array,
+  };
+};

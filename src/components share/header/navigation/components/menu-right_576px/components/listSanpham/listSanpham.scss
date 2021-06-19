@@ -1,9 +1,10 @@
 .list-sanpham {
   background-color: white;
-  width: 200px;
+  width: 160px;
   position: absolute;
-  left: -208px;
+  left: -170px;
   border-radius: 3px;
+  border: 0.5px solid black;
   top: -2px;
   display: none;
   will-change: opacity;
@@ -14,7 +15,7 @@
     border: 12px solid;
     border-color: transparent transparent transparent rgb(255, 255, 255);
     position: absolute;
-    left: 193px;
+    left: 153px;
     top: 8px;
   }
 
@@ -27,12 +28,12 @@
 @keyframes animation-for-list-sanpham {
   0% {
     opacity: 0;
-    left: -228px;
+    left: -189px;
     top: 22px;
   }
   100% {
     opacity: 1;
-    left: -208px;
+    left: -170px;
     top: -2px;
   }
 }
@@ -54,16 +55,16 @@
 }
 
 .list-sanpham_item {
-  width: 188px;
-  height: 36px;
+  width: 148px;
+  height: 34px;
   font-weight: 300;
   font-size: 1rem;
-  padding: 4px 20px;
+  padding: 4px 14px;
   cursor: pointer;
   transition: all 0.25s ease-in-out 0s;
 
   &_link {
-    width: 168px;
+    width: 138px;
     display: inline-block;
     color: black;
     &:hover {

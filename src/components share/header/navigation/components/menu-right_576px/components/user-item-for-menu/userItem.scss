@@ -1,13 +1,13 @@
 .user-profile {
   width: 100%;
-  height: 42px;
+  height: 34px;
   display: flex;
   align-items: center;
   flex-direction: row;
   &_left {
     border-radius: 50%;
-    height: 42px;
-    width: 42px;
+    height: 32px;
+    width: 32px;
   }
   &_Name {
     display: inline-block;
@@ -20,7 +20,7 @@
   }
   &_right {
     margin-left: 12px;
-    width: 122px;
+    width: 98px;
     overflow: hidden;
   }
 }
@@ -34,8 +34,8 @@
   background-image: url(../../../../../../../assets/images/logo.JPG);
   background-position: center;
   object-fit: cover;
-  height: 42px;
-  width: 42px;
+  height: 32px;
+  width: 32px;
   background-size: cover;
   border-radius: 50%;
 }
@@ -43,6 +43,14 @@
 .Menu-list_item_link {
   &:hover {
     color: black;
+    .after9:hover:after {
+      width: 100%;
+    }
+  }
+}
+
+.user-profile_Name {
+  &:hover {
     .after9::after {
       width: 100%;
     }

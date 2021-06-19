@@ -14,7 +14,7 @@
     font-weight: 500;
     letter-spacing: 5px;
     font-size: 2rem;
-    width: 100%;
+    width: 97%;
     text-align: center;
   }
 }
@@ -22,5 +22,11 @@
 @media screen and (max-width: 576px) {
   .banner__title1 {
     font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .banner {
+    margin-top: 54px;
   }
 }

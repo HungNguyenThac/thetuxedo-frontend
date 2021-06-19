@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./detailTop.scss";
 import { Col, Row } from "antd";
-import uuid from "uuid/dist/v4";
 import { useState } from "react";
 import "font-awesome/css/font-awesome.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +10,8 @@ import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../../../actions/itemCart";
 import { useEffect } from "react";
+import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
+import { useHistory } from "react-router-dom";
 
 DetailTop.propTypes = {
   itemDetail: PropTypes.object,
@@ -29,7 +30,7 @@ function convertListAnhtoArray(list) {
   let newArray = [];
   for (let i = 0; i < listAnhLength; i++) {
     let object = {
-      id: uuid(),
+      id: i,
       url: list[i],
     };
     newArray.push(object);
@@ -57,6 +58,7 @@ function DetailTop(props) {
   const [numberItemSelected, setNumberItemSelected] = useState(1);
   const [sizeSelected, setSizeSelected] = useState("");
   const dispatch = useDispatch();
+  const history = useHistory();
 
   //tạo list ảnh
   var arrayAnh = [];
@@ -73,63 +75,19 @@ function DetailTop(props) {
   // tạo dấu . trong giá tiền
   let Gia = "";
   if (gia !== undefined) {
-    const stringGia = gia.toString();
-    const arrayGia = [];
-    for (let i = 0; i < stringGia.length / 3; i++) {
-      if (stringGia.length - 3 * (i + 1) > 0) {
-        arrayGia.push(
-          stringGia.slice(
-            stringGia.length - 3 * (i + 1),
-            stringGia.length - 3 * i
-          )
-        );
-      } else {
-        arrayGia.push(stringGia.slice(0, stringGia.length - 3 * i));
-      }
-    }
-    Gia = arrayGia.reverse().join(".");
+    console.log(77, gia);
+    Gia = themDauChamVaoGiaTien(gia);
   }
 
   // tạo dấu . trong giảm giá tiền
   let giamGiaString = "";
   if (giamGia !== undefined) {
-    const stringGiamGia = giamGia.toString();
-    const arrayGiamGia = [];
-    for (let i = 0; i < stringGiamGia.length / 3; i++) {
-      if (stringGiamGia.length - 3 * (i + 1) > 0) {
-        arrayGiamGia.push(
-          stringGiamGia.slice(
-            stringGiamGia.length - 3 * (i + 1),
-            stringGiamGia.length - 3 * i
-          )
-        );
-      } else {
-        arrayGiamGia.push(stringGiamGia.slice(0, stringGiamGia.length - 3 * i));
-      }
-    }
-    giamGiaString = arrayGiamGia.reverse().join(".");
+    giamGiaString = themDauChamVaoGiaTien(giamGia);
   }
   //thêm dấu . vào phần sub giảm giá
   let numberSale = "";
   if (gia && giamGia !== undefined) {
-    const numberSale1 = gia - giamGia;
-    const stringGiamGia1 = numberSale1.toString();
-    const arrayGiamGia1 = [];
-    for (let i = 0; i < stringGiamGia1.length / 3; i++) {
-      if (stringGiamGia1.length - 3 * (i + 1) > 0) {
-        arrayGiamGia1.push(
-          stringGiamGia1.slice(
-            stringGiamGia1.length - 3 * (i + 1),
-            stringGiamGia1.length - 3 * i
-          )
-        );
-      } else {
-        arrayGiamGia1.push(
-          stringGiamGia1.slice(0, stringGiamGia1.length - 3 * i)
-        );
-      }
-    }
-    numberSale = arrayGiamGia1.reverse().join(".");
+    numberSale = themDauChamVaoGiaTien(gia - giamGia);
   }
 
   // chọn số lượng
@@ -142,19 +100,6 @@ function DetailTop(props) {
     element.classList.remove("active");
   }
 
-  function handleClickToSelectSize(size) {
-    setSizeSelected(size.size);
-    RemoveActiveForMissSelectSize();
-    if (activeSize) {
-      activeSize(size);
-    }
-  }
-
-  // let newSize = [];
-  // if (size !== undefined) {
-  //   newSize = size[0];
-  // }
-
   function notificationToSelectSize() {
     let element = document.querySelector(".notification-for-miss-select-size");
     element.classList.add("active");
@@ -164,13 +109,21 @@ function DetailTop(props) {
     element.classList.add("active");
   }
 
+  function handleClickToSelectSize(size) {
+    setSizeSelected(size.size);
+    RemoveActiveForMissSelectSize();
+    if (activeSize) {
+      activeSize(size);
+    }
+  }
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       let element = document.querySelector(
         ".notification-for-add-item-to-cart"
       );
       element.classList.remove("active");
-    }, 4000);
+    }, 3000);
     return () => {
       clearTimeout(timeout);
     };
@@ -183,9 +136,23 @@ function DetailTop(props) {
         size: sizeSelected,
         soLuong: numberItemSelected,
       };
-      const itemToCart = addItemToCart(itemSelected);
+      let itemToCart = addItemToCart(itemSelected);
       notificationAddToCart();
       dispatch(itemToCart);
+    } else {
+      notificationToSelectSize();
+    }
+  }
+  function handleClickToPayNow() {
+    if (sizeSelected.length !== 0) {
+      let itemSelected = {
+        ...itemDetail,
+        size: sizeSelected,
+        soLuong: numberItemSelected,
+      };
+      let itemToCart = addItemToCart(itemSelected);
+      dispatch(itemToCart);
+      history.push("/feature/payPage");
     } else {
       notificationToSelectSize();
     }
@@ -194,12 +161,12 @@ function DetailTop(props) {
   return (
     <div className="body-detail_top">
       <Row gutter={[32, 8]}>
-        <Col xxl={12}>
+        <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
           <Row gutter={[8]}>
             <ul className="ul-listAnh">
               {arrayAnh.map((anh) => {
                 return (
-                  <Col xxl={12}>
+                  <Col xxl={12} xl={12} lg={12} md={12} sm={12} xs={24}>
                     <li key={anh.id} className="detail-img">
                       <img className="detail-img_img" src={anh.url} alt="" />
                     </li>
@@ -209,7 +176,7 @@ function DetailTop(props) {
             </ul>
           </Row>
         </Col>
-        <Col xxl={12}>
+        <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
           <div className="item-detail-page">
             <h1 className="item-detail-page_name">{tenSP}</h1>
             {giamGia ? (
@@ -303,7 +270,7 @@ function DetailTop(props) {
                   Giao hàng tận nơi toàn quốc
                 </span>
               </button>
-              <button className="button-buy-now">
+              <button className="button-buy-now" onClick={handleClickToPayNow}>
                 <span className="button-buy-now_title">MUA NGAY</span>
                 <span className="button-buy-now_sub">
                   Thêm nhiều ưu đãi hấp dẫn

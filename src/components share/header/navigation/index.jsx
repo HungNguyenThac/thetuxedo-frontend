@@ -26,7 +26,6 @@ Navigation.propTypes = {};
 function Navigation(props) {
   const handleClickSearch = () => {
     const search = document.querySelector(".SearchForm");
-    console.log(29, search);
     search.classList.toggle("active");
   };
   return (

@@ -235,7 +235,7 @@ ul {
   background-color: black !important;
 }
 .first68-4:after {
-  left: 248px;
+  right: 0;
 }
 
 .after99:after {
@@ -748,6 +748,9 @@ ul {
   }
 }
 @media only screen and (max-width: 767px) {
+  .navigation__top {
+    display: none;
+  }
   .navigation__bottom--left,
   .navigation__bottom--mid,
   .navigation__bottom--right {

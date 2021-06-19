@@ -24,3 +24,9 @@
     font-size: 1.3rem;
   }
 }
+
+@media screen and (max-width: 769px) {
+  .banner {
+    margin-top: 54px;
+  }
+}

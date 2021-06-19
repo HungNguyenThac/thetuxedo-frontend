@@ -23,24 +23,24 @@
     text-transform: uppercase;
   }
   &_price {
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: black;
     font-weight: 300;
     display: flex;
     align-items: center;
     &-sale {
-      margin-right: 18px;
+      margin-right: 1.2rem;
       font-weight: 500;
     }
     &-real_sale {
       font-style: italic;
       text-decoration-line: line-through;
-      font-size: 0.8rem;
+      font-size: 1rem;
     }
     &-real {
       display: inline-block;
       color: black;
-      font-size: 1rem;
+      font-size: 1.2rem;
       margin-bottom: 0;
     }
   }
@@ -236,4 +236,47 @@
 .soluong {
   font-size: 1.2rem;
   font-weight: 300;
+}
+
+@media screen and (max-width: 1200px) {
+  .body-detail {
+    padding: 0 24px;
+  }
+  .detail--page {
+    margin: 20px 0;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .body-detail {
+    padding: 0 16px;
+  }
+  .detail--page {
+    margin: 12px 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .body-detail {
+    padding: 0 8px;
+  }
+  .detail--page {
+    margin: 8px 0;
+  }
+  .number_so-luong {
+    font-size: 1rem;
+    text-decoration: underline;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .body-detail {
+    padding: 0 4px;
+  }
+  .detail--page {
+    margin: 4px 0;
+  }
+  .button-add-item-cart {
+    margin-left: 0;
+  }
 }
