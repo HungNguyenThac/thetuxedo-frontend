@@ -48,7 +48,7 @@ function PaginationHanmade(props) {
     if (onPageChange1) {
       onPageChange1(page);
     }
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 472);
   }
 
   function handleClickButtonChangePage(newPage) {

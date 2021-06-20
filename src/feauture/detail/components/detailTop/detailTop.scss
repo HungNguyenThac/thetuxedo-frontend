@@ -8,6 +8,7 @@
   flex-wrap: wrap;
 }
 .detail-img {
+  position: relative;
   width: 100%;
   margin-bottom: 6px;
   &_img {
@@ -233,9 +234,25 @@
   }
 }
 
+.padding-none {
+  padding: 0 !important;
+}
+
 .soluong {
   font-size: 1.2rem;
   font-weight: 300;
+}
+
+.img-zoom-lens {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  width: 37.3px;
+  height: 56px;
+  cursor: none;
+}
+.img-zoom-result {
+  border: 1px solid #d4d4d4;
+  width: 100%;
 }
 
 @media screen and (max-width: 1200px) {

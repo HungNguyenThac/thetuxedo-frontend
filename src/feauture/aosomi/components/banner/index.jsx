@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./bannerAoSoMi.scss";
+import banner from "../../../../assets/banner/banner5.png";
 
 BannerAoSoMi.propTypes = {
   backgroundBannerURL: PropTypes.string,
@@ -15,9 +16,7 @@ BannerAoSoMi.defaultProps = {
 function BannerAoSoMi(props) {
   const { backgroundBannerURL, titleBanner } = props;
   const title = titleBanner ? titleBanner : "BST ÁO SƠ MI CAO CẤP";
-  const background = backgroundBannerURL
-    ? backgroundBannerURL
-    : "http://thetuxedo.vn/wp-content/uploads/2018/01/TIM-CUA-HANG.png";
+  const background = backgroundBannerURL ? backgroundBannerURL : banner;
 
   return (
     <div className="banner">

@@ -14,4 +14,12 @@
   color: black;
   font-size: 1rem;
   font-weight: 300;
+  padding: 12px;
+}
+
+@media screen and (max-width: 1200px) {
+  .input__search {
+    height: 2rem;
+    font-size: 0.975rem;
+  }
 }

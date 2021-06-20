@@ -1,11 +1,13 @@
 .list--data2 {
   background-color: white;
+  max-height: 220px;
+  overflow: auto;
   &__li {
     width: 100%;
     padding-left: 8px;
     display: flex;
     height: 42px;
-    margin-bottom: 2px;
+    margin-top: 2px;
     &__img {
       height: 42px;
       width: 28px;
@@ -20,7 +22,7 @@
 }
 
 .list--data__li__content2 {
-  width: 94%;
+  width: 87%;
 }
 .list--data2__li {
   background-color: rgb(245, 240, 227);

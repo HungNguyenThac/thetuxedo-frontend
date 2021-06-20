@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./bannerDetail.scss";
+import banner from "../../../../assets/banner/banner7.png";
 
 BannerDetail.propTypes = {
   backgroundBannerURL: PropTypes.string,
@@ -17,9 +18,7 @@ function BannerDetail(props) {
   const { tenSP } = itemDetail;
 
   const title = tenSP ? tenSP : "BST ÁO SƠ MI CAO CẤP";
-  const background = backgroundBannerURL
-    ? backgroundBannerURL
-    : "http://thetuxedo.vn/wp-content/uploads/2018/01/FOOTER.png";
+  const background = backgroundBannerURL ? backgroundBannerURL : banner;
 
   return (
     <div className="banner">
