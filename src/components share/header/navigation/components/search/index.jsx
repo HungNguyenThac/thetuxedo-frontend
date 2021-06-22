@@ -16,7 +16,8 @@ function Search(props) {
     async function fetchPostList() {
       try {
         const queryString1 = queryString.stringify(filter);
-        const postListURL = `http://localhost:1337/products/search?${queryString1}`;
+        console.log(19, queryString1);
+        const postListURL = `https://thetuxedo.herokuapp.com/products/search?${queryString1}`;
         const response = await fetch(postListURL);
         const postListJSON = await response.json();
         setListItem(postListJSON);

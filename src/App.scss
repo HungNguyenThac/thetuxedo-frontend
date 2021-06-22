@@ -34,4 +34,15 @@
 .suspen-img {
   width: 64px;
   height: 64px;
+  will-change: transform;
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

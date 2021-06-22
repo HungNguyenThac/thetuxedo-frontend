@@ -25,7 +25,7 @@ function ItemDetail(props) {
     async function getItem() {
       try {
         let response = await axios({
-          url: `http://localhost:1337/products/${id}`,
+          url: `https://thetuxedo.herokuapp.com/products/${id}`,
           method: "GET",
         });
 

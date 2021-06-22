@@ -16,7 +16,7 @@ function MainPage(props) {
       try {
         let responseItems = await axios({
           method: "GET",
-          url: "http://localhost:1337/products?phanLoai_containss=Handmade",
+          url: "https://thetuxedo.herokuapp.com/products?phanLoai_containss=Handmade",
         });
         if (responseItems.status === 200) {
           setListItem(responseItems.data);
