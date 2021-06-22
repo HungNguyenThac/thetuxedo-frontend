@@ -6,6 +6,7 @@ import React, { Suspense } from "react";
 import Header from "./components share/header";
 import RouterApp from "./components share/router/routerApp";
 import Footer from "./components share/footer";
+import suspen from "../src/assets/images/suspen.png";
 
 // window.addEventListener("resize", setPaddingBottom);
 // function setPaddingBottom() {
@@ -19,7 +20,15 @@ import Footer from "./components share/footer";
 function App() {
   return (
     <div className="main-shop">
-      <Suspense fallback={<div></div>}>
+      <Suspense
+        fallback={
+          <div className="modal">
+            <div className="modal__overlay">
+              <img className="suspen-img" src={suspen} alt="suspen" />
+            </div>
+          </div>
+        }
+      >
         <Router history={createBrowserHistory()}>
           <Header />
           <RouterApp />

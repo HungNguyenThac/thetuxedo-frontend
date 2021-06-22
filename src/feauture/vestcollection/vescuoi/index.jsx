@@ -5,11 +5,7 @@ import "./vestcuoi.scss";
 VestCuoi.propTypes = {};
 
 function VestCuoi(props) {
-  return (
-    <div>
-      <p>ĐÂY LÀ TRANG VEST CƯỚI</p>
-    </div>
-  );
+  return <div></div>;
 }
 
 export default VestCuoi;
