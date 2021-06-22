@@ -46,6 +46,9 @@
     }
   }
 }
+.item-detail_price-real {
+  font-size: 1.2rem;
+}
 
 .price-detail-page {
   text-decoration-line: underline;
@@ -227,6 +230,8 @@
   justify-content: center;
   align-items: center;
   &_content {
+    margin: 0 28px;
+    text-align: center;
     color: red;
     font-style: italic;
     font-weight: 300;

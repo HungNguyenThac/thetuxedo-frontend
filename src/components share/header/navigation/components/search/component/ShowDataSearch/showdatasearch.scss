@@ -50,7 +50,7 @@
 
 @media screen and (max-width: 1200px) {
   .list--data {
-    height: 302px;
+    max-height: 302px;
   }
   .image--search {
     vertical-align: top;

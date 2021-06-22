@@ -1,9 +1,19 @@
-.carousel {
+.banner-parent {
   margin-top: 112px;
+  margin-bottom: 4px;
+}
+
+.banner {
+  width: 100%;
+  height: 100%;
+  &-img {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 @media screen and (max-width: 768px) {
-  .carousel {
-    margin-top: 96px;
+  .banner-parent {
+    margin-top: 54px;
   }
 }

@@ -254,22 +254,48 @@ function DetailTop(props) {
       <Row gutter={[32, 8]}>
         <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
           <Row gutter={[8]}>
-            <ul className="ul-listAnh">
-              {arrayAnh.map((anh) => {
-                return (
-                  <Col xxl={12} xl={12} lg={12} md={12} sm={12} xs={24}>
-                    <li key={anh.id} className="detail-img">
-                      <img
-                        className="detail-img_img myImage"
-                        src={anh.url}
-                        alt=""
-                        onMouseOver={checkWindowInnerWidth}
-                      />
-                    </li>
-                  </Col>
-                );
-              })}
-            </ul>
+            {arrayAnh.length >= 2 ? (
+              <ul className="ul-listAnh">
+                {arrayAnh.map((anh) => {
+                  return (
+                    <Col xxl={12} xl={12} lg={12} md={12} sm={12} xs={24}>
+                      <li key={anh.id} className="detail-img">
+                        <img
+                          className="detail-img_img myImage"
+                          src={anh.url}
+                          alt=""
+                          onMouseOver={checkWindowInnerWidth}
+                        />
+                      </li>
+                    </Col>
+                  );
+                })}
+              </ul>
+            ) : (
+              <ul className="ul-listAnh">
+                {arrayAnh.map((anh) => {
+                  return (
+                    <Col
+                      xxl={{ span: 12, offset: 6 }}
+                      xl={{ span: 12, offset: 6 }}
+                      lg={{ span: 12, offset: 6 }}
+                      md={{ span: 12, offset: 6 }}
+                      sm={12}
+                      xs={24}
+                    >
+                      <li key={anh.id} className="detail-img">
+                        <img
+                          className="detail-img_img myImage"
+                          src={anh.url}
+                          alt=""
+                          onMouseOver={checkWindowInnerWidth}
+                        />
+                      </li>
+                    </Col>
+                  );
+                })}
+              </ul>
+            )}
           </Row>
         </Col>
         <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
@@ -290,10 +316,10 @@ function DetailTop(props) {
                   </div>
                 </div>
               ) : (
-                <p className="item-detail_price-real">
+                <span className="item-detail_price-real">
                   {Gia}
                   <span className="price">đ</span>
-                </p>
+                </span>
               )}
               {giamGia ? (
                 <span className="sub-text_sale">

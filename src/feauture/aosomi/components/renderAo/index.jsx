@@ -95,7 +95,7 @@ function RenderAo(props) {
                 id=""
                 onChange={handleSelectFilter}
               >
-                <option selected value="1">
+                <option defaultValue value="1">
                   Tất Cả
                 </option>
                 <option value="0-500000">Nhỏ hơn 500.000đ</option>
@@ -133,7 +133,7 @@ function RenderAo(props) {
                 onChange={handleSelectSort}
               >
                 <option value="gia:ASC">Sản Phẩm Bán Chạy</option>
-                <option selected value="tenSP:DESC">
+                <option defaultValue value="tenSP:DESC">
                   Theo Bảng Chữ Cái Từ A-Z
                 </option>
                 <option value="tenSP:ASC">Theo Bảng Chữ Cái Từ Z-A</option>
@@ -164,7 +164,7 @@ function RenderAo(props) {
 
                 return (
                   <Col xxl={8} xl={8} lg={8} md={8} sm={12} xs={24}>
-                    <li className="item" key={item._id}>
+                    <li className="item" key={item.id}>
                       <Link
                         className="item-link"
                         to="/feature/detail"

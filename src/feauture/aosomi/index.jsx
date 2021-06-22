@@ -28,7 +28,7 @@ function AoSoMi(props) {
         });
         let responseCount = await axios({
           method: "GET",
-          url: "http://localhost:1337/products/count?phanLoai_contains=quan",
+          url: "http://localhost:1337/products/count?phanLoai_contains=aosomi",
         });
         if (responseItems.status === 200) {
           setListItem(responseItems.data);
@@ -73,7 +73,6 @@ function AoSoMi(props) {
   }
 
   function handleSort(value) {
-    console.log(value);
     let newFilter = {
       ...filters,
       _start: 0,
@@ -83,7 +82,7 @@ function AoSoMi(props) {
   }
 
   return (
-    <div>
+    <div className="container">
       <BannerAoSoMi />
       <RenderAo
         totalItem={totalItem}

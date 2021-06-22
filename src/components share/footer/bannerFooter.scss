@@ -1,0 +1,130 @@
+.footer {
+  position: absolute;
+  bottom: -12px;
+  transform: translate(0, 100%);
+}
+
+.banner-footer {
+  position: relative;
+  bottom: 0;
+  &_img {
+    width: 100%;
+  }
+}
+.footer-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #f2b72e;
+}
+
+.footer-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8px;
+}
+.footer-logo_bottom {
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  font-size: 1.2vw;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out 0s;
+  & span &:hover {
+    transform: translate(18px, 0);
+  }
+}
+
+.flex-direaction-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.footer-icon {
+  margin: 0 6px;
+  cursor: pointer;
+  color: #f2b72e;
+}
+.footer-marginTop {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-title {
+  color: #f2b72e;
+  font-size: 1.6vw;
+}
+.footer-block-link {
+  display: flex;
+  flex-direction: column;
+}
+.footer-logo-contents {
+  font-family: "Times New Roman";
+  font-size: 2.5vw;
+  font-weight: 700;
+  animation: color-change 1.6999s linear alternate infinite;
+}
+
+.footer-title-content {
+  position: relative;
+  font-size: 1.2vw;
+  margin: 4px 0 4px 0;
+  display: inline;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 300;
+  transition: all 0.4s ease-in-out 0s;
+  color: #f2b72e;
+  &:hover {
+    transform: translate(16px, 0);
+  }
+}
+
+.just-tificontent-center {
+  display: flex;
+  margin-top: 12px;
+}
+
+@keyframes color-change {
+  0% {
+    color: #f2b72e;
+  }
+  100% {
+    color: black;
+  }
+}
+@media screen and (max-width: 768px) {
+  .display-flex-row {
+    display: flex;
+  }
+
+  .footer-logo_bottom {
+    margin-top: 6px;
+    & span {
+      display: none;
+    }
+  }
+}
+@media screen and (max-width: 576px) {
+  .footer-display-none {
+    display: none;
+  }
+
+  .footer-title {
+    font-size: 1rem !important;
+  }
+
+  .footer-logo-contents {
+    font-size: 1.4rem;
+  }
+}

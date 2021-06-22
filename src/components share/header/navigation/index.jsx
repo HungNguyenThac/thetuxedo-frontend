@@ -7,6 +7,7 @@ import { NavLink } from "react-router-dom";
 import "font-awesome/css/font-awesome.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "font-awesome/css/font-awesome.min.css";
+import logo from "../../../assets/logo/logo.png";
 import {
   faEnvelope,
   faSearch,
@@ -37,17 +38,9 @@ function Navigation(props) {
             <div className="navigation__bottom--left">
               <NavLink className="logo__title" exact to="/" activeClassName="">
                 <div className="logo-shop">
-                  <img
-                    className="logo--img"
-                    src="https://i.imgur.com/iTIwckh.png"
-                    alt=""
-                  />
+                  <img className="logo--img" src={logo} alt="" />
                   <span className="logo--contents">THE TUXEDO</span>
-                  <img
-                    className="logo--img"
-                    src="https://i.imgur.com/iTIwckh.png"
-                    alt=""
-                  />
+                  <img className="logo--img" src={logo} alt="" />
                 </div>
               </NavLink>
             </div>

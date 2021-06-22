@@ -11,7 +11,6 @@ function Search(props) {
   const [listItem, setListItem] = useState([]);
 
   const [filter, setFilter] = useState("");
-  console.log(14, filter);
 
   useEffect(() => {
     async function fetchPostList() {

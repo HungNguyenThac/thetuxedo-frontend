@@ -6,11 +6,7 @@ import "./header.scss";
 Header.propTypes = {};
 
 function Header(props) {
-  return (
-    <div className="header">
-      <Navigation />
-    </div>
-  );
+  return <Navigation />;
 }
 
 export default Header;
