@@ -15,7 +15,6 @@ ListDataSearch.defaultProps = {
 
 function ListDataSearch(props) {
   const { items } = props;
-  console.log(18, items);
   const dispatch = useDispatch();
   function handleClickAddItemToCart(item) {
     let itemDispatch = addItemToDetail(item);
