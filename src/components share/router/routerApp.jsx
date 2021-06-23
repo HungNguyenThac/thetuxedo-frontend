@@ -5,15 +5,9 @@ import { Route, Switch } from "react-router-dom";
 const main = React.lazy(() => import("../../feauture/mainpage"));
 const notFound = React.lazy(() => import("../notFound"));
 const vest = React.lazy(() => import("../../feauture/vestcollection"));
-const vestcuoi = React.lazy(() =>
-  import("../../feauture/vestcollection/vescuoi")
-);
-const vestcongso = React.lazy(() =>
-  import("../../feauture/vestcollection/vestcongso")
-);
-const vestdahoi = React.lazy(() =>
-  import("../../feauture/vestcollection/vestdahoi")
-);
+const vestcuoi = React.lazy(() => import("../../feauture/vestCuoi"));
+const vestcongso = React.lazy(() => import("../../feauture/vestCongSo"));
+const vestdahoi = React.lazy(() => import("../../feauture/vestDaHoi"));
 const aosomi = React.lazy(() => import("../../feauture/aosomi"));
 const giay = React.lazy(() => import("../../feauture/giay"));
 const quan = React.lazy(() => import("../../feauture/quan"));
@@ -47,13 +41,13 @@ function RouterApp(props) {
       />
       <Route
         exact
-        path="/feature/vestcollection/vestdahoi"
-        component={vestdahoi}
+        path="/feature/vestcollection/vestcongso"
+        component={vestcongso}
       />
       <Route
         exact
-        path="/feature/vestcollection/vestcongso"
-        component={vestcongso}
+        path="/feature/vestcollection/vestdahoi"
+        component={vestdahoi}
       />
       <Route exact path="/feature/aosomi" component={aosomi} />
       <Route exact path="/feature/giaytay" component={giay} />

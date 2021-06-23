@@ -4,29 +4,38 @@ import "./giayTay.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import queryString from "query-string";
-import RenderGiayTay from "./components/renderGiayTay";
 import BannerGiayTay from "./components/banner";
+import RenderGiayTay from "./components/renderGiayTay";
+
 GiayTay.propTypes = {};
 
 function GiayTay(props) {
   const [listItem, setListItem] = useState([]);
+  const [totalItem, setTotalItem] = useState(0);
   const [filters, setFilters] = useState({
     _limit: 12,
     _start: 0,
     gia_gte: 0,
-    _sort: "name:DESC",
+    _sort: "tenSP:DESC",
   });
+
   useEffect(() => {
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
-        let response = await axios({
+        let responseItems = await axios({
           method: "GET",
-          url: `http://localhost:1337/products?phanLoai_containss=giaytay&${pagination}`,
+          url: `https://thetuxedo.herokuapp.com/products?phanLoai_containss=giaytay&${pagination}`,
         });
-        console.log(response);
-        if (response.status === 200) {
-          setListItem(response.data);
+        let responseCount = await axios({
+          method: "GET",
+          url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=giaytay",
+        });
+        if (responseItems.status === 200) {
+          setListItem(responseItems.data);
+        }
+        if (responseCount.status === 200) {
+          setTotalItem(responseCount.data);
         }
       } catch (error) {
         console.log(error);
@@ -38,7 +47,7 @@ function GiayTay(props) {
   function handlePageChange1(Page) {
     const newFilters = {
       ...filters,
-      _start: (Page - 1) * 9,
+      _start: (Page - 1) * 12,
     };
     setFilters(newFilters);
   }
@@ -46,7 +55,7 @@ function GiayTay(props) {
   function handlePageChange2(newPage) {
     const newFilters = {
       ...filters,
-      _start: (newPage - 1) * 9,
+      _start: (newPage - 1) * 12,
     };
     setFilters(newFilters);
   }
@@ -65,7 +74,6 @@ function GiayTay(props) {
   }
 
   function handleSort(value) {
-    console.log(value);
     let newFilter = {
       ...filters,
       _start: 0,
@@ -75,9 +83,10 @@ function GiayTay(props) {
   }
 
   return (
-    <div>
+    <div className="container">
       <BannerGiayTay />
       <RenderGiayTay
+        totalItem={totalItem}
         items={listItem}
         pagination={filters}
         onPageChange1={handlePageChange1}

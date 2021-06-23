@@ -44,7 +44,6 @@ const ListItemStar = (props) => {
     lazyLoad: true,
     autoplaySpeed: 2500,
     pauseOnHover: false,
-    centerPadding: 30,
     responsive: [
       {
         breakpoint: 992,
@@ -70,6 +69,9 @@ const ListItemStar = (props) => {
   };
   return (
     <ul className="carousel-mainPage">
+      <div className="carousel-title">
+        <h3 >SẢN PHẨM HANDMADE</h3>
+      </div>
       <Slider ref={ref} {...settings}>
         {listItem.map((item) => {
           // tạo dấu . trong giá tiền

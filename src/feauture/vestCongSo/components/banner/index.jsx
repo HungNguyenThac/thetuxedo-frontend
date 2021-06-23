@@ -1,21 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./bannerGiayTay.scss";
+import "./bannerVestCongSo.scss";
 import banner from "../../../../assets/banner/banner5.png";
 
-BannerGiayTay.propTypes = {
+BannerVestCongSo.propTypes = {
   backgroundBannerURL: PropTypes.string,
   titleBanner: PropTypes.string,
 };
 
-BannerGiayTay.defaultProps = {
+BannerVestCongSo.defaultProps = {
   backgroundBannerURL: "",
   titleBanner: "",
 };
 
-function BannerGiayTay(props) {
+function BannerVestCongSo(props) {
   const { backgroundBannerURL, titleBanner } = props;
-  const title = titleBanner ? titleBanner : "BST GIÀY TÂY CAO CẤP";
+  const title = titleBanner ? titleBanner : "BST VEST CÔNG SỞ CAO CẤP";
   const background = backgroundBannerURL ? backgroundBannerURL : banner;
 
   return (
@@ -26,4 +26,4 @@ function BannerGiayTay(props) {
   );
 }
 
-export default BannerGiayTay;
+export default BannerVestCongSo;

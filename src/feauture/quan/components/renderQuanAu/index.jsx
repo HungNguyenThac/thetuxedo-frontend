@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import { Col, Row } from "antd";
 import PaginationHanmade from "../pagination";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addItemToDetail } from "../../../../actions/itemDetail";
+import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
 
 RenderQuanAu.propTypes = {
   items: PropTypes.array,
@@ -13,6 +16,7 @@ RenderQuanAu.propTypes = {
   onPageChange2: PropTypes.func,
   onSelectFilter: PropTypes.func,
   onSelectSort: PropTypes.func,
+  totalItem: PropTypes.number,
 };
 
 RenderQuanAu.defaultProps = {
@@ -22,9 +26,11 @@ RenderQuanAu.defaultProps = {
   onPageChange2: null,
   onSelectFilter: null,
   onSelectSort: null,
+  totalItem: null,
 };
 
 function RenderQuanAu(props) {
+  const dispatch = useDispatch();
   const {
     items,
     pagination,
@@ -32,6 +38,7 @@ function RenderQuanAu(props) {
     onSelectSort,
     onPageChange1,
     onPageChange2,
+    totalItem,
   } = props;
 
   const [idActive, setIdActive] = useState("");
@@ -41,6 +48,7 @@ function RenderQuanAu(props) {
     }
     setIdActive(Page.id);
   }
+
   function handlePageChange2(newPage) {
     if (onPageChange2) {
       onPageChange2(newPage);
@@ -61,6 +69,10 @@ function RenderQuanAu(props) {
     }
   }
 
+  function handleClickSendItem(item) {
+    const action = addItemToDetail(item);
+    dispatch(action);
+  }
   return (
     <body className="Body">
       <div className="grid">
@@ -83,7 +95,7 @@ function RenderQuanAu(props) {
                 id=""
                 onChange={handleSelectFilter}
               >
-                <option selected value="1">
+                <option defaultValue value="1">
                   Tất Cả
                 </option>
                 <option value="0-500000">Nhỏ hơn 500.000đ</option>
@@ -121,7 +133,7 @@ function RenderQuanAu(props) {
                 onChange={handleSelectSort}
               >
                 <option value="gia:ASC">Sản Phẩm Bán Chạy</option>
-                <option selected value="tenSP:DESC">
+                <option defaultValue value="tenSP:DESC">
                   Theo Bảng Chữ Cái Từ A-Z
                 </option>
                 <option value="tenSP:ASC">Theo Bảng Chữ Cái Từ Z-A</option>
@@ -138,41 +150,12 @@ function RenderQuanAu(props) {
             <Row gutter={[8, 8]}>
               {items.map((item) => {
                 // tạo dấu . trong giá tiền
-                const stringGia = item.gia.toString();
-                const arrayGia = [];
-                for (let i = 0; i < stringGia.length / 3; i++) {
-                  if (stringGia.length - 3 * (i + 1) > 0) {
-                    arrayGia.push(
-                      stringGia.slice(
-                        stringGia.length - 3 * (i + 1),
-                        stringGia.length - 3 * i
-                      )
-                    );
-                  } else {
-                    arrayGia.push(stringGia.slice(0, stringGia.length - 3 * i));
-                  }
-                }
-                let Gia = arrayGia.reverse().join(".");
+                let Gia = themDauChamVaoGiaTien(item.gia);
+
                 // tạo dấu . trong giảm giá tiền
                 let giamGiaString = "";
                 if (item.giamGia) {
-                  const stringGiamGia = item.giamGia.toString();
-                  const arrayGiamGia = [];
-                  for (let i = 0; i < stringGiamGia.length / 3; i++) {
-                    if (stringGiamGia.length - 3 * (i + 1) > 0) {
-                      arrayGiamGia.push(
-                        stringGiamGia.slice(
-                          stringGiamGia.length - 3 * (i + 1),
-                          stringGiamGia.length - 3 * i
-                        )
-                      );
-                    } else {
-                      arrayGiamGia.push(
-                        stringGiamGia.slice(0, stringGiamGia.length - 3 * i)
-                      );
-                    }
-                  }
-                  giamGiaString = arrayGiamGia.reverse().join(".");
+                  giamGiaString = themDauChamVaoGiaTien(item.giamGia);
                 }
 
                 //tạo % giảm giá
@@ -181,8 +164,12 @@ function RenderQuanAu(props) {
 
                 return (
                   <Col xxl={8} xl={8} lg={8} md={8} sm={12} xs={24}>
-                    <li className="item" key={item._id}>
-                      <Link className="item-link" to="/feature/detail">
+                    <li className="item" key={item.id}>
+                      <Link
+                        className="item-link"
+                        to="/feature/detail"
+                        onClick={() => handleClickSendItem(item)}
+                      >
                         <div className="item-main">
                           <div className="item-main_div-img">
                             <img
@@ -239,6 +226,7 @@ function RenderQuanAu(props) {
             onPageChange2={handlePageChange2}
             activeID={idActive}
             pagination={pagination}
+            totalItem={totalItem}
           />
         </div>
       </div>

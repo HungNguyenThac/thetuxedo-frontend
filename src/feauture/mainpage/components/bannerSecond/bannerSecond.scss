@@ -46,20 +46,6 @@
   }
 }
 
-.after:after {
-  content: "";
-  transition: 0.5s all ease;
-  position: absolute;
-  bottom: -0.25em;
-  height: 1px;
-  width: 0;
-  background-color: black !important;
-  left: 0;
-}
-.after:hover:after {
-  width: 100%;
-}
-
 @media screen and (min-width: 768px) {
   .nho-hon-576 {
     display: none;

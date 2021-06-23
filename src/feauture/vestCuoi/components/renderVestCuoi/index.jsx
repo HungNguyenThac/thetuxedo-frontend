@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./renderGiayTay.scss";
+import "./renderVestCuoi.scss";
 import { Link } from "react-router-dom";
 import { Col, Row } from "antd";
 import PaginationHanmade from "../pagination";
@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { addItemToDetail } from "../../../../actions/itemDetail";
 import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
 
-RenderGiayTay.propTypes = {
+RenderVestCuoi.propTypes = {
   items: PropTypes.array,
   pagination: PropTypes.object,
   onPageChange1: PropTypes.func,
@@ -19,7 +19,7 @@ RenderGiayTay.propTypes = {
   totalItem: PropTypes.number,
 };
 
-RenderGiayTay.defaultProps = {
+RenderVestCuoi.defaultProps = {
   items: [],
   pagination: {},
   onPageChange1: null,
@@ -29,7 +29,7 @@ RenderGiayTay.defaultProps = {
   totalItem: null,
 };
 
-function RenderGiayTay(props) {
+function RenderVestCuoi(props) {
   const dispatch = useDispatch();
   const {
     items,
@@ -234,4 +234,4 @@ function RenderGiayTay(props) {
   );
 }
 
-export default RenderGiayTay;
+export default RenderVestCuoi;

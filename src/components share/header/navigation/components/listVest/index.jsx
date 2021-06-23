@@ -11,6 +11,15 @@ function ListVest(props) {
       <div className="vest--list">
         <li className="li--vest">
           <NavLink
+            className="navling-vest"
+            to="/feature/vestcollection/vestcuoi"
+            activeClassName="first2 after9"
+          >
+            <span className="name-item_vest first after">Vest Trăm Năm</span>
+          </NavLink>
+        </li>
+        <li className="li--vest">
+          <NavLink
             className="navling-vest "
             to="/feature/vestcollection/vestdahoi"
             activeClassName="first2 after7"
@@ -25,15 +34,6 @@ function ListVest(props) {
             activeClassName="first2 after8"
           >
             <span className="name-item_vest first after">Vest Công Sở</span>
-          </NavLink>
-        </li>
-        <li className="li--vest">
-          <NavLink
-            className="navling-vest"
-            to="/feature/vestcollection/vestcuoi"
-            activeClassName="first2 after9"
-          >
-            <span className="name-item_vest first after">Vest Trăm Năm</span>
           </NavLink>
         </li>
       </div>

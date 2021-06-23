@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./quanAu.scss";
+import "./vestDaHoi.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import RenderQuanAu from "./components/renderQuanAu";
-import BannerQuanAu from "./components/banner";
+import RenderAo from "./components/renderVestDaHoi";
+import BannerAoSoMi from "./components/banner";
 import queryString from "query-string";
-AoSoMi.propTypes = {};
+VestDaHoi.propTypes = {};
 
-function AoSoMi(props) {
+function VestDaHoi(props) {
   const [listItem, setListItem] = useState([]);
   const [totalItem, setTotalItem] = useState(0);
   const [filters, setFilters] = useState({
@@ -24,11 +24,11 @@ function AoSoMi(props) {
         const pagination = queryString.stringify(filters);
         let responseItems = await axios({
           method: "GET",
-          url: `https://thetuxedo.herokuapp.com/products?phanLoai_containss=quanau&${pagination}`,
+          url: `https://thetuxedo.herokuapp.com/products?phanLoai_containss=vestdahoi&${pagination}`,
         });
         let responseCount = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=quanau",
+          url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=vestdahoi",
         });
         if (responseItems.status === 200) {
           setListItem(responseItems.data);
@@ -83,8 +83,8 @@ function AoSoMi(props) {
 
   return (
     <div className="container">
-      <BannerQuanAu />
-      <RenderQuanAu
+      <BannerAoSoMi />
+      <RenderAo
         totalItem={totalItem}
         items={listItem}
         pagination={filters}
@@ -97,4 +97,4 @@ function AoSoMi(props) {
   );
 }
 
-export default AoSoMi;
+export default VestDaHoi;

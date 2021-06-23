@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import "./mainpage.scss";
 import BannerMainPage from "./components/banner";
 import BannerSecond from "./components/bannerSecond";

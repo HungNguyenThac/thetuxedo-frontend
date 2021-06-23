@@ -21,6 +21,12 @@
 
 @media screen and (max-width: 576px) {
   .banner__title {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .banner {
+    margin-top: 54px;
   }
 }
