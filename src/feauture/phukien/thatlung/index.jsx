@@ -1,6 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-import "./thatLung.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import queryString from "query-string";
@@ -8,7 +6,6 @@ import RenderThatLung from "./components/renderThatLung";
 import BannerThatLung from "./components/banner/index";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../../../actions/loading";
-ThatLung.propTypes = {};
 
 function ThatLung(props) {
   const dispatch = useDispatch();
