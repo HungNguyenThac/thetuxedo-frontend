@@ -26,49 +26,15 @@
 }
 
 .user-profile_avt {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-
-  background-image: url(../../../../../../../assets/images/logo.JPG);
-  background-position: center;
-  object-fit: cover;
   height: 32px;
   width: 32px;
   background-size: cover;
   border-radius: 50%;
 }
-
-.Menu-list_item_link {
-  &:hover {
-    color: black;
-    .after9:hover:after {
-      width: 100%;
-    }
-  }
+.mini-icon-user-not-login {
+  font-size: 2rem;
 }
 
-.user-profile_Name {
-  &:hover {
-    .after9::after {
-      width: 100%;
-    }
-  }
-}
-
-.after9:after {
-  content: "";
-  transition: 0.5s all ease;
-  position: absolute;
-  bottom: -0.25em;
-  height: 1px;
-  width: 0;
-  background-color: black !important;
-}
-.first9:after {
-  left: 0;
-}
-.after9:hover:after {
-  width: 100%;
+.Menu-list_item_content {
+  margin-left: 24px;
 }

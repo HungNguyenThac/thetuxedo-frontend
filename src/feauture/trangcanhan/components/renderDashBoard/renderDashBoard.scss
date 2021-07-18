@@ -1,0 +1,419 @@
+.Body-dashboard {
+  padding: 192px 0 192px 0;
+  background-color: rgb(245, 245, 245);
+  width: 100%;
+  position: relative;
+}
+.grid-dashboard {
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  background-color: rgb(245, 245, 245);
+  list-style: none;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow: hidden;
+}
+
+.grid-dashboard-Row {
+  margin: 0 !important;
+}
+
+//dashboard left
+.dashboard-left {
+  user-select: none;
+  background-color: rgb(255, 255, 0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-userName {
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+}
+.avatar {
+  max-width: 64px;
+  max-height: 64px;
+  &-img {
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 0.5px solid black;
+  }
+}
+
+.block-userName {
+  margin-left: 12px;
+}
+
+.userName-dashboard {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 122px;
+  font-size: 1.2rem;
+}
+
+.feature-userName {
+  margin-top: 40px;
+  cursor: pointer;
+}
+
+.profile-userName {
+  position: relative;
+}
+
+.profile-title {
+  font-size: 1.2rem;
+  margin-left: 12px;
+  transition: all 0.17s ease-in-out 0s;
+  &:hover {
+    color: rgb(255, 132, 0);
+  }
+}
+
+.profile-title.active {
+  color: rgb(255, 132, 0);
+}
+
+.btn-logout {
+  font-size: 1.2rem;
+  margin-left: 12px;
+  transition: all 0.17s ease-in-out 0s;
+  &:hover {
+    color: white;
+  }
+}
+
+.profile-title-icon {
+  font-size: 1.6rem;
+}
+
+.block-user-Bills,
+.block-notification-user,
+.block-history-pay,
+.block-logout {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.block-logout {
+  margin: 144px 0 16px 0;
+}
+
+.logout-profile {
+  transform: rotate(180deg);
+}
+
+.block-profile-userName {
+  &:hover span {
+    color: rgb(255, 132, 0);
+  }
+}
+
+.option-profile {
+  margin-left: 36px;
+  margin-top: 12px;
+  display: block;
+}
+
+.option-file {
+  display: inline-block;
+  width: 120px;
+  margin: 8px 0;
+  font-weight: 300;
+  font-size: 1rem;
+  transition: all 0.17s ease-in-out 0s;
+  &:hover {
+    color: rgb(255, 132, 0);
+  }
+}
+
+.option-file.active {
+  color: rgb(255, 132, 0);
+}
+
+.btn-logout {
+  height: 32px;
+  width: 68px;
+  border-radius: 6px;
+  outline: none;
+  background-color: black;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  line-height: 32px;
+  transition: all 0.17s ease-in-out 0s;
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(227, 19, 19);
+  }
+}
+
+//dashboard-right
+.div-parent-bill-user,
+.div-parent-history-user,
+.div-parent-change-password-user,
+.div-parent-change-info-user,
+.div-parent-change-address-user {
+  display: none;
+  height: 100%;
+}
+
+.div-parent-history-user.active,
+.div-parent-bill-user.active,
+.div-parent-change-info-user.active,
+.div-parent-change-address-user.active,
+.div-parent-change-password-user.active {
+  display: block;
+}
+
+.div-children-change-info-user {
+  height: 86%;
+}
+
+.dashboard-right {
+  padding: 0 32px 24px 32px !important;
+}
+
+.select-birthday {
+  max-height: 60px;
+  overflow: auto;
+  width: 60px;
+}
+.table-left-dashboard {
+  width: 100%;
+}
+.dashboard-right-top {
+  position: relative;
+  height: 81px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.173);
+  &-title {
+    padding-top: 16px;
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  &-content {
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+}
+
+.tr-dashboard-info {
+  height: 48px;
+}
+.td-dashboard-info {
+  width: 32%;
+  font-size: 1.1rem;
+  font-weight: 300;
+  text-align: right;
+  padding-right: 24px;
+}
+
+.td-info-user {
+  width: 68%;
+  font-size: 1.2rem;
+  position: relative;
+
+  & td {
+    cursor: pointer;
+    & label,
+    input {
+      cursor: pointer;
+    }
+  }
+}
+
+.option-gender {
+  font-size: 1.2rem;
+  position: relative;
+  margin-right: 12px;
+  border-radius: 4px;
+  width: 70px;
+  font-weight: 300;
+  transition: all 0.25s ease-in-out 0s;
+  cursor: pointer;
+  border: 1px solid black;
+  &:hover {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+  }
+  input[type="radio"] {
+    border: 0px;
+    width: 100%;
+    height: 2em;
+    // position: absolute;
+    opacity: 0;
+    left: 0;
+    cursor: pointer;
+    top: 0;
+    margin: 0;
+  }
+}
+
+.select-gender {
+  margin: 0 2px 0 4px;
+  font-size: 1.2rem;
+}
+
+.option-gender.active {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+}
+
+.btn-fix,
+.btn-save {
+  outline: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-top: 8px;
+  margin-right: 12px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.btn-save {
+  display: none;
+}
+
+.select-gender {
+  margin: 0 24px 0 4px;
+}
+
+.td-birthDay {
+  position: relative;
+  & button {
+    margin-right: 24px;
+    outline: none;
+    border: 0.5px solid black;
+    width: 100px;
+    height: 42px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+}
+
+.tr-birthday {
+  position: absolute;
+  max-height: 160px;
+  overflow: auto;
+  display: none;
+  user-select: none;
+  cursor: pointer;
+  & li {
+    width: 84px;
+    text-align: center;
+    &:hover {
+      color: rgb(255, 132, 0);
+    }
+  }
+}
+.tr-birthday.active {
+  display: block;
+}
+
+.input-info-user {
+  width: 100%;
+  outline: none;
+  border: 0.5px solid black;
+  height: 42px;
+  padding-left: 12px;
+  border-radius: 4px;
+}
+.block-rigth-userInfo {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.btn-save-all-change-info {
+  margin-bottom: 16%;
+  width: 78px;
+  height: 39px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  outline: none;
+  border: 0.5px solid black;
+  border-radius: 4px;
+  transition: all 0.17s ease-in-out 0s;
+  background-color: black;
+  color: white;
+  &:hover {
+    background-color: rgb(227, 19, 19);
+    border: 0.5px solid rgb(227, 19, 19);
+  }
+}
+
+.td-info-user.success input {
+  border-color: black;
+}
+
+.td-info-user.error input {
+  border-color: #e74c3c;
+}
+
+.td-info-user small {
+  color: #e74c3c;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  visibility: hidden;
+  padding-left: 12px;
+}
+
+.td-info-user.error small {
+  visibility: visible;
+}
+
+.message-for-user-when-change-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &-succes {
+    margin-top: 32px;
+    display: none;
+    font-size: 1rem;
+  }
+  &-failed {
+    margin-top: 32px;
+    display: none;
+    font-size: 1rem;
+  }
+}
+
+.message-for-user-when-change-info-failed {
+  color: red;
+}
+.message-for-user-when-change-info-succes {
+  color: green;
+}
+
+.btn-add-address {
+  position: absolute;
+  right: 0;
+  top: 37%;
+  margin-right: 2vw;
+  width: 106px;
+  height: 42px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: yellow;
+  outline: none;
+  border: 0.5px solid black;
+  border-radius: 4px;
+  transition: all 0.17s ease-in-out 0s;
+  &:hover {
+    color: rgb(255, 132, 0);
+  }
+}

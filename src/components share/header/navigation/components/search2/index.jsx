@@ -35,7 +35,7 @@ function Search2(props) {
   return (
     <div className="SearchForm2">
       <InputSearch onSubmit={handleFilterChange} />
-      <hr />
+      <hr className="hr-search" />
       <ListDataSearch items={listItem} />
     </div>
   );

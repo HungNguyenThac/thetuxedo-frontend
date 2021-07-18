@@ -25,3 +25,10 @@ export const DeleteAllItemAndStorage = (array) => {
     payload: array,
   };
 };
+
+export const addItemToCartFormDataUser = (array) => {
+  return {
+    type: "ADD_ITEM_TO_CART_FROM_DATA_USER",
+    payload: array,
+  };
+};

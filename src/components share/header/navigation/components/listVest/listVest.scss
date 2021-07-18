@@ -9,6 +9,7 @@
   z-index: 2;
   will-change: opacity;
   animation: animation-for-vestmenu 0.5s linear;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 @keyframes animation-for-vestmenu {

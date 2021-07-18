@@ -6,10 +6,13 @@ import axios from "axios";
 import queryString from "query-string";
 import BannerGiayTay from "./components/banner";
 import RenderGiayTay from "./components/renderGiayTay";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "../../actions/loading";
 
 GiayTay.propTypes = {};
 
 function GiayTay(props) {
+  const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
   const [totalItem, setTotalItem] = useState(0);
   const [filters, setFilters] = useState({
@@ -20,6 +23,7 @@ function GiayTay(props) {
   });
 
   useEffect(() => {
+    dispatch(showLoading(true));
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -37,11 +41,17 @@ function GiayTay(props) {
         if (responseCount.status === 200) {
           setTotalItem(responseCount.data);
         }
+        if (responseItems.status === 200 && responseCount.status === 200) {
+          dispatch(hideLoading(false));
+        }
       } catch (error) {
         console.log(error);
       }
     }
     getData();
+    return () => {
+      getData();
+    };
   }, [filters]);
 
   function handlePageChange1(Page) {

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
 import "./navigation.scss";
@@ -21,10 +20,13 @@ import MenuRight from "./components/menu-right_576px";
 import Search2 from "./components/search2";
 import CartPopup from "./components/shoppingCart";
 import UserAvarterNavigation from "./components/userAvtNav";
+import { useSelector } from "react-redux";
 
 Navigation.propTypes = {};
 
 function Navigation(props) {
+  const lisiItems = useSelector((state) => state.itemCart.itemCart);
+  const numbersItemInCart = lisiItems.length;
   const handleClickSearch = () => {
     const search = document.querySelector(".SearchForm");
     search.classList.toggle("active");
@@ -164,8 +166,9 @@ function Navigation(props) {
                       className="icon-navigation_scale"
                       icon={faShoppingCart}
                     />
-                    <CartPopup />
+                    <CartPopup lisiItems={lisiItems} />
                   </span>
+                  <span className="numbers-in-cart">({numbersItemInCart})</span>
                 </NavLink>
               </li>
             </ul>
@@ -183,6 +186,9 @@ function Navigation(props) {
                       className="icon-navigation_scale"
                       icon={faShoppingCart}
                     />
+                    <span className="numbers-in-cart">
+                      ({numbersItemInCart})
+                    </span>
                   </span>
                 </NavLink>
               </div>

@@ -9,6 +9,7 @@
   z-index: 2;
   will-change: opacity;
   animation: animation-for-phukien_menu 0.5s linear;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   &::after {
     content: "";
     border: 12px solid;

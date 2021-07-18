@@ -7,11 +7,14 @@ import "font-awesome/css/font-awesome.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "font-awesome/css/font-awesome.min.css";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import firebase from "firebase";
 import { addItemToCart } from "../../../../actions/itemCart";
 import { useEffect } from "react";
 import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
 import { useHistory } from "react-router-dom";
+import { getCookie } from "../../../../shareFunction/checkCookies";
+import axios from "axios";
 
 DetailTop.propTypes = {
   itemDetail: PropTypes.object,
@@ -144,12 +147,40 @@ function displayNone() {
 
 function DetailTop(props) {
   const { itemDetail, activeSize, idSize } = props;
-  const { tenSP, phanLoai, maSP, size, moTa, listAnh, gia, giamGia } =
-    itemDetail;
+  const cartForUser = useSelector((state) => state.itemCart.itemCart);
+  const { tenSP, phanLoai, maSP, size, listAnh, gia, giamGia } = itemDetail;
   const [numberItemSelected, setNumberItemSelected] = useState(1);
   const [sizeSelected, setSizeSelected] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(() => {
+    let sendRequestUpdateCart = async () => {
+      if (!firebase.apps.length) {
+        firebase.initializeApp({});
+      }
+      let user = firebase.auth().currentUser;
+      if (user) {
+        try {
+          const cookies = getCookie("user");
+          let response = await axios({
+            method: "PUT",
+            url: "http://localhost:9527/user/addcart",
+            headers: { Authorization: cookies },
+            data: {
+              cartForUser: { cartForUser },
+            },
+          });
+          if (response.data.status === 200) {
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+    };
+    sendRequestUpdateCart();
+    return () => sendRequestUpdateCart();
+  }, [cartForUser]);
 
   //tạo list ảnh
   var arrayAnh = [];
@@ -166,7 +197,6 @@ function DetailTop(props) {
   // tạo dấu . trong giá tiền
   let Gia = "";
   if (gia !== undefined) {
-    console.log(77, gia);
     Gia = themDauChamVaoGiaTien(gia);
   }
 
@@ -227,13 +257,14 @@ function DetailTop(props) {
         size: sizeSelected,
         soLuong: numberItemSelected,
       };
-      let itemToCart = addItemToCart(itemSelected);
+      let element = addItemToCart(itemSelected);
+      dispatch(element);
       notificationAddToCart();
-      dispatch(itemToCart);
     } else {
       notificationToSelectSize();
     }
   }
+
   function handleClickToPayNow() {
     if (sizeSelected.length !== 0) {
       let itemSelected = {
@@ -241,8 +272,8 @@ function DetailTop(props) {
         size: sizeSelected,
         soLuong: numberItemSelected,
       };
-      let itemToCart = addItemToCart(itemSelected);
-      dispatch(itemToCart);
+      let element = addItemToCart(itemSelected);
+      dispatch(element);
       history.push("/feature/payPage");
     } else {
       notificationToSelectSize();
@@ -251,7 +282,7 @@ function DetailTop(props) {
 
   return (
     <div className="body-detail_top">
-      <Row gutter={[32, 8]}>
+      <Row gutter={[32, 8]} className="margin-none">
         <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
           <Row gutter={[8]}>
             {arrayAnh.length >= 2 ? (
@@ -299,140 +330,133 @@ function DetailTop(props) {
           </Row>
         </Col>
         <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-          <div>
-            <div className="item-detail-page">
-              <h1 className="item-detail-page_name">{tenSP}</h1>
-              {giamGia ? (
-                <div className="item-detail-page_price">
-                  <span className="item-detail-page_price-sale">
-                    {giamGiaString}
-                    <span className="price-detail-page">đ</span>
+          <div className="item-detail-page">
+            <h1 className="item-detail-page_name">{tenSP}</h1>
+            {giamGia ? (
+              <div className="item-detail-page_price">
+                <span className="item-detail-page_price-sale">
+                  {giamGiaString}
+                  <span className="price-detail-page">đ</span>
+                </span>
+                <div>
+                  <span className="item-detail-page_price-real_sale">
+                    {Gia}
+                    <span className="price-sale">đ</span>
                   </span>
-                  <div>
-                    <span className="item-detail-page_price-real_sale">
-                      {Gia}
-                      <span className="price-sale">đ</span>
-                    </span>
-                  </div>
                 </div>
-              ) : (
-                <span className="item-detail_price-real">
-                  {Gia}
-                  <span className="price">đ</span>
-                </span>
-              )}
-              {giamGia ? (
-                <span className="sub-text_sale">
-                  (Bạn đã tiết kiệm được {numberSale}
-                  <span className="price">đ</span>)
-                </span>
-              ) : (
-                <p className="sub-text_sale">
-                  (Sản phẩm mới ra mắt, chưa áp dụng chính sách giảm giá)
-                </p>
-              )}
-              <div>
-                <span className="mota-item_title">
-                  Loại:
-                  <span className="mota-item_content">{phanLoai}</span>
-                </span>
-                <span className="mota-item_title">
-                  Mã sản phẩm:
-                  <span className="mota-item_content">{maSP}</span>
-                </span>
               </div>
-              <hr className="hr-title-page" />
-              <div className="block-size">
-                <span className="block-size_label">Size:</span>
-                <ul className="block-size_ul">
-                  {arraySize.map((size) => {
-                    return (
-                      <li
-                        className={
-                          size.id === idSize
-                            ? "block-size_select active"
-                            : "block-size_select"
-                        }
-                        key={size.id}
-                        onClick={() => handleClickToSelectSize(size)}
-                      >
-                        {size.size}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-              <div className="button-item-change_block">
-                <span className="soluong">Số lượng:</span>
-                <button
-                  disabled={numberItemSelected <= 1}
-                  className="button-item-change"
-                  onClick={() => {
-                    handleClickNumberChange(numberItemSelected - 1);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faMinus} />
-                </button>
-                <span className="number_so-luong">{numberItemSelected}</span>
-                <button
-                  className="button-item-change"
-                  onClick={() => {
-                    handleClickNumberChange(numberItemSelected + 1);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-              </div>
-              <div className="block-for-button">
-                <button
-                  className="button-add-item-cart"
-                  onClick={handleClickAddItemToCart}
-                >
-                  <span className="button-add-item-cart_title">
-                    THÊM VÀO GIỎ
-                  </span>
-                  <span className="button-add-item-cart_sub">
-                    Giao hàng tận nơi toàn quốc
-                  </span>
-                </button>
-                <button
-                  className="button-buy-now"
-                  onClick={handleClickToPayNow}
-                >
-                  <span className="button-buy-now_title">MUA NGAY</span>
-                  <span className="button-buy-now_sub">
-                    Thêm nhiều ưu đãi hấp dẫn
-                  </span>
-                </button>
-              </div>
-              <div className="notification-in-detail-page">
-                <span className="notification-for-miss-select-size">
-                  (Hãy chắc chắn rằng Bạn đã chọn size phù hợp)
-                </span>
-                <span className="notification-for-add-item-to-cart">
-                  (Bạn đã thêm sản phẩm vào giỏ hàng thành công)
-                </span>
-              </div>
-              <hr className="hr-title-page" />
-              <div className="moTa-sanPham">
-                <span className="moTa-sanPham_content">
-                  *Hãy tới The TUXEDO để trải nghiệm các sản phẩm đang có tại 71
-                  Showroom
-                </span>
-              </div>
+            ) : (
+              <span className="item-detail_price-real">
+                {Gia}
+                <span className="price">đ</span>
+              </span>
+            )}
+            {giamGia ? (
+              <span className="sub-text_sale">
+                (Bạn đã tiết kiệm được {numberSale}
+                <span className="price">đ</span>)
+              </span>
+            ) : (
+              <p className="sub-text_sale">
+                (Sản phẩm mới ra mắt, chưa áp dụng chính sách giảm giá)
+              </p>
+            )}
+            <div>
+              <span className="mota-item_title">
+                Loại:
+                <span className="mota-item_content">{phanLoai}</span>
+              </span>
+              <span className="mota-item_title">
+                Mã sản phẩm:
+                <span className="mota-item_content">{maSP}</span>
+              </span>
             </div>
-            <Col
-              xxl={12}
-              xl={12}
-              lg={12}
-              md={12}
-              sm={24}
-              xs={24}
-              className="padding-none"
-            >
-              <div id="myresult" class="img-zoom-result"></div>
-            </Col>
+            <hr className="hr-title-page" />
+            <div className="block-size">
+              <span className="block-size_label">Size:</span>
+              <ul className="block-size_ul">
+                {arraySize.map((size) => {
+                  return (
+                    <li
+                      className={
+                        size.id === idSize
+                          ? "block-size_select active"
+                          : "block-size_select"
+                      }
+                      key={size.id}
+                      onClick={() => handleClickToSelectSize(size)}
+                    >
+                      {size.size}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            <div className="button-item-change_block">
+              <span className="soluong">Số lượng:</span>
+              <button
+                disabled={numberItemSelected <= 1}
+                className="button-item-change"
+                onClick={() => {
+                  handleClickNumberChange(numberItemSelected - 1);
+                }}
+              >
+                <FontAwesomeIcon icon={faMinus} />
+              </button>
+              <span className="number_so-luong">{numberItemSelected}</span>
+              <button
+                className="button-item-change"
+                onClick={() => {
+                  handleClickNumberChange(numberItemSelected + 1);
+                }}
+              >
+                <FontAwesomeIcon icon={faPlus} />
+              </button>
+            </div>
+            <div className="block-for-button">
+              <button
+                className="button-add-item-cart"
+                onClick={handleClickAddItemToCart}
+              >
+                <span className="button-add-item-cart_title">THÊM VÀO GIỎ</span>
+                <span className="button-add-item-cart_sub">
+                  Giao hàng tận nơi toàn quốc
+                </span>
+              </button>
+              <button className="button-buy-now" onClick={handleClickToPayNow}>
+                <span className="button-buy-now_title">MUA NGAY</span>
+                <span className="button-buy-now_sub">
+                  Thêm nhiều ưu đãi hấp dẫn
+                </span>
+              </button>
+            </div>
+            <div className="notification-in-detail-page">
+              <span className="notification-for-miss-select-size">
+                (Hãy chắc chắn rằng Bạn đã chọn size phù hợp)
+              </span>
+              <span className="notification-for-add-item-to-cart">
+                (Bạn đã thêm sản phẩm vào giỏ hàng thành công)
+              </span>
+            </div>
+            <hr className="hr-title-page" />
+            <div className="moTa-sanPham">
+              <span className="moTa-sanPham_content">
+                *Hãy tới The TUXEDO để trải nghiệm các sản phẩm đang có tại 71
+                Showroom
+              </span>
+            </div>
           </div>
+          <Col
+            xxl={12}
+            xl={12}
+            lg={12}
+            md={12}
+            sm={24}
+            xs={24}
+            className="padding-none"
+          >
+            <div id="myresult" className="img-zoom-result"></div>
+          </Col>
         </Col>
       </Row>
     </div>

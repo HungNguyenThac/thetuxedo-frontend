@@ -48,10 +48,10 @@ function ListPhuKien(props) {
         <li className="li-phukien">
           <NavLink
             className="navling-phukien"
-            to="/feature/phukien/mangsettay"
+            to="/feature/phukien/ghimcaiao"
             activeClassName="first2 after6"
           >
-            <span className="name-phukien first after">Măng Sét Tay</span>
+            <span className="name-phukien first after">Ghim Cài Áo</span>
           </NavLink>
         </li>
       </div>

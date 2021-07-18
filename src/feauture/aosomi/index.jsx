@@ -6,9 +6,12 @@ import axios from "axios";
 import RenderAo from "./components/renderAo";
 import BannerAoSoMi from "./components/banner";
 import queryString from "query-string";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "../../actions/loading";
 AoSoMi.propTypes = {};
 
 function AoSoMi(props) {
+  const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
   const [totalItem, setTotalItem] = useState(0);
   const [filters, setFilters] = useState({
@@ -19,6 +22,7 @@ function AoSoMi(props) {
   });
 
   useEffect(() => {
+    dispatch(showLoading(true));
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -36,11 +40,17 @@ function AoSoMi(props) {
         if (responseCount.status === 200) {
           setTotalItem(responseCount.data);
         }
+        if (responseItems.status === 200 && responseCount.status === 200) {
+          dispatch(hideLoading(false));
+        }
       } catch (error) {
         console.log(error);
       }
     }
     getData();
+    return () => {
+      getData();
+    };
   }, [filters]);
 
   function handlePageChange1(Page) {

@@ -1,12 +1,15 @@
 import React from "react";
-import PropTypes from "prop-types";
+import "./dangNhap.scss";
+import RenderFormDangNhap from "./components/renderFromDangNhap";
+import BannerDangNhap from "./components/banner";
 
 TrangDangNhap.propTypes = {};
 
 function TrangDangNhap(props) {
   return (
-    <div>
-      <p>ĐÂY LÀ TRANG ĐĂNG NHẬP</p>
+    <div className="container">
+      <BannerDangNhap />
+      <RenderFormDangNhap />
     </div>
   );
 }

@@ -4,11 +4,11 @@
   position: absolute;
   left: -170px;
   border-radius: 3px;
-  border: 0.5px solid black;
   top: -2px;
   display: none;
   will-change: opacity;
   animation: animation-for-list-sanpham 0.5s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
   &::after {
     content: "";

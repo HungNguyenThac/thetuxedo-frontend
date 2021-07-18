@@ -5,10 +5,10 @@
   right: 0;
   top: 56px;
   border-radius: 3px;
-  border: 0.5px solid black;
   display: none;
   will-change: opacity;
   animation: animation-for-list-menu 0.5s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   &::after {
     content: "";
     position: absolute;

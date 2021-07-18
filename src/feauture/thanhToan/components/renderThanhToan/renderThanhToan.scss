@@ -15,6 +15,8 @@
   margin: 0 auto;
   height: 100%;
   background-color: white;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .form-user-profile {
@@ -88,6 +90,7 @@
   border: 0.5px solid black;
   border-radius: 4px;
   display: block;
+  text-align: center;
   font-family: inherit;
   font-size: 1rem;
   font-weight: 300;
@@ -95,6 +98,32 @@
   width: 100%;
 }
 
+.form-control textarea {
+  border: 0.5px solid black;
+  border-radius: 4px;
+  display: block;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 300;
+  text-align: center;
+  padding: 10px;
+  resize: none;
+  width: 100%;
+  outline: none;
+}
+
+.form-control.success textarea {
+  border-color: #2ecc71;
+}
+
+.form-control.error textarea {
+  border-color: #e74c3c;
+}
+
+.form-control textarea:focus {
+  outline: 0;
+  border-color: #777;
+}
 .form-control input:focus {
   outline: 0;
   border-color: #777;
@@ -130,6 +159,7 @@
   position: absolute;
   bottom: 0;
   left: 0;
+  margin-left: 12px;
   visibility: hidden;
 }
 
@@ -151,7 +181,7 @@
 }
 
 .note-for-user {
-  margin-top: 48px;
+  margin-top: 18px;
   &_title {
     font-size: 1rem;
   }
@@ -286,11 +316,15 @@
   will-change: opacity, transform;
   animation: hiddenShow linear 0.1s;
 }
+
 .modal__overlay {
   position: absolute;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal.active {
@@ -308,6 +342,7 @@
   }
 }
 
+.notification-forget-selected-address,
 .notification-in-payPage {
   font-size: 1rem;
   color: red;
@@ -373,6 +408,520 @@
   &:hover {
     border: 0.5px solid rgb(206, 25, 25);
     background-color: rgb(206, 25, 25);
+  }
+}
+//----------------------------------------------------------------------
+.modal-moreAddress,
+.modal-fix-Address {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
+  will-change: opacity, transform;
+  animation: hiddenShow linear 0.1s;
+  z-index: 1;
+}
+.block-for-change-address,
+.block-select-address-for-buy-product {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-select-address-for-buy-product {
+  margin-bottom: 16%;
+  width: 102px;
+  height: 56px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  outline: none;
+  border: 0.5px solid black;
+  border-radius: 4px;
+  transition: all 0.25s ease-in-out 0s;
+  background-color: black;
+  color: white;
+  &:hover {
+    background-color: rgb(227, 19, 19);
+    border: 0.5px solid rgb(227, 19, 19);
+  }
+}
+
+.modal-select-Address-for-buy {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
+  will-change: opacity, transform;
+  animation: hiddenShow linear 0.1s;
+  z-index: 1;
+}
+.modal-select-Address-for-buy_overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.block-select-Address-for-buy-dashboard {
+  width: 1200px;
+  max-width: 60%;
+  margin: 0 auto;
+  height: 70%;
+  background-color: rgb(245, 245, 245);
+  list-style: none;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow: hidden;
+  padding: 24px 42px 24px 42px;
+  position: relative;
+}
+
+.table-left-dashboard {
+  width: 100%;
+  height: 160px;
+}
+
+.div-children-change-info-user {
+  position: relative;
+}
+
+.btn-click-to-save-all-address {
+  margin-right: 64px;
+  margin-bottom: 28px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 98px;
+  height: 48px;
+  outline: none;
+  border: 0.5px solid black;
+  border-radius: 6px;
+  font-size: 1.6rem;
+  background: black;
+  color: white;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out 0s;
+  &:hover {
+    background-color: rgb(255, 1, 1);
+    border: red;
+  }
+}
+.notification-for-forget-save-address,
+.notification-for-save-all-address {
+  position: absolute;
+  font-size: 1.2rem;
+  left: 50%;
+  margin-bottom: 38px;
+  bottom: 0;
+  transform: translate(-50%, 0);
+  display: none;
+}
+
+.notification-for-save-all-address {
+  color: green;
+}
+
+.notification-for-forget-save-address {
+  color: red;
+}
+
+.btn-add-address {
+  position: absolute;
+  right: 0;
+  top: 37%;
+  margin-right: 2vw;
+  width: 106px;
+  height: 42px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: yellow;
+  outline: none;
+  border: 0.5px solid black;
+  border-radius: 4px;
+  transition: all 0.17s ease-in-out 0s;
+  &:hover {
+    color: rgb(255, 132, 0);
+  }
+}
+
+.dashboard-right-top {
+  position: relative;
+  height: 81px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.173);
+  &-title {
+    padding-top: 16px;
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  &-content {
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+}
+
+.modal-moreAddress_overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.block-add-address-user-dashboard {
+  width: 780px;
+  height: 332px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 0, 0.831);
+  padding: 14px 18px 8px 18px;
+}
+.title-add-address {
+  height: 52px;
+  border-radius: 4px;
+  padding-left: 16px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.31);
+  & span {
+    line-height: 56px;
+    font-size: 1.2rem;
+  }
+}
+.block-content-add-address {
+  margin: 12px;
+  display: flex;
+  flex-direction: column;
+  &-mid {
+    margin-top: 16px;
+    & textarea {
+      width: 100%;
+      resize: none;
+      font-weight: 400;
+      outline: none;
+      border-radius: 2px;
+      border: 0.5px solid black;
+      padding: 0 12px;
+      font-size: 1.2rem;
+      height: 58px;
+    }
+  }
+}
+
+.div-info-user {
+  font-size: 1.2rem;
+  position: relative;
+  margin: 0 16px;
+}
+
+.div-info-user.success input {
+  border-color: black;
+}
+
+.div-info-user.error input {
+  border-color: #e74c3c;
+}
+
+.div-info-user.error textarea {
+  border-color: #e74c3c;
+}
+
+.div-info-user small {
+  color: #e74c3c;
+  position: absolute;
+  bottom: -20px;
+  right: 0;
+  visibility: hidden;
+  padding-left: 12px;
+}
+
+.div-info-user.error small {
+  visibility: visible;
+}
+
+.input-address-user {
+  width: 100%;
+  outline: none;
+  border: 0.5px solid black;
+  height: 42px;
+  padding-left: 12px;
+  border-radius: 4px;
+}
+
+.btn-fix,
+.btn-save {
+  outline: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-top: 8px;
+  margin-right: 12px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.btn-save {
+  display: none;
+}
+
+.block-option-address {
+  margin-left: 16px;
+  margin-top: 12px;
+}
+
+.select-type-time,
+.select-type-addres {
+  display: flex;
+  align-items: center;
+}
+.select-type-addres {
+  padding-bottom: 12px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.173);
+}
+.select-type-time {
+  margin-top: 12px;
+}
+.type-time-title,
+.type-addess-title {
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-align: right;
+}
+
+.type-addess-title {
+  margin-right: 12px;
+  margin-left: 54px;
+}
+
+.type-time-title {
+  margin-right: 12px;
+}
+
+.option-time,
+.option-change-time,
+.option-change-address,
+.option-address,
+.confirm-cancel-add-address,
+.confirm-save-add-address {
+  font-size: 1.2rem;
+  position: relative;
+  margin-right: 12px;
+  border-radius: 3px;
+  font-weight: 300;
+  transition: all 0.25s ease-in-out 0s;
+  z-index: 2;
+  cursor: pointer;
+  border: 1px solid black;
+  &:hover {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+  }
+}
+
+input[type="radio"] {
+  border: 0px;
+  width: 100%;
+  height: 2em;
+  position: absolute;
+  opacity: 0;
+  left: 0;
+  cursor: pointer;
+  top: 0;
+  margin: 0;
+}
+
+.option-address.active {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+}
+
+.option-change-address.active {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+}
+
+.option-time.active {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+}
+.option-change-time.active {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+}
+
+.option-time,
+.option-change-time,
+.option-change-address,
+.option-address {
+  width: 90px;
+}
+
+.select-address {
+  margin: 0 2px 0 4px;
+  font-size: 1.2rem;
+}
+
+.ul-address-dashboard {
+  max-height: 438px;
+  overflow-y: auto;
+  cursor: pointer;
+}
+
+.confirm-save-and-cancel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-left: 0.5px solid rgba(0, 0, 0, 0.173);
+  padding-left: 3.3vw;
+}
+
+.confirm-cancel-add-address,
+.confirm-save-add-address {
+  margin-top: 12px;
+  width: 92px;
+}
+
+.confirm-save-add-address {
+  height: 54px;
+  &:hover {
+    background-color: black;
+    font-weight: 400;
+  }
+}
+
+.text-underline {
+  text-decoration: underline;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out 0s;
+  text-align: center !important;
+  &:hover {
+    color: red;
+  }
+}
+.btn-for-open-boardAddress {
+  margin-bottom: 2%;
+  width: 80px;
+  height: 48px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  outline: none;
+  border: 0.5px solid black;
+  border-radius: 4px;
+  transition: all 0.25s ease-in-out 0s;
+  background-color: black;
+  color: white;
+  &:hover {
+    background-color: rgb(227, 19, 19);
+    border: 0.5px solid rgb(227, 19, 19);
+  }
+}
+.btn-select-address-real {
+  margin-bottom: 16%;
+  width: 80px;
+  height: 48px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  outline: none;
+  border: 0.5px solid black;
+  border-radius: 4px;
+  transition: all 0.25s ease-in-out 0s;
+  background-color: black;
+  color: white;
+  &:hover {
+    background-color: rgb(227, 19, 19);
+    border: 0.5px solid rgb(227, 19, 19);
+  }
+}
+
+.td-address-left {
+  width: 15%;
+  font-size: 1.1rem;
+  font-weight: 300;
+  text-align: right;
+  padding-right: 24px;
+}
+
+.td-address-right {
+  width: 30%;
+  font-size: 1.2rem;
+  text-align: justify;
+  position: relative;
+}
+@media screen and (max-width: 767px) {
+  .block-add-address-user-dashboard {
+    padding: 14px 8px 8px 8px;
+    width: 429px;
+    height: 400px;
+  }
+  .title-add-address {
+    height: 32px;
+    & span {
+      line-height: 32px;
+    }
+  }
+  .div-info-user {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+  .type-time-title,
+  .type-addess-title {
+    font-size: 0.975rem;
+  }
+  .div-info-user small {
+    bottom: -18px;
+  }
+  .input-address-user {
+    height: 38px;
+  }
+  .block-content-add-address-mid {
+    margin-top: 4px;
+  }
+  .type-addess-title {
+    margin-left: 50px;
+  }
+  .select-type-addres {
+    border: none;
+  }
+  .select-type-time {
+    margin-bottom: 12px;
+  }
+  .confirm-save-and-cancel {
+    justify-content: center;
+    padding: 0;
+    border-left: none;
+    border-top: 0.5px solid rgba(0, 0, 0, 0.255);
+  }
+  .confirm-save-add-address {
+    height: 34px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .block-add-address-user-dashboard {
+    padding: 14px 0px 8px 0px;
+    width: 321px;
+    height: 386px;
+  }
+  .option-address,
+  .option-change-address {
+    width: 72px;
+  }
+  .option-time,
+  .option-change-time {
+    width: 148px;
+  }
+  .type-addess-title {
+    margin: 0 12px 0 0;
+  }
+  .select-type-time {
+    margin: 0;
   }
 }
 

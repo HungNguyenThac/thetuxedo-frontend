@@ -4,7 +4,6 @@ import "./cartPage.scss";
 import { useSelector } from "react-redux";
 import BannerCartPage from "./components/bannerCartPage";
 import RenderCartPage from "./components/renderCart";
-import { useState } from "react";
 
 CartPage.propTypes = {
   items: PropTypes.array,

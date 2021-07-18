@@ -1,27 +1,21 @@
 import React from "react";
-import PropTypes from "prop-types";
 import "./userAvtNav.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
-UserAvarterNavigation.propTypes = {};
+import { useSelector } from "react-redux";
 
 function UserAvarterNavigation(props) {
-  // const { avatarUser } = props;
-  const avatarUser = true;
-  return avatarUser ? (
+  const { infoUser } = useSelector((state) => state.GetInfoUser);
+  return infoUser.avatar ? (
     <NavLink
       exact
       className="link__right-icon"
-      to="/feature/userpage"
+      to="/feature/dashboard"
       activeClassName="scale-avatar_when-focus"
     >
       <div className="avatar-user">
-        <img
-          className="avatar-user_img"
-          src="https://anhdep123.com/wp-content/uploads/2021/02/hinh-nen-gai-xinh-full-hd-cho-dien-thoai.jpg"
-          alt="avatar"
-        />
+        <img className="avatar-user_img" src={infoUser.avatar} alt="avatar" />
       </div>
     </NavLink>
   ) : (

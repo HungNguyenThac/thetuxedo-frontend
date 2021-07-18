@@ -1,34 +1,34 @@
 import React from "react";
-import PropTypes from "prop-types";
 import "./shoppingCart.scss";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addItemToDetail } from "../../../../../actions/itemDetail";
 import { themDauChamVaoGiaTien } from "../../../../../shareFunction/numberToString";
-CartPopup.propTypes = {
-  items: PropTypes.string,
-};
 
+CartPopup.propTypes = {
+  lisiItems: PropTypes.array,
+};
 CartPopup.defaultProps = {
-  items: [],
+  lisiItems: null,
 };
 
 function CartPopup(props) {
+  const { lisiItems } = props;
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.itemCart.itemCart);
   function handleClickSendItemToDetailPage(item) {
     const itemSelected = addItemToDetail(item);
     dispatch(itemSelected);
   }
 
-  return items.length ? (
+  return lisiItems.length !== 0 ? (
     <div className="cart-popup">
       <header className="cart-popup_header">
         <span className="cart-popup_header_title">Sản phẩm đã chọn</span>
       </header>
       <body className="cart-popup_body">
         <ul className="list-item">
-          {items.map((item) => {
+          {lisiItems.map((item) => {
             // tạo dấu . trong giá tiền
             let Gia = "";
             if (item.gia !== undefined) {
@@ -40,9 +40,22 @@ function CartPopup(props) {
             if (item.giamGia !== undefined) {
               giamGiaString = themDauChamVaoGiaTien(item.giamGia);
             }
+
+            // tạo dấu . trong tổng giá tiền
+            let tongGia = "";
+            if (item.gia !== undefined) {
+              tongGia = themDauChamVaoGiaTien(item.gia * item.soLuong);
+            }
+
+            //tạo . trong tông giá tiền đã giảm
+            let tongGiamGiaString = "";
+            if (item.giamGia !== undefined) {
+              tongGiamGiaString = themDauChamVaoGiaTien(
+                item.giamGia * item.soLuong
+              );
+            }
             return (
               <li
-                key={item.id}
                 className="item-selected"
                 onClick={() => handleClickSendItemToDetailPage(item)}
               >
@@ -72,19 +85,19 @@ function CartPopup(props) {
                       {item.giamGia ? (
                         <div className="item-detail-page_price">
                           <span className="item-detail-page_price-sale">
-                            {giamGiaString}
+                            {tongGiamGiaString}
                             <span className="price-detail-page">đ</span>
                           </span>
                           <div>
                             <span className="item-detail-page_price-real_sale">
-                              {Gia}
+                              {tongGia}
                               <span className="price-sale">đ</span>
                             </span>
                           </div>
                         </div>
                       ) : (
                         <p className="item-detail_price-real">
-                          {Gia}
+                          {tongGia}
                           <span className="price">đ</span>
                         </p>
                       )}

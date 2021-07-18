@@ -15,9 +15,7 @@ const sale = React.lazy(() => import("../../feauture/sale"));
 const phukien = React.lazy(() => import("../../feauture/phukien"));
 const cavat = React.lazy(() => import("../../feauture/phukien/cavat"));
 const khancaiao = React.lazy(() => import("../../feauture/phukien/khancaiao"));
-const mangsettay = React.lazy(() =>
-  import("../../feauture/phukien/mangsettay")
-);
+const ghimcaiao = React.lazy(() => import("../../feauture/phukien/ghimCaiAo"));
 const nocaico = React.lazy(() => import("../../feauture/phukien/nocaico"));
 const thatlung = React.lazy(() => import("../../feauture/phukien/thatlung"));
 const login = React.lazy(() => import("../../feauture/trangdangnhap"));
@@ -58,9 +56,9 @@ function RouterApp(props) {
       <Route exact path="/feature/phukien/cavat" component={cavat} />
       <Route exact path="/feature/phukien/nocaico" component={nocaico} />
       <Route exact path="/feature/phukien/khancaiao" component={khancaiao} />
-      <Route exact path="/feature/phukien/mangsettay" component={mangsettay} />
+      <Route exact path="/feature/phukien/ghimcaiao" component={ghimcaiao} />
       <Route exact path="/feature/login" component={login} />
-      <Route exact path="/feature/userpage" component={userpage} />
+      <Route exact path="/feature/dashboard" component={userpage} />
       <Route exact path="/feature/connectwithus" component={lienhe} />
       <Route exact path="/feature/detail" component={chitiet} />
       <Route exact path="/feature/cartPage" component={cartPage} />

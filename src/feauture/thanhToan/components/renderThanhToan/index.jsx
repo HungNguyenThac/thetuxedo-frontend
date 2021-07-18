@@ -5,10 +5,14 @@ import { Col, Row } from "antd";
 import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useEffect } from "react";
+import uuid from "uuid/dist/v4";
 import { useState } from "react";
 import { DeleteAllItemAndStorage } from "../../../../actions/itemCart";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { hideLoading, showLoading } from "../../../../actions/loading";
+import { useRef } from "react";
+import { setAddressUser, setInfoUser } from "../../../../actions/infoUser";
+import { getCookie } from "../../../../shareFunction/checkCookies";
 RenderThanhToan.propTypes = {
   listItems: PropTypes.array,
 };
@@ -17,19 +21,14 @@ RenderThanhToan.defaultProps = {
   listItems: [],
 };
 
-function checkItemPayPage(listItems) {
-  if (listItems.length === 0) {
-    let element = document.querySelector(".notification-in-payPage");
-    element.classList.add("active");
-  }
-}
-
 function checkInputs() {
   var userName = document.querySelector(".userName");
   const phoneNumber = document.querySelector(".phoneNumber");
   const userAddres = document.querySelector(".address");
+  const email = document.querySelector(".email");
   const usernameValue = userName.value.trim();
   const numberPhone1 = phoneNumber.value.trim();
+  const emailValue = email.value.trim();
   const address1 = userAddres.value.trim();
 
   if (usernameValue === "") {
@@ -38,9 +37,22 @@ function checkInputs() {
     setSuccessFor(userName);
   }
 
+  if (emailValue === "") {
+    setErrorFor(email, "Vui lòng nhập Email");
+  } else if (!isEmail(emailValue)) {
+    setErrorFor(email, "Không đúng định dạng Email");
+  } else {
+    setSuccessFor(email);
+  }
+
   if (numberPhone1 === "") {
     setErrorFor(phoneNumber, "Vui lòng nhập số điện thoại");
-  } else if (isNaN(Number(numberPhone1)) === true) {
+  } else if (
+    numberPhone1.length < 10 ||
+    numberPhone1.length > 11 ||
+    numberPhone1.startsWith("0") === false ||
+    isNaN(Number(numberPhone1)) === true
+  ) {
     setErrorFor(phoneNumber, "không đúng định dạng số điện thoại");
   } else {
     setSuccessFor(phoneNumber);
@@ -51,6 +63,12 @@ function checkInputs() {
   } else {
     setSuccessFor(userAddres);
   }
+}
+
+function isEmail(email) {
+  return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+    email
+  );
 }
 
 function setErrorFor(input, message) {
@@ -76,18 +94,377 @@ function sumPriceOfTotalItems(list) {
   return total;
 }
 
+function formatTimeString(date) {
+  const day = `0${date.getDate()}`.slice(-2);
+  const month = `0${date.getMonth() + 1}`.slice(-2);
+  const year = `0${date.getFullYear()}`.slice(-4);
+  return `${day}/${month}/${year}`;
+}
+
 function RenderThanhToan(props) {
-  const { listItems } = props;
-  const totalPricePayPage = sumPriceOfTotalItems(listItems);
   const dispatch = useDispatch();
+  const { listItems } = props;
+  const { infoUser } = useSelector((state) => state.GetInfoUser);
+  const totalPricePayPage = sumPriceOfTotalItems(listItems);
   const converNumberToString = themDauChamVaoGiaTien(totalPricePayPage);
+  const [name, setName] = useState(infoUser.name);
+  const [phone, setPhone] = useState(infoUser.phoneNumber);
+  const [diaChi, setDiaChi] = useState("Công Ty");
+  const [time, setTime] = useState("Giờ Hành Chính");
+  const [valueTextArea, setValueTextArea] = useState("");
+  const [changeAddress, setChangeAddress] = useState({});
+  const [index, setIndex] = useState("");
+  const [addressSelected, setAddressSelected] = useState();
+  const cloneUser = useRef(infoUser);
+
+  function handleChangePhone(e) {
+    let value = e.target.value;
+    setPhone(value);
+    let element = e.target.parentElement;
+    let number = value.trim().length;
+    if (number === 0) {
+      setErrorForLogIN(e.target, "Vui lòng nhập số điện thoại");
+    } else if (
+      number < 10 ||
+      number > 11 ||
+      value.startsWith("0") === false ||
+      isNaN(Number(value)) === true
+    ) {
+      setErrorForLogIN(e.target, "không đúng định dạng số điện thoại");
+    } else {
+      element.className = "div-info-user success";
+    }
+  }
+
+  function handleChangeName(e) {
+    let value = e.target.value;
+    setName(value);
+    let element = e.target.parentElement;
+    let number = value.trim().length;
+    if (number === 0) {
+      setErrorForLogIN(e.target, "Tên người nhận không thể để trống!");
+    } else if (number < 2) {
+      setErrorForLogIN(e.target, "Tên càng đầy đủ càng tốt");
+    } else if (number >= 2) {
+      element.className = "div-info-user success";
+    }
+  }
+
+  function handleChangeValueTextArea(e) {
+    let value = e.target.value;
+    setValueTextArea(value);
+    let element = e.target.parentElement;
+    let number = value.trim().length;
+    if (number === 0) {
+      setErrorForLogIN(e.target, "Địa chỉ không thể bỏ trống!");
+    } else if (number <= 20) {
+      setErrorForLogIN(e.target, "Địa chỉ càng cụ thể càng tốt!");
+    } else if (number > 20) {
+      element.className = "div-info-user success";
+    }
+  }
+
+  function handleChangeNewName(e) {
+    let value = e.target.value;
+    let newObject = { ...changeAddress };
+    newObject.name = value;
+    setChangeAddress(newObject);
+    let element = e.target.parentElement;
+    let number = value.trim().length;
+    if (number === 0) {
+      setErrorForLogIN(e.target, "Tên người nhận không thể để trống!");
+    } else if (number < 2) {
+      setErrorForLogIN(e.target, "Tên càng đầy đủ càng tốt");
+    } else if (number >= 2) {
+      element.className = "div-info-user success";
+    }
+  }
+
+  function handleChangeNewPhone(e) {
+    let value = e.target.value;
+    let newObject = { ...changeAddress };
+    newObject.phone = value;
+    setChangeAddress(newObject);
+    let element = e.target.parentElement;
+    let number = value.trim().length;
+    if (number === 0) {
+      setErrorForLogIN(e.target, "Vui lòng nhập số điện thoại");
+    } else if (
+      number < 10 ||
+      number > 11 ||
+      value.startsWith("0") === false ||
+      isNaN(Number(value)) === true
+    ) {
+      setErrorForLogIN(e.target, "không đúng định dạng số điện thoại");
+    } else {
+      element.className = "div-info-user success";
+    }
+  }
+
+  function handleChangeNewValueTextArea(e) {
+    let value = e.target.value;
+    let newObject = { ...changeAddress };
+    newObject.Address = value;
+    setChangeAddress(newObject);
+    let element = e.target.parentElement;
+    let number = value.trim().length;
+    if (number === 0) {
+      setErrorForLogIN(e.target, "Địa chỉ không thể bỏ trống!");
+    } else if (number <= 20) {
+      setErrorForLogIN(e.target, "Địa chỉ càng cụ thể càng tốt!");
+    } else if (number > 20) {
+      element.className = "div-info-user success";
+    }
+  }
+  function handleClickToSelectAddress(e) {
+    setDiaChi(e.target.value);
+  }
+
+  function handleClickToSelectTime(e) {
+    setTime(e.target.value);
+  }
+  function handleClickToChangeAnyWhere(e) {
+    let newObject = { ...changeAddress };
+    newObject.diaChi = e.target.value;
+    setChangeAddress(newObject);
+    let element = e.target;
+    element.checked = true;
+  }
+
+  function handleClickToSelectChangeTime(e) {
+    let newObject = { ...changeAddress };
+    newObject.time = e.target.value;
+    setChangeAddress(newObject);
+    let element = e.target;
+    element.checked = true;
+  }
+
+  function handleClickToOpenBoardAddAddress() {
+    let element = document.querySelector(".modal-moreAddress");
+    element.style.display = "block";
+  }
+
+  function handleClickToOpenChangeAddress(address, index) {
+    setChangeAddress(address);
+    setIndex(index);
+    let element = document.querySelector(".modal-fix-Address");
+    element.style.display = "block";
+  }
+
+  function handleClickToCancelCreateNewAddress() {
+    let element = document.querySelector(".modal-moreAddress");
+    element.style.display = "none";
+  }
+
+  function handleClickToCancelChangeAddress() {
+    let errors = document.querySelectorAll(".div-info-user.error");
+    if (errors.length < 1) {
+      let element = document.querySelector(".modal-fix-Address");
+      element.style.display = "none";
+    }
+  }
+
+  //sửa dữ liệu
+  function handleClickToFix(e) {
+    let element = e.target.parentElement;
+    let input = element.querySelector(".input-address-user");
+    input.disabled = false;
+    element.className = "div-info-user error";
+    let fix = element.querySelector(".btn-fix");
+    fix.style.display = "none";
+    let save = element.querySelector(".btn-save");
+    save.style.display = "block";
+    let small = element.querySelector("small");
+    small.style.display = "none";
+  }
+
+  function handleClickToFocusTextarea(e) {
+    let value = e.target.value;
+    let element = e.target.parentElement;
+    if (value.length === 0) {
+      element.className = "div-info-user error";
+    }
+  }
+
+  function handleClickToSave(e) {
+    let element = e.target.parentElement;
+    let input = element.querySelector(".input-address-user");
+    if (input.value === name || input.value === changeAddress.name) {
+      checkInputName();
+    } else if (input.value === phone || input.value === changeAddress.phone) {
+      checkInputPhone(e);
+    }
+    function checkInputName() {
+      let emailValue = input.value.trim();
+      if (emailValue === "") {
+        setErrorForSignUP(input, "Vui lòng nhập Tên người nhận");
+      } else if (emailValue.length >= 2) {
+        setSuccessForSignUP(input);
+        input.disabled = true;
+        let save = element.querySelector(".btn-save");
+        save.style.display = "none";
+        let fix = element.querySelector(".btn-fix");
+        fix.style.display = "block";
+      }
+    }
+    //check phone
+    function checkInputPhone() {
+      let phoneValue = input.value.trim();
+      if (phoneValue === "") {
+        setErrorForSignUP(input, "Vui lòng nhập số điện thoại");
+      } else if (
+        phoneValue.length < 10 ||
+        phoneValue.length > 11 ||
+        phoneValue.startsWith("0") === false ||
+        isNaN(Number(phoneValue)) === true
+      ) {
+        setErrorForSignUP(input, "không đúng định dạng số điện thoại");
+      } else {
+        setSuccessForSignUP(input);
+        input.disabled = true;
+        let save = element.querySelector(".btn-save");
+        save.style.display = "none";
+        let fix = element.querySelector(".btn-fix");
+        fix.style.display = "block";
+      }
+    }
+  }
+
+  function setErrorForSignUP(input, message) {
+    let formControl = input.parentElement;
+    let small = formControl.querySelector("small");
+    formControl.className = "div-info-user error";
+    small.innerText = message;
+    small.style.display = "block";
+  }
+
+  function setSuccessForSignUP(input) {
+    let formControl = input.parentElement;
+    formControl.className = "div-info-user success";
+  }
+
+  function handleClickToConfirmCreateNewAddress() {
+    let error = document.querySelectorAll(".div-info-user.error");
+    let addressUser = document.getElementById("addressUser");
+    let value = addressUser.value.trim();
+
+    if (error.length < 1 && value.length > 20) {
+      let object = {
+        id: uuid(),
+        name: name,
+        phone: phone,
+        Address: valueTextArea,
+        diaChi: diaChi,
+        time: time,
+      };
+      let cloneArray = [...infoUser.address];
+      cloneArray.unshift(object);
+      dispatch(setAddressUser(cloneArray));
+      let element = document.querySelector(".modal-moreAddress");
+      element.style.display = "none";
+      setName(infoUser.name);
+      setPhone(infoUser.phoneNumber);
+      setValueTextArea("");
+      setDiaChi("Công Ty");
+      setTime("Giờ Hành Chính");
+    } else if (value.length === 0) {
+      setErrorForSignUP(addressUser, "Địa chỉ không thể bỏ trống!");
+    }
+  }
+
+  function setErrorForLogIN(input, message) {
+    let formControl = input.parentElement;
+    let small = formControl.querySelector("small");
+    formControl.className = "div-info-user error";
+    small.innerText = message;
+    small.style.display = "block";
+  }
+
+  function handleClickToConfirmChangeAddress() {
+    let error = document.querySelectorAll(".div-info-user.error");
+    if (error.length < 1) {
+      let newArray = [...infoUser.address];
+      newArray.splice(index, 1, changeAddress);
+      dispatch(setAddressUser(newArray));
+      let element = document.querySelector(".modal-fix-Address");
+      element.style.display = "none";
+    }
+  }
+
+  function handleClickToDeleteAddress(index) {
+    let cloneArray = [...infoUser.address];
+    cloneArray.splice(index, 1);
+    dispatch(setAddressUser(cloneArray));
+  }
+
+  function handleClickToSaveAllAddress() {
+    if (JSON.stringify(cloneUser.current) !== JSON.stringify(infoUser)) {
+      sendRequestToUpdateAddress();
+    }
+  }
+
+  let sendRequestToUpdateAddress = async () => {
+    let array = infoUser.address;
+    let notification = document.querySelector(
+      ".notification-for-save-all-address"
+    );
+    let element = document.querySelector(
+      ".notification-for-forget-save-address"
+    );
+    try {
+      const cookies = getCookie("user");
+      let response = await axios({
+        method: "PUT",
+        url: "http://localhost:9527/user/dashboard",
+        headers: { Authorization: cookies },
+        data: {
+          address: { array },
+        },
+      });
+      if (response.data.status === 200) {
+        dispatch(setInfoUser(response.data.user));
+        cloneUser.current = response.data.user;
+        element.style.display = "none";
+        notification.style.display = "block";
+      } else if (response.data.status === 400) {
+        notification.innerText = "Một lỗi đã xảy ra";
+        notification.style.display = "block";
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    setTimeout(() => {
+      notification.style.display = "none";
+    }, 3000);
+  };
 
   function handleClickToPayNow() {
-    checkInputs();
-    checkItemPayPage(listItems);
-    const threeElement = document.querySelectorAll(".form-control.success");
-    if (threeElement.length === 3 && listItems.length !== 0) {
-      setHello(listItems);
+    if (infoUser.avatar.length >= 1) {
+      if (addressSelected !== undefined) {
+        postBillForUserModol();
+        dispatch(showLoading(true));
+      } else {
+        let element = document.querySelector(
+          ".notification-forget-selected-address"
+        );
+        element.classList.add("active");
+      }
+    } else {
+      checkInputs();
+      checkItemPayPage(listItems);
+      const threeElement = document.querySelectorAll(".form-control.success");
+      if (threeElement.length === 4 && listItems.length !== 0) {
+        dispatch(showLoading(true));
+        postBill();
+      }
+    }
+  }
+
+  function checkItemPayPage(listItems) {
+    if (listItems.length === 0) {
+      let element = document.querySelector(".notification-in-payPage");
+      element.classList.add("active");
     }
   }
 
@@ -98,43 +475,112 @@ function RenderThanhToan(props) {
     dispatch(array);
   }
 
-  const [hello, setHello] = useState("");
-  useEffect(() => {
-    async function postData() {
-      const threeElement = document.querySelectorAll(".form-control.success");
-      const userName = document.querySelector(".userName");
-      const phoneNumber = document.querySelector(".phoneNumber");
-      const userAddres = document.querySelector(".address");
-      const email = document.querySelector(".email");
-      const usernameValue = userName.value.trim();
-      const userPhoneNumber = phoneNumber.value.trim();
-      const userAddress = userAddres.value.trim();
-      const userEmail = email.value.trim();
-      if (threeElement.length === 3) {
-        try {
-          var responseData = await axios({
-            method: "post",
-            url: "http://localhost:1337/bills",
-            data: {
-              HovaTen: usernameValue,
-              Email: userEmail,
-              DiaChi: userAddress,
-              SoDienThoai: userPhoneNumber,
-              sanPham: { listItems },
-            },
-          });
-          console.log(responseData);
-          if (responseData.status === 200) {
-            showModalAndClearLocalStorage();
+  const postBillForUserModol = async () => {
+    let nameUser = addressSelected.name;
+    let phoneuser = addressSelected.phone;
+    let address = addressSelected.Address;
+    let diaChi = addressSelected.diaChi;
+    let time = addressSelected.time;
+    let now = new Date();
+    let newTimeString = formatTimeString(now);
+    let bill = {
+      HoVaTen: nameUser,
+      SoDienThoai: phoneuser,
+      DiaChi: address,
+      DiaDiem: diaChi,
+      ThoiGian: time,
+      NgayDat: newTimeString,
+      TongTien: totalPricePayPage,
+      products: { listItems },
+    };
+    let cloneBill = [...infoUser.bill];
+    cloneBill.push(bill);
+    try {
+      const cookies = getCookie("user");
+      let response = await axios({
+        method: "PUT",
+        url: "http://localhost:9527/user/addbill",
+        headers: { Authorization: cookies },
+        data: {
+          bill: { cloneBill },
+        },
+      });
+      if (response.data.status === 200) {
+        dispatch(hideLoading(false));
+        showModalAndClearLocalStorage();
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const postBill = async () => {
+    let threeElement = document.querySelectorAll(".form-control.success");
+    let userName = document.querySelector(".userName");
+    let phoneNumber = document.querySelector(".phoneNumber");
+    let userAddres = document.querySelector(".address");
+    let email = document.querySelector(".email");
+    let usernameValue = userName.value.trim();
+    let userPhoneNumber = phoneNumber.value.trim();
+    let userAddress = userAddres.value.trim();
+    let userEmail = email.value.trim();
+    if (threeElement.length === 4) {
+      try {
+        let responseData = await axios.post(
+          "https://thetuxedo.herokuapp.com/bills",
+          {
+            HovaTen: usernameValue,
+            Email: userEmail,
+            DiaChi: userAddress,
+            SoDienThoai: userPhoneNumber,
+            sanPham: { listItems },
           }
-        } catch (error) {
-          console.log(error);
+        );
+        if (responseData.status === 200) {
+          dispatch(hideLoading(false));
+          showModalAndClearLocalStorage();
         }
+      } catch (error) {
+        console.log(error);
       }
     }
-    postData();
-    return { postData, axios, showModalAndClearLocalStorage };
-  }, [hello]);
+  };
+
+  function handleClickToOpenBoardSelectAddress(e) {
+    e.preventDefault();
+    let element = document.querySelector(".modal-select-Address-for-buy");
+    element.style.display = "block";
+    let notification = document.querySelector(
+      ".notification-forget-selected-address"
+    );
+    notification.classList.remove("active");
+  }
+
+  function handleCliickToOpenChangeAddressUser(e) {
+    e.preventDefault();
+    let element = document.querySelector(".modal-select-Address-for-buy");
+    element.style.display = "block";
+  }
+
+  function handleClickToDispatchSelectAddress(address) {
+    if (JSON.stringify(cloneUser.current) === JSON.stringify(infoUser)) {
+      setAddressSelected(address);
+      let element = document.querySelector(".modal-select-Address-for-buy");
+      element.style.display = "none";
+    } else {
+      let element = document.querySelector(
+        ".notification-for-forget-save-address"
+      );
+      let notification = document.querySelector(
+        ".notification-for-save-all-address"
+      );
+      element.style.display = "block";
+      notification.style.display = "none";
+      setTimeout(() => {
+        element.style.display = "none";
+      }, 3000);
+    }
+  }
 
   return (
     <body className="body-payPage">
@@ -168,78 +614,203 @@ function RenderThanhToan(props) {
                   </div>
                   <hr className="hr-payPage" />
                   <div className="form-user-profile">
-                    <form id="form" action="">
-                      <Col
-                        xxl={24}
-                        xl={24}
-                        lg={24}
-                        md={24}
-                        className="no-padding"
-                      >
-                        <div class="form-control">
-                          <input
-                            name="Họ và tên"
-                            type="text"
-                            placeholder="Họ và Tên"
-                            className="userName"
-                          />
-                          <small>Error message</small>
-                        </div>
-                      </Col>
-                      <div className="email-phoneNumber">
+                    {infoUser.avatar.length >= 1 ? (
+                      <div>
+                        {addressSelected ? (
+                          <form id="form" action="">
+                            <Col
+                              xxl={24}
+                              xl={24}
+                              lg={24}
+                              md={24}
+                              className="no-padding"
+                            >
+                              <div class="form-control">
+                                <input
+                                  name="Họ và tên"
+                                  type="text"
+                                  disabled
+                                  placeholder="Họ và Tên"
+                                  className="userName"
+                                  value={addressSelected.name}
+                                />
+                                <small>Error message</small>
+                              </div>
+                            </Col>
+                            <div className="email-phoneNumber">
+                              <Col
+                                xxl={8}
+                                xl={8}
+                                lg={8}
+                                md={8}
+                                sm={8}
+                                xs={8}
+                                className="no-padding"
+                              >
+                                <div class="form-control">
+                                  <input
+                                    name="số điện thoại"
+                                    type="text"
+                                    disabled
+                                    placeholder="Số điện thoại"
+                                    className="phoneNumber"
+                                    value={addressSelected.phone}
+                                  />
+                                  <small>Error message</small>
+                                </div>
+                              </Col>
+                              <Col
+                                xxl={8}
+                                xl={8}
+                                lg={8}
+                                md={8}
+                                sm={8}
+                                xs={8}
+                                className="remove-padding-left no-padding"
+                              >
+                                <div class="form-control">
+                                  <input
+                                    name="địa chỉ"
+                                    type="text"
+                                    disabled
+                                    placeholder="Địa Chỉ"
+                                    className="phoneNumber"
+                                    value={addressSelected.diaChi}
+                                  />
+                                  <small>Error message</small>
+                                </div>
+                              </Col>
+                              <Col
+                                xxl={8}
+                                xl={8}
+                                lg={8}
+                                md={8}
+                                sm={8}
+                                xs={8}
+                                className="remove-padding-left no-padding"
+                              >
+                                <div class="form-control">
+                                  <input
+                                    name="thời gian"
+                                    type="text"
+                                    disabled
+                                    placeholder="Thời Gian"
+                                    className="phoneNumber"
+                                    value={addressSelected.time}
+                                  />
+                                  <small>Error message</small>
+                                </div>
+                              </Col>
+                            </div>
+                            <div>
+                              <Col className="no-padding">
+                                <div class="form-control">
+                                  <textarea
+                                    name="Địa chỉ"
+                                    type="text"
+                                    disabled
+                                    placeholder="Địa chỉ nhận hàng"
+                                    className="address"
+                                    value={addressSelected.Address}
+                                  ></textarea>
+                                  <small>Error message</small>
+                                </div>
+                              </Col>
+                            </div>
+                            <div className="block-for-change-address">
+                              <button
+                                className="btn-for-open-boardAddress"
+                                onClick={handleCliickToOpenChangeAddressUser}
+                              >
+                                Thay Đổi
+                              </button>
+                            </div>
+                          </form>
+                        ) : (
+                          <div className="block-select-address-for-buy-product">
+                            <button
+                              className="btn-select-address-for-buy-product"
+                              onClick={handleClickToOpenBoardSelectAddress}
+                            >
+                              Chọn Địa Chỉ
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <form id="form" action="">
                         <Col
-                          xxl={15}
-                          xl={15}
-                          lg={15}
-                          md={15}
-                          sm={15}
-                          xs={15}
+                          xxl={24}
+                          xl={24}
+                          lg={24}
+                          md={24}
                           className="no-padding"
                         >
                           <div class="form-control">
                             <input
+                              name="Họ và tên"
                               type="text"
-                              placeholder="Email"
-                              className="email"
-                              name="Email"
+                              placeholder="Họ và Tên"
+                              className="userName"
                             />
                             <small>Error message</small>
                           </div>
                         </Col>
-                        <Col
-                          xxl={9}
-                          xl={9}
-                          lg={9}
-                          md={9}
-                          sm={9}
-                          xs={9}
-                          className="remove-padding-left no-padding"
-                        >
-                          <div class="form-control">
-                            <input
-                              name="số điện thoại"
-                              type="text"
-                              placeholder="Số điện thoại"
-                              className="phoneNumber"
-                            />
-                            <small>Error message</small>
-                          </div>
-                        </Col>
-                      </div>
-                      <div>
-                        <Col className="no-padding">
-                          <div class="form-control">
-                            <input
-                              name="Địa chỉ"
-                              type="text"
-                              placeholder="Địa chỉ nhận hàng"
-                              className="address"
-                            />
-                            <small>Error message</small>
-                          </div>
-                        </Col>
-                      </div>
-                    </form>
+                        <div className="email-phoneNumber">
+                          <Col
+                            xxl={15}
+                            xl={15}
+                            lg={15}
+                            md={15}
+                            sm={15}
+                            xs={15}
+                            className="no-padding"
+                          >
+                            <div class="form-control">
+                              <input
+                                type="email"
+                                placeholder="Email"
+                                className="email"
+                                name="Email"
+                              />
+                              <small>Error message</small>
+                            </div>
+                          </Col>
+                          <Col
+                            xxl={9}
+                            xl={9}
+                            lg={9}
+                            md={9}
+                            sm={9}
+                            xs={9}
+                            className="remove-padding-left no-padding"
+                          >
+                            <div class="form-control">
+                              <input
+                                name="số điện thoại"
+                                type="text"
+                                placeholder="Số điện thoại"
+                                className="phoneNumber"
+                              />
+                              <small>Error message</small>
+                            </div>
+                          </Col>
+                        </div>
+                        <div>
+                          <Col className="no-padding">
+                            <div class="form-control">
+                              <textarea
+                                name="Địa chỉ"
+                                type="text"
+                                placeholder="Địa chỉ nhận hàng"
+                                className="address"
+                              ></textarea>
+                              <small>Error message</small>
+                            </div>
+                          </Col>
+                        </div>
+                      </form>
+                    )}
                     <div className="note-for-user">
                       <span className="note-for-user_title">
                         ** Thanh Toán Khi Nhận Hàng
@@ -290,62 +861,60 @@ function RenderThanhToan(props) {
                         );
                       }
                       return (
-                        <div>
-                          <li key={item.id}>
-                            <div className="thongtin-sanPham">
-                              <Col
-                                xxl={4}
-                                xl={4}
-                                lg={4}
-                                md={4}
-                                sm={4}
-                                xs={4}
-                                className="remove-padding-right remove-padding-left"
-                              >
-                                <img
-                                  className="thongtin-sanPham_tren"
-                                  src={item.anhBia}
-                                  alt="anhBia"
-                                />
-                              </Col>
-                              <Col
-                                xxl={20}
-                                xl={20}
-                                lg={20}
-                                md={20}
-                                sm={20}
-                                xs={20}
-                                className="remove-padding-right"
-                              >
-                                <div className="thongtin-sanPham_duoi">
-                                  <span className="ten-san-pham">
-                                    {item.tenSP}
+                        <li key={item.id}>
+                          <div className="thongtin-sanPham">
+                            <Col
+                              xxl={4}
+                              xl={4}
+                              lg={4}
+                              md={4}
+                              sm={4}
+                              xs={4}
+                              className="remove-padding-right remove-padding-left"
+                            >
+                              <img
+                                className="thongtin-sanPham_tren"
+                                src={item.anhBia}
+                                alt="anhBia"
+                              />
+                            </Col>
+                            <Col
+                              xxl={20}
+                              xl={20}
+                              lg={20}
+                              md={20}
+                              sm={20}
+                              xs={20}
+                              className="remove-padding-right"
+                            >
+                              <div className="thongtin-sanPham_duoi">
+                                <span className="ten-san-pham">
+                                  {item.tenSP}
+                                </span>
+                                <div className="size-sl-price">
+                                  <span className="size-sl-price_size">
+                                    Size: {item.size}
                                   </span>
-                                  <div className="size-sl-price">
-                                    <span className="size-sl-price_size">
-                                      Size: {item.size}
+                                  <span className="size-sl-price_soluong">
+                                    Số lượng: {item.soLuong}
+                                  </span>
+                                  {item.giamGia ? (
+                                    <span className="size-sl-price_price">
+                                      {giamGiaString}
+                                      <span className="price">đ</span>
                                     </span>
-                                    <span className="size-sl-price_soluong">
-                                      Số lượng: {item.soLuong}
+                                  ) : (
+                                    <span className="size-sl-price_price">
+                                      {Gia}
+                                      <span className="price">đ</span>
                                     </span>
-                                    {item.giamGia ? (
-                                      <span className="size-sl-price_price">
-                                        {giamGiaString}
-                                        <span className="price">đ</span>
-                                      </span>
-                                    ) : (
-                                      <span className="size-sl-price_price">
-                                        {Gia}
-                                        <span className="price">đ</span>
-                                      </span>
-                                    )}
-                                  </div>
+                                  )}
                                 </div>
-                              </Col>
-                            </div>
-                          </li>
+                              </div>
+                            </Col>
+                          </div>
                           <hr className="hr-payPage" />
-                        </div>
+                        </li>
                       );
                     })}
                   </ul>
@@ -382,6 +951,11 @@ function RenderThanhToan(props) {
                 Giỏ hàng trống, vui lòng chọn sản phẩm trước khi Đặt hàng
               </span>
             </div>
+            <div>
+              <span className="notification-forget-selected-address">
+                Bạn đã đăng nhập, vui lòng chọn địa chỉ
+              </span>
+            </div>
           </footer>
         </div>
       </div>
@@ -405,6 +979,472 @@ function RenderThanhToan(props) {
                   </span>
                 </button>
               </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="modal-select-Address-for-buy">
+        <div className="modal-select-Address-for-buy_overlay">
+          <div className="block-select-Address-for-buy-dashboard">
+            <div className="dashboard-right-top">
+              <h3 className="dashboard-right-top-title">
+                Chọn địa chỉ giao hàng
+              </h3>
+              <span className="dashboard-right-top-content">
+                Quản lý địa chỉ của bạn thật chính xác
+              </span>
+              <button
+                className="btn-add-address"
+                onClick={handleClickToOpenBoardAddAddress}
+                disabled={infoUser.address.length >= 6 ? true : false}
+                style={
+                  infoUser.address.length >= 6
+                    ? { cursor: "not-allowed" }
+                    : { cursor: "pointer" }
+                }
+              >
+                Thêm Địa Chỉ
+              </button>
+            </div>
+
+            <Col
+              className="div-children-change-info-user"
+              xxl={24}
+              xl={24}
+              lg={24}
+              md={24}
+              sm={24}
+            >
+              <ul className="ul-address-dashboard">
+                {infoUser.address.map((address, index) => {
+                  return (
+                    <li key={address.id}>
+                      <table className="table-left-dashboard">
+                        <tr className="tr-dashboard-info">
+                          <td className="td-address-left">Tên người nhận:</td>
+                          <td className="td-address-right">{address.name}</td>
+                          <td className="td-address-left">Điện thoại:</td>
+                          <td className="td-address-right">{address.phone}</td>
+                          <td
+                            className="td-address-right text-underline"
+                            onClick={() =>
+                              handleClickToOpenChangeAddress(address, index)
+                            }
+                          >
+                            Sửa
+                          </td>
+                        </tr>
+                        <tr className="tr-dashboard-info">
+                          <td className="td-address-left">Nơi nhận:</td>
+                          <td className="td-address-right">{address.diaChi}</td>
+                          <td className="td-address-left">Thời gian:</td>
+                          <td className="td-address-right">{address.time}</td>
+                          <td
+                            className="td-address-right text-underline"
+                            onClick={() => handleClickToDeleteAddress(index)}
+                          >
+                            Xóa
+                          </td>
+                        </tr>
+                        <tr className="tr-dashboard-info">
+                          <td className="td-address-left">Địa chỉ cụ thể:</td>
+                          <td className="td-address-right" colSpan="3">
+                            {address.Address}
+                          </td>
+                          <td className="td-address-right text-underline">
+                            <button
+                              className="btn-select-address-real"
+                              onClick={() =>
+                                handleClickToDispatchSelectAddress(address)
+                              }
+                            >
+                              Chọn
+                            </button>
+                          </td>
+                        </tr>
+                      </table>
+                      <hr />
+                    </li>
+                  );
+                })}
+              </ul>
+            </Col>
+            <div className="modal-moreAddress">
+              <div className="modal-moreAddress_overlay">
+                <div className="block-add-address-user-dashboard">
+                  <div className="title-add-address">
+                    <span>Địa chỉ mới:</span>
+                  </div>
+                  <div className="block-content-add-address">
+                    <div className="block-content-add-address-top">
+                      <Row gutter={[8, 8]}>
+                        <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
+                          <div className="div-info-user">
+                            <input
+                              className="input-address-user"
+                              type="text"
+                              value={name}
+                              placeholder="Họ và tên"
+                              onChange={handleChangeName}
+                              disabled
+                              id="nameUser"
+                            />
+
+                            <small>Error message</small>
+                            <button
+                              className="btn-fix"
+                              onClick={handleClickToFix}
+                            >
+                              Sửa
+                            </button>
+                            <button
+                              className="btn-save"
+                              onClick={handleClickToSave}
+                            >
+                              Lưu
+                            </button>
+                          </div>
+                        </Col>
+                        <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
+                          <div className="div-info-user">
+                            <input
+                              className="input-address-user"
+                              type="text"
+                              value={phone}
+                              placeholder="Số điện thoại"
+                              onChange={handleChangePhone}
+                              disabled
+                              id="phoneUser"
+                            />
+                            <small>Error message</small>
+                            <button
+                              className="btn-fix"
+                              onClick={handleClickToFix}
+                            >
+                              Sửa
+                            </button>
+                            <button
+                              className="btn-save"
+                              onClick={handleClickToSave}
+                            >
+                              Lưu
+                            </button>
+                          </div>
+                        </Col>
+                      </Row>
+                    </div>
+                    <div className="block-content-add-address-mid">
+                      <div className="div-info-user">
+                        <textarea
+                          className="detail-address"
+                          name=""
+                          id="addressUser"
+                          placeholder="Địa chỉ cụ thể..."
+                          onChange={handleChangeValueTextArea}
+                          onClick={handleClickToFocusTextarea}
+                          value={valueTextArea}
+                        ></textarea>
+                        <small>Địa chỉ không thể bỏ trống!</small>
+                      </div>
+                      <Row className="block-option-address">
+                        <Col xxl={14} xl={14} lg={14} md={14} sm={24} xs={24}>
+                          <div className="select-type-addres">
+                            <div className="type-addess-title">
+                              Loại địa chỉ:
+                            </div>
+                            <button
+                              className={
+                                diaChi === "Công Ty"
+                                  ? "option-address active"
+                                  : "option-address"
+                              }
+                            >
+                              Công ty
+                              <input
+                                className="select-address"
+                                type="radio"
+                                value="Công Ty"
+                                name="noinhanhang"
+                                id="companyUser"
+                                defaultChecked={
+                                  diaChi === "Công Ty" ? true : false
+                                }
+                                onClick={handleClickToSelectAddress}
+                              />
+                            </button>
+                            <button
+                              className={
+                                diaChi === "Nhà Riêng"
+                                  ? "option-address active"
+                                  : "option-address"
+                              }
+                            >
+                              Nhà riêng
+                              <input
+                                className="select-address"
+                                type="radio"
+                                name="noinhanhang"
+                                value="Nhà Riêng"
+                                id="homeUser"
+                                defaultChecked={
+                                  diaChi === "Nhà Riêng" ? true : false
+                                }
+                                onClick={handleClickToSelectAddress}
+                              />
+                            </button>
+                          </div>
+                          <div className="select-type-time">
+                            <div className="type-time-title">
+                              Thời gian nhận hàng:
+                            </div>
+                            <button
+                              className={
+                                time === "Giờ Hành Chính"
+                                  ? "option-time active"
+                                  : "option-time"
+                              }
+                            >
+                              Hành chính
+                              <input
+                                className="select-address"
+                                type="radio"
+                                value="Giờ Hành Chính"
+                                name="gionhanhang"
+                                id="administrativeHours"
+                                defaultChecked={
+                                  time === "Giờ Hành Chính" ? true : false
+                                }
+                                onClick={handleClickToSelectTime}
+                              />
+                            </button>
+                            <button
+                              className={
+                                time === "Mọi Lúc"
+                                  ? "option-time active"
+                                  : "option-time"
+                              }
+                            >
+                              Mọi lúc
+                              <input
+                                className="select-address"
+                                type="radio"
+                                value="Mọi Lúc"
+                                id="everyTime"
+                                name="gionhanhang"
+                                defaultChecked={
+                                  time === "Mọi Lúc" ? true : false
+                                }
+                                onClick={handleClickToSelectTime}
+                              />
+                            </button>
+                          </div>
+                        </Col>
+                        <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
+                          <div className="confirm-save-and-cancel">
+                            <button
+                              className="confirm-cancel-add-address"
+                              onClick={handleClickToCancelCreateNewAddress}
+                            >
+                              Hủy Bỏ
+                            </button>
+                            <button
+                              className="confirm-save-add-address"
+                              onClick={handleClickToConfirmCreateNewAddress}
+                            >
+                              Xác Nhận
+                            </button>
+                          </div>
+                        </Col>
+                      </Row>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span className="notification-for-save-all-address">
+              Bạn đã lưu địa chỉ thành công
+            </span>
+            <span className="notification-for-forget-save-address">
+              Bạn chưa lưu thay đổi địa chỉ
+            </span>
+            <button
+              className="btn-click-to-save-all-address"
+              onClick={handleClickToSaveAllAddress}
+            >
+              SAVE
+            </button>
+          </div>
+        </div>
+      </div>
+      {/* sửa object addres */}
+      <div className="modal-fix-Address">
+        <div className="modal-moreAddress_overlay">
+          <div className="block-add-address-user-dashboard">
+            <div className="title-add-address">
+              <span>Sửa địa chỉ:</span>
+            </div>
+            <div className="block-content-add-address">
+              <div className="block-content-add-address-top">
+                <Row gutter={[8, 8]}>
+                  <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
+                    <div className="div-info-user">
+                      <input
+                        className="input-address-user"
+                        type="text"
+                        value={changeAddress.name}
+                        placeholder="Họ và tên"
+                        onChange={handleChangeNewName}
+                        disabled
+                      />
+                      <small>Error message</small>
+                      <button className="btn-fix" onClick={handleClickToFix}>
+                        Sửa
+                      </button>
+                      <button className="btn-save" onClick={handleClickToSave}>
+                        Lưu
+                      </button>
+                    </div>
+                  </Col>
+                  <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
+                    <div className="div-info-user">
+                      <input
+                        className="input-address-user"
+                        type="text"
+                        value={changeAddress.phone}
+                        placeholder="Số điện thoại"
+                        onChange={handleChangeNewPhone}
+                        disabled
+                      />
+                      <small>Error message</small>
+                      <button className="btn-fix" onClick={handleClickToFix}>
+                        Sửa
+                      </button>
+                      <button className="btn-save" onClick={handleClickToSave}>
+                        Lưu
+                      </button>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+              <div className="block-content-add-address-mid">
+                <div className="div-info-user">
+                  <textarea
+                    className="detail-address"
+                    name=""
+                    id=""
+                    placeholder="Địa chỉ cụ thể..."
+                    onChange={handleChangeNewValueTextArea}
+                    value={changeAddress.Address}
+                  ></textarea>
+                  <small>Địa chỉ không thể bỏ trống!</small>
+                </div>
+                <Row className="block-option-address">
+                  <Col xxl={14} xl={14} lg={14} md={14} sm={24} xs={24}>
+                    <div className="select-type-addres">
+                      <div className="type-addess-title">Loại địa chỉ:</div>
+                      <button
+                        className={
+                          changeAddress.diaChi === "Công Ty"
+                            ? "option-change-address active"
+                            : "option-change-address"
+                        }
+                      >
+                        Công ty
+                        <input
+                          className="select-address"
+                          type="radio"
+                          value="Công Ty"
+                          defaultChecked={
+                            changeAddress.diaChi === "Công Ty" ? true : false
+                          }
+                          name="noinhanhang"
+                          onClick={handleClickToChangeAnyWhere}
+                        />
+                      </button>
+                      <button
+                        className={
+                          changeAddress.diaChi === "Nhà Riêng"
+                            ? "option-change-address active"
+                            : "option-change-address"
+                        }
+                      >
+                        Nhà riêng
+                        <input
+                          className="select-address"
+                          type="radio"
+                          name="noinhanhang"
+                          value="Nhà Riêng"
+                          defaultChecked={
+                            changeAddress.diaChi === "Nhà Riêng" ? true : false
+                          }
+                          onClick={handleClickToChangeAnyWhere}
+                        />
+                      </button>
+                    </div>
+                    <div className="select-type-time">
+                      <div className="type-time-title">
+                        Thời gian nhận hàng:
+                      </div>
+                      <button
+                        className={
+                          changeAddress.time === "Giờ Hành Chính"
+                            ? "option-change-time active"
+                            : "option-change-time"
+                        }
+                      >
+                        Hành chính
+                        <input
+                          className="select-address"
+                          type="radio"
+                          value="Giờ Hành Chính"
+                          name="gionhanhang"
+                          defaultChecked={
+                            changeAddress.time === "Giờ Hành Chính"
+                              ? true
+                              : false
+                          }
+                          onClick={handleClickToSelectChangeTime}
+                        />
+                      </button>
+                      <button
+                        className={
+                          changeAddress.time === "Mọi Lúc"
+                            ? "option-change-time active"
+                            : "option-change-time"
+                        }
+                      >
+                        Mọi lúc
+                        <input
+                          className="select-address"
+                          type="radio"
+                          value="Mọi Lúc"
+                          defaultChecked={
+                            changeAddress.time === "Mọi Lúc" ? true : false
+                          }
+                          name="gionhanhang"
+                          onClick={handleClickToSelectChangeTime}
+                        />
+                      </button>
+                    </div>
+                  </Col>
+                  <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
+                    <div className="confirm-save-and-cancel">
+                      <button
+                        className="confirm-cancel-add-address"
+                        onClick={handleClickToCancelChangeAddress}
+                      >
+                        Hủy Bỏ
+                      </button>
+                      <button
+                        className="confirm-save-add-address"
+                        onClick={handleClickToConfirmChangeAddress}
+                      >
+                        Xác Nhận
+                      </button>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
             </div>
           </div>
         </div>

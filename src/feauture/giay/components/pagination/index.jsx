@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./pagination.scss";
 import uuid from "uuid/dist/v4";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 PaginationHanmade.propTypes = {
   onPageChange1: PropTypes.func,

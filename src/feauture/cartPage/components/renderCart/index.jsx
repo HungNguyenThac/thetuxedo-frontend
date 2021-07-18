@@ -4,15 +4,16 @@ import "./renderCart.scss";
 import { Col } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   changeAllItemInCart,
   DeleteItemInCart,
 } from "../../../../actions/itemCart";
 import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
 import { Link, useHistory } from "react-router-dom";
-
+import axios from "axios";
+import { getCookie } from "../../../../shareFunction/checkCookies";
+import { useEffect } from "react";
 RenderCartPage.propTypes = {
   itemDetails: PropTypes.object,
 };
@@ -36,12 +37,12 @@ function RenderCartPage(props) {
   const disPatch = useDispatch();
   const history = useHistory();
   const { itemDetails } = props;
+  const cartForUser = useSelector((state) => state.itemCart.itemCart);
   const totalPrice = sumPriceOfTotalItems(itemDetails);
   const totalPriceString = themDauChamVaoGiaTien(totalPrice);
+
   function handleClickToDeleteItem(index) {
-    console.log(index);
     const itemDelete = DeleteItemInCart(index);
-    console.log(43, itemDetails);
     disPatch(itemDelete);
   }
 
@@ -53,6 +54,29 @@ function RenderCartPage(props) {
       history.push("/feature/payPage");
     }
   }
+
+  useEffect(() => {
+    let sendRequestUpdateCart = async () => {
+      try {
+        const cookies = getCookie("user");
+        let response = await axios({
+          method: "PUT",
+          url: "http://localhost:9527/user/addcart",
+          headers: { Authorization: cookies },
+          data: {
+            cartForUser: { cartForUser },
+          },
+        });
+        if (response.data.status === 200) {
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    sendRequestUpdateCart();
+    return () => sendRequestUpdateCart();
+  }, [cartForUser]);
+
   return (
     <body className="Body-cart">
       <div className="grid">
@@ -132,12 +156,6 @@ function RenderCartPage(props) {
               tongGia = themDauChamVaoGiaTien(item.gia * item.soLuong);
             }
 
-            // tạo dấu . trong giảm giá tiền
-            let giamGiaString = "";
-            if (item.giamGia !== undefined) {
-              giamGiaString = themDauChamVaoGiaTien(item.giamGia);
-            }
-
             //tạo . trong tông giá tiền đã giảm
             let tongGiamGiaString = "";
             if (item.giamGia !== undefined) {
@@ -145,6 +163,13 @@ function RenderCartPage(props) {
                 item.giamGia * item.soLuong
               );
             }
+
+            // tạo dấu . trong giảm giá tiền
+            let giamGiaString = "";
+            if (item.giamGia !== undefined) {
+              giamGiaString = themDauChamVaoGiaTien(item.giamGia);
+            }
+
             //thêm dấu . vào phần sub giảm giá
             let numberSale = "";
             if (item.gia && item.giamGia !== undefined) {

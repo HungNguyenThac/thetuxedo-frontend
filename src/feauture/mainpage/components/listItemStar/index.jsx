@@ -70,7 +70,7 @@ const ListItemStar = (props) => {
   return (
     <ul className="carousel-mainPage">
       <div className="carousel-title">
-        <h3 >SẢN PHẨM HANDMADE</h3>
+        <h3>SẢN PHẨM HANDMADE</h3>
       </div>
       <Slider ref={ref} {...settings}>
         {listItem.map((item) => {
@@ -84,8 +84,9 @@ const ListItemStar = (props) => {
           }
 
           //tạo % giảm giá
-          const tiLe = (1 - item.giamGia / item.gia).toFixed(2);
-          const phanTram = tiLe * 100;
+          const phanTram = Math.round(
+            (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+          );
           return (
             <li className="item" key={item.id}>
               <Link

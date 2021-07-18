@@ -74,10 +74,9 @@ function RenderVestCollection(props) {
   const settings = {
     dots: false,
     arrows: false,
-    slidesToShow: 4,
+    slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
-    lazyLoad: true,
     autoplaySpeed: 2500,
     pauseOnHover: true,
     responsive: [
@@ -107,10 +106,9 @@ function RenderVestCollection(props) {
   const setting1 = {
     dots: false,
     arrows: false,
-    slidesToShow: 4,
+    slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
-    lazyLoad: true,
     rtl: true,
     autoplaySpeed: 2500,
     pauseOnHover: true,
@@ -146,12 +144,13 @@ function RenderVestCollection(props) {
             xxl={{ span: 10, offset: 12 }}
             xl={{ span: 10, offset: 12 }}
             lg={{ span: 10, offset: 12 }}
-            md={{ span: 10, offset: 12 }}
-            sm={{ span: 16, offset: 6 }}
+            md={{ span: 9, offset: 12 }}
+            sm={{ span: 14, offset: 6 }}
+            xs={{ span: 16, offset: 4 }}
           >
             <h3>VEST CƯỚI</h3>
           </Col>
-          <Col xxl={2} xl={2} lg={2} md={2} sm={2} xs={2}>
+          <Col xxl={2} xl={2} lg={2} md={3} sm={4} xs={4}>
             <Link
               className="link-in-vestCollection"
               to="/feature/vestcollection/vestcongso"
@@ -174,8 +173,9 @@ function RenderVestCollection(props) {
             }
 
             //tạo % giảm giá
-            const tiLe = (1 - item.giamGia / item.gia).toFixed(2);
-            const phanTram = tiLe * 100;
+            const phanTram = Math.round(
+              (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+            );
             return (
               <li className="item" key={item.id}>
                 <Link
@@ -251,12 +251,13 @@ function RenderVestCollection(props) {
             xxl={{ span: 10, offset: 12 }}
             xl={{ span: 10, offset: 12 }}
             lg={{ span: 10, offset: 12 }}
-            md={{ span: 10, offset: 12 }}
-            sm={{ span: 16, offset: 6 }}
+            md={{ span: 9, offset: 12 }}
+            sm={{ span: 14, offset: 6 }}
+            xs={{ span: 16, offset: 4 }}
           >
             <h3>VEST DA HỘI</h3>
           </Col>
-          <Col xxl={2} xl={2} lg={2} md={2} sm={2} xs={2}>
+          <Col xxl={2} xl={2} lg={2} md={3} sm={4} xs={4}>
             <Link
               className="link-in-vestCollection"
               to="/feature/vestcollection/vestcongso"
@@ -279,8 +280,9 @@ function RenderVestCollection(props) {
             }
 
             //tạo % giảm giá
-            const tiLe = (1 - item.giamGia / item.gia).toFixed(2);
-            const phanTram = tiLe * 100;
+            const phanTram = Math.round(
+              (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+            );
             return (
               <li className="item" key={item.id}>
                 <Link
@@ -356,12 +358,13 @@ function RenderVestCollection(props) {
             xxl={{ span: 10, offset: 12 }}
             xl={{ span: 10, offset: 12 }}
             lg={{ span: 10, offset: 12 }}
-            md={{ span: 10, offset: 12 }}
-            sm={{ span: 16, offset: 6 }}
+            md={{ span: 9, offset: 12 }}
+            sm={{ span: 14, offset: 6 }}
+            xs={{ span: 16, offset: 4 }}
           >
             <h3>VEST CÔNG SỞ</h3>
           </Col>
-          <Col xxl={2} xl={2} lg={2} md={2} sm={2} xs={2}>
+          <Col xxl={2} xl={2} lg={2} md={3} sm={4} xs={4}>
             <Link
               className="link-in-vestCollection"
               to="/feature/vestcollection/vestcongso"
@@ -384,8 +387,9 @@ function RenderVestCollection(props) {
             }
 
             //tạo % giảm giá
-            const tiLe = (1 - item.giamGia / item.gia).toFixed(2);
-            const phanTram = tiLe * 100;
+            const phanTram = Math.round(
+              (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+            );
             return (
               <li className="item" key={item.id}>
                 <Link

@@ -16,7 +16,12 @@
   }
 }
 
+.margin-none {
+  margin: 0;
+}
+
 .item-detail-page {
+  cursor: pointer;
   &_name {
     font-size: 2rem;
     color: black;
@@ -178,7 +183,7 @@
     font-weight: 300;
     border: 0.5px solid black;
     margin: 0 4px;
-    width: 32px;
+    min-width: 32px;
     height: 32px;
     text-align: center;
     line-height: 29px;

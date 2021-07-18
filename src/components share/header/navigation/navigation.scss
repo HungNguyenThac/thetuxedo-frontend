@@ -21,6 +21,7 @@
     width: 100%;
     height: 62px;
     justify-content: space-around;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
     &--left {
       background-color: black;
@@ -112,15 +113,22 @@ ul {
   position: relative;
   color: black;
   &:hover {
-    transition: 0.5s color ease;
     color: black;
     .icon-navigation_scale {
+      transition: 0.5s color ease;
       transform: scale(2);
+    }
+    .numbers-in-cart {
+      display: none;
     }
     .after86:hover::after {
       width: 100%;
     }
   }
+}
+
+.numbers-in-cart {
+  position: absolute;
 }
 
 .after98:after {
@@ -173,7 +181,6 @@ ul {
 }
 
 .link__right-icon {
-  display: inline-block;
   text-decoration: none;
   color: black;
   align-items: center;
@@ -217,19 +224,6 @@ ul {
   left: -10px;
 }
 
-.after68-3:after {
-  content: "";
-  transition: 0.2s all ease;
-  position: absolute;
-  bottom: 5px;
-  height: 1px;
-  width: 39px;
-  background-color: black !important;
-}
-.first68-3:after {
-  left: -10px;
-}
-
 .after68-4:after {
   content: "";
   transition: 0.2s all ease;
@@ -243,6 +237,9 @@ ul {
   right: 0;
 }
 
+.first68-4.after68-4 .numbers-in-cart {
+  display: none;
+}
 .after99:after {
   content: "";
   transition: 0.5s all ease;
@@ -634,7 +631,7 @@ ul {
   }
   .icon__navigation,
   .icon-navigation_scale {
-    font-size: 12px;
+    font-size: 2.2vw;
   }
 
   .icon__navigation:hover {

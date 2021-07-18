@@ -1,17 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./detail.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import BannerDetail from "./components/bannerDetail";
 import DetailTop from "./components/detailTop";
 import ProductDetail from "./components/productDetails";
+import { hideLoading, showLoading } from "../../actions/loading";
 
 ItemDetail.propTypes = {};
 
 function ItemDetail(props) {
+  const dispatch = useDispatch();
   const [itemDetail, setItemDetail] = useState({});
   const [idSize, setIdSize] = useState("");
   const item = useSelector((state) => state.itemDetail.itemDetail);
@@ -22,22 +24,27 @@ function ItemDetail(props) {
     id = localStorage.getItem("itemDetail");
   }
   useEffect(() => {
+    dispatch(showLoading(true));
     async function getItem() {
       try {
         let response = await axios({
-          url: `https://thetuxedo.herokuapp.com/products/${id}`,
           method: "GET",
+          url: `https://thetuxedo.herokuapp.com/products/${id}`,
         });
 
         if (response.status === 200) {
           localStorage.setItem("itemDetail", response.data.id);
           setItemDetail(response.data);
         }
+        if (response.status === 200 && response.status === 200) {
+          dispatch(hideLoading(false));
+        }
       } catch (error) {
         console.log(error);
       }
     }
     getItem();
+    return () => getItem();
   }, [item]);
 
   function handleSizeSelected(size) {

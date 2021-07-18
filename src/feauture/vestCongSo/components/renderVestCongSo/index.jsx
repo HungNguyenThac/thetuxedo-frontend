@@ -159,8 +159,9 @@ function RenderVestCongSo(props) {
                 }
 
                 //tạo % giảm giá
-                const tiLe = (1 - item.giamGia / item.gia).toFixed(2);
-                const phanTram = tiLe * 100;
+                const phanTram = Math.round(
+                  (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+                );
 
                 return (
                   <Col xxl={8} xl={8} lg={8} md={8} sm={12} xs={24}>
