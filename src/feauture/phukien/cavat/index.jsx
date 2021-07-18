@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./cavat.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import queryString from "query-string";

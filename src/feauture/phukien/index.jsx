@@ -1,5 +1,4 @@
 import React from "react";
-import "./phukien.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BannerPhuKien from "./components/banner";

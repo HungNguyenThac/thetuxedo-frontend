@@ -1,6 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-import "./khanCaiAo.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import queryString from "query-string";
