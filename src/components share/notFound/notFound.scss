@@ -1,16 +1,41 @@
-.bg--notFound {
+.body__not__found {
+  margin-top: 112px;
+  width: 100%;
+  height: 100vh;
+
+  position: relative;
+  background-color: black;
+}
+.grid__not__found {
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  background-color: black;
+}
+
+.not__found-left {
+  width: 100%;
+  &_img {
+    width: 82%;
+  }
+}
+
+.not__found-right {
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-flow: row wrap;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 15rem;
+}
 
-  background-image: url(../../assets/banner/banner.jpg);
-  background-position: center;
-  background-size: cover;
+.notFound__title {
+  color: #ffce69;
+  font-size: 5rem;
+}
 
-  &__title {
-    color: rgba(255, 255, 255, 0.85);
-    font-weight: bold;
-  }
+.notFound__sub {
+  color: #ffce69;
+  font-size: 2rem;
 }

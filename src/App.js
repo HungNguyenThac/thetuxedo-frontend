@@ -1,19 +1,19 @@
-import "./App.scss";
-import { createBrowserHistory } from "history";
-import { Router } from "react-router-dom";
-import React, { Suspense, useEffect } from "react";
-import Header from "./components share/header";
-import RouterApp from "./components share/router/routerApp";
-import Footer from "./components share/footer";
-import LoadingMain from "./components share/loading";
 import axios from "axios";
-import { getCookie } from "./shareFunction/checkCookies";
 import firebase from "firebase";
-import { useDispatch, useSelector } from "react-redux";
-import { setInfoUser } from "./actions/infoUser";
-import { addItemToCartFormDataUser } from "./actions/itemCart";
+import { createBrowserHistory } from "history";
+import React, { Suspense, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Router } from "react-router-dom";
 import { postBillToReducer } from "./actions/billUser";
 import { dispatchHistory } from "./actions/history";
+import { setInfoUser } from "./actions/infoUser";
+import { addItemToCartFormDataUser } from "./actions/itemCart";
+import "./App.scss";
+import Footer from "./components share/footer";
+import Header from "./components share/header";
+import LoadingMain from "./components share/loading";
+import RouterApp from "./components share/router/routerApp";
+import { getCookie } from "./shareFunction/checkCookies";
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -47,7 +47,7 @@ function App() {
 
   return (
     <div className="main-shop">
-      <Suspense fallback={<div></div>}>
+      <Suspense fallback={<LoadingMain />}>
         <Router history={createBrowserHistory()}>
           <Header />
           <RouterApp />

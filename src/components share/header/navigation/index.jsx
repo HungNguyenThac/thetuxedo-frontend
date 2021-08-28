@@ -1,36 +1,73 @@
-import React from "react";
-import "antd/dist/antd.css";
-import { Row, Col } from "antd";
-import "./navigation.scss";
-import { NavLink } from "react-router-dom";
-import "font-awesome/css/font-awesome.min.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "font-awesome/css/font-awesome.min.css";
-import logo from "../../../assets/logo/logo.png";
 import {
+  faCaretDown,
   faEnvelope,
   faSearch,
   faShoppingCart,
-  faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
-import Search from "./components/search";
-import ListVest from "./components/listVest";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Col, Row } from "antd";
+import "antd/dist/antd.css";
+import "font-awesome/css/font-awesome.min.css";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { NavLink, useLocation } from "react-router-dom";
+import logo from "../../../assets/logo/logo.png";
 import ListPhuKien from "./components/listPhukien";
+import ListVest from "./components/listVest";
 import MenuRight from "./components/menu-right_576px";
+import Search from "./components/search";
 import Search2 from "./components/search2";
 import CartPopup from "./components/shoppingCart";
 import UserAvarterNavigation from "./components/userAvtNav";
-import { useSelector } from "react-redux";
+import "./navigation.scss";
 
 Navigation.propTypes = {};
 
 function Navigation(props) {
   const lisiItems = useSelector((state) => state.itemCart.itemCart);
+  const location = useLocation();
   const numbersItemInCart = lisiItems.length;
   const handleClickSearch = () => {
     const search = document.querySelector(".SearchForm");
     search.classList.toggle("active");
   };
+  function handleHoverVest() {
+    const element = document.querySelector(".vest");
+    element.classList.add("first99", "after99");
+  }
+
+  function handleHoverPhuKien() {
+    const element = document.querySelector(".phukien");
+    element.classList.add("first99", "after99");
+  }
+  useEffect(() => {
+    const phukien = document.querySelector(".phukien");
+    const vest = document.querySelector(".vest");
+    if (
+      location.pathname === "/feature/vestcollection" ||
+      location.pathname === "/feature/vestcollection/vestcollection" ||
+      location.pathname === "/feature/vestcollection/vestcuoi" ||
+      location.pathname === "/feature/vestcollection/vestcongso" ||
+      location.pathname === "/feature/vestcollection/vestdahoi"
+    ) {
+      vest.classList.add("first99", "after99");
+    } else {
+      vest.classList.remove("first99", "after99");
+    }
+    if (
+      location.pathname === "/feature/phukien" ||
+      location.pathname === "/feature/phukien/combo" ||
+      location.pathname === "/feature/phukien/thatlung" ||
+      location.pathname === "/feature/phukien/cavat" ||
+      location.pathname === "/feature/phukien/nocaico" ||
+      location.pathname === "/feature/phukien/khancaiao" ||
+      location.pathname === "/feature/phukien/ghimcaiao"
+    ) {
+      phukien.classList.add("first99", "after99");
+    } else {
+      phukien.classList.remove("first99", "after99");
+    }
+  }, [location]);
   return (
     <div className="navigation">
       <div className="navigation__top"></div>
@@ -55,14 +92,14 @@ function Navigation(props) {
               <li>
                 <NavLink
                   exact
-                  className="link__navigation--mid1"
-                  to="/feature/vestcollection"
+                  className="link__navigation--mid1 vest"
+                  to="/feature/vestcollection/vestcollection"
                   activeClassName="first99 after99"
                 >
                   <span className="vest--dropdown first98 after98">
                     <span className="spacing__navi">BỘ SƯU TẬP VEST</span>
                     <FontAwesomeIcon icon={faCaretDown} />
-                    <ListVest />
+                    <ListVest handleHover={handleHoverVest} />
                   </span>
                 </NavLink>
               </li>
@@ -105,14 +142,14 @@ function Navigation(props) {
               <li>
                 <NavLink
                   exact
-                  className="link__navigation--mid1"
+                  className="link__navigation--mid1 phukien"
                   to="/feature/phukien"
                   activeClassName="first99 after99"
                 >
                   <span className="phukien--dropdown first98 after98">
                     <span className="spacing__navi">PHỤ KIỆN</span>
                     <FontAwesomeIcon icon={faCaretDown} />
-                    <ListPhuKien />
+                    <ListPhuKien handleHoverPhuKien={handleHoverPhuKien} />
                   </span>
                 </NavLink>
               </li>
