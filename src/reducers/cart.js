@@ -8,7 +8,6 @@ const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case "ADD_ITEM_TO_CART": {
       let newItem = [...state.itemCart];
-
       let value = newItem.filter(
         (el) => el.id === action.payload.id && el.size === action.payload.size
       );
@@ -33,6 +32,7 @@ const cartReducer = (state = initialState, action) => {
         itemCart: newItem,
       };
     }
+
     case "ADD_ITEM_TO_CART_FROM_DATA_USER": {
       let newItem = [];
       newItem = action.payload;
@@ -42,8 +42,10 @@ const cartReducer = (state = initialState, action) => {
         itemCart: newItem,
       };
     }
-    case "CHANGE_ALL_ITEM_IN_CART": {
+
+    case "CHANGE_QUANTITY_ITEM_IN_CART": {
       let newItem = [];
+      console.log(action.payload);
       newItem.unshift(action.payload);
       localStorage.setItem("addItemToCart", JSON.stringify(newItem[0]));
       return {
@@ -51,6 +53,7 @@ const cartReducer = (state = initialState, action) => {
         itemCart: newItem[0],
       };
     }
+
     case "DELETE_ITEM_IN_CART": {
       let newItem = [...state.itemCart];
       newItem.splice(action.payload, 1);

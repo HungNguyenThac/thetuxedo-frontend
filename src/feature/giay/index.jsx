@@ -1,13 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./giayTay.scss";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import queryString from "query-string";
-import BannerGiayTay from "./components/banner";
-import RenderGiayTay from "./components/renderGiayTay";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../../actions/loading";
+import BannerGiayTay from "./components/banner";
+import RenderGiayTay from "./components/renderGiayTay";
 
 GiayTay.propTypes = {};
 
@@ -24,6 +21,7 @@ function GiayTay(props) {
 
   useEffect(() => {
     dispatch(showLoading(true));
+    let isSubscribe = true;
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -35,13 +33,17 @@ function GiayTay(props) {
           method: "GET",
           url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=giaytay",
         });
-        if (responseItems.status === 200) {
+        if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);
         }
-        if (responseCount.status === 200) {
+        if (isSubscribe && responseCount.status === 200) {
           setTotalItem(responseCount.data);
         }
-        if (responseItems.status === 200 && responseCount.status === 200) {
+        if (
+          isSubscribe &&
+          responseItems.status === 200 &&
+          responseCount.status === 200
+        ) {
           dispatch(hideLoading(false));
         }
       } catch (error) {
@@ -49,9 +51,7 @@ function GiayTay(props) {
       }
     }
     getData();
-    return () => {
-      getData();
-    };
+    return () => (isSubscribe = false);
   }, [filters]);
 
   function handlePageChange1(Page) {

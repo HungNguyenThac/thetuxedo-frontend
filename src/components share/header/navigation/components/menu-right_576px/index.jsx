@@ -1,9 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./menu-right_576px.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListUl } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import MenuList from "./components/ul-list-element";
+import "./menu-right_576px.scss";
 
 MenuRight.propTypes = {};
 

@@ -1,9 +1,9 @@
-import React from "react";
+// import React from "react";
 
-Feauture.propTypes = {};
+// Feauture.propTypes = {};
 
-function Feauture(props) {
-  return <div></div>;
-}
+// function Feauture(props) {
+//   return <div></div>;
+// }
 
-export default Feauture;
+// export default Feauture;

@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./bannerAoSoMi.scss";
 import banner from "../../../../assets/banner/banner5.png";
 
 BannerAoSoMi.propTypes = {

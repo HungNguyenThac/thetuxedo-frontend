@@ -8,7 +8,7 @@ import BannerAoSoMi from "./components/banner";
 import RenderAo from "./components/renderAo";
 AoSoMi.propTypes = {};
 
-function AoSoMi(props) {
+function AoSoMi() {
   const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
   const [totalItem, setTotalItem] = useState(0);
@@ -20,7 +20,8 @@ function AoSoMi(props) {
   });
 
   useEffect(() => {
-    dispatch(showLoading(true));
+    dispatch(showLoading());
+    let isSubscribe = true;
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -28,27 +29,30 @@ function AoSoMi(props) {
           method: "GET",
           url: `https://thetuxedo.herokuapp.com/products?phanLoai_containss=aosomi&${pagination}`,
         });
+        console.log(responseItems);
         let responseCount = await axios({
           method: "GET",
           url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=aosomi",
         });
-        if (responseItems.status === 200) {
+        if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);
         }
-        if (responseCount.status === 200) {
+        if (isSubscribe && responseCount.status === 200) {
           setTotalItem(responseCount.data);
         }
-        if (responseItems.status === 200 && responseCount.status === 200) {
-          dispatch(hideLoading(false));
+        if (
+          isSubscribe &&
+          responseItems.status === 200 &&
+          responseCount.status === 200
+        ) {
+          dispatch(hideLoading());
         }
       } catch (error) {
         console.log(error);
       }
     }
     getData();
-    return () => {
-      getData();
-    };
+    return () => (isSubscribe = false);
   }, [filters]);
 
   function handlePageChange1(Page) {

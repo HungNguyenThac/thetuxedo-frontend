@@ -1,7 +1,7 @@
 const initialState = {
   infoUser: {
     name: "",
-    nickname: "",
+    nickName: "",
     avatar: "",
     gender: "",
     birthDay: {
@@ -22,7 +22,7 @@ const initialState = {
 const getInfoUser = (state = initialState, action) => {
   switch (action.type) {
     case "SET_INFO_USER": {
-      let dataUser = action.payload;
+      const dataUser = action.payload;
       return {
         infoUser: dataUser,
       };

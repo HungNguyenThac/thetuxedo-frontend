@@ -17,7 +17,7 @@ UserItemSelect.defaultProps = {
 };
 
 function UserItemSelect(props) {
-  const { infoUser } = useSelector((state) => state.GetInfoUser);
+  const infoUser = useSelector((state) => state.GetInfoUser);
 
   return infoUser.avatar ? (
     <Link className="Menu-list_item_link" to="/feature/userpage">

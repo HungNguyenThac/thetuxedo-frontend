@@ -1,7 +1,3 @@
-import React from "react";
-import { Col, Row } from "antd";
-import "./renderDashBoard.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
   faClipboardCheck,
@@ -9,7 +5,12 @@ import {
   faSignOutAlt,
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Col, Row } from "antd";
+import firebase from "firebase";
+import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {
   setDayBirthDayUser,
   setEmailUser,
@@ -21,18 +22,15 @@ import {
   setPhoneUser,
   setYearBirthDayUser,
 } from "../../../../actions/infoUser";
-import { getCookie } from "../../../../shareFunction/checkCookies";
-import axios from "axios";
-import { useRef } from "react";
-import firebase from "firebase";
-import { useHistory } from "react-router-dom";
+import userApi from "../../../../api/userApi";
 import { isEmail } from "../../../../shareFunction/isEmail";
-import RenderFormAddAddress from "../renderFormAddress";
-import RenderChangePassword from "../renderChangePassword";
 import BillOFUser from "../bill";
 import HistoryBill from "../history";
+import RenderChangePassword from "../renderChangePassword";
+import RenderFormAddAddress from "../renderFormAddress";
+import "./renderDashBoard.scss";
 
-function RenderDashBoard(props) {
+function RenderDashBoard() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { stories } = useSelector((state) => state.stories);
@@ -89,39 +87,42 @@ function RenderDashBoard(props) {
   }
 
   //logout
-  function handleClickToLogout() {
+  async function handleClickToLogout() {
     if (!firebase.apps.length) {
       firebase.initializeApp({});
     }
+
     let user = firebase.auth().currentUser;
 
     if (user) {
-      firebase.auth().signOut();
-    }
-    setTimeout(() => {
+      await firebase.auth().signOut();
+      history.push("/login");
+    } else {
       delete_cookie("user");
-      dispatch(
-        setInfoUser({
-          name: "",
-          nickname: "",
-          avatar: "",
-          gender: "",
-          birthDay: {
-            day: "",
-            month: "",
-            year: "",
-          },
-          address: [],
-          cart: [],
-          bill: {},
-          loginName: "",
-          email: "",
-          phoneNumber: "",
-          password: "",
-        })
-      );
-      history.push("/feature/login");
-    }, 200);
+      setTimeout(() => {
+        dispatch(
+          setInfoUser({
+            name: "",
+            nickname: "",
+            avatar: "",
+            gender: "",
+            birthDay: {
+              day: "",
+              month: "",
+              year: "",
+            },
+            address: [],
+            cart: [],
+            bill: {},
+            loginName: "",
+            email: "",
+            phoneNumber: "",
+            password: "",
+          })
+        );
+        history.push("/login");
+      }, 250);
+    }
   }
 
   // đưa cookies về hết hạn
@@ -235,27 +236,23 @@ function RenderDashBoard(props) {
     let year = infoUser.birthDay.year;
     let email = infoUser.email;
     let phoneNumber = infoUser.phoneNumber;
+    let isSubscribe = true;
     if (formSignup.length < 1) {
       try {
-        const cookies = getCookie("user");
-        let response = await axios({
-          method: "PUT",
-          url: "http://localhost:9527/user/addinfor",
-          headers: { Authorization: cookies },
-          data: {
-            name,
-            nickName,
-            gender,
-            day,
-            month,
-            year,
-            email,
-            phoneNumber,
-          },
-        });
-        if (response.data.status === 200) {
-          dispatch(setInfoUser(response.data.data));
-          cloneInfoUser.current = response.data.data;
+        let response = await userApi.putUpdateInfoUser(
+          name,
+          nickName,
+          gender,
+          day,
+          month,
+          year,
+          email,
+          phoneNumber
+        );
+        const { status, user } = response;
+        if (isSubscribe && status === 200) {
+          dispatch(setInfoUser(user));
+          cloneInfoUser.current = user;
           succes.style.display = "block";
           failed.style.display = "none";
           let element = document.querySelector(".modal-moreInformation");
@@ -268,6 +265,7 @@ function RenderDashBoard(props) {
       failed.style.display = "block";
       succes.style.display = "none";
     }
+
     setTimeout(() => {
       succes.style.display = "none";
       failed.style.display = "none";
@@ -275,127 +273,127 @@ function RenderDashBoard(props) {
   };
 
   function handleClickToSelectProfileAccount() {
-    let optionActive = document.querySelector(".option-file.active");
-    optionActive.classList.remove("active");
-    let profileRemove = document.querySelector(".profile-title.active");
-    profileRemove.classList.remove("active");
-    let profileOption = document.querySelector(".option-profile");
+    const optionActive = document.querySelector(".option-file.active");
+    optionActive?.classList.remove("active");
+    const profileRemove = document.querySelector(".profile-title.active");
+    profileRemove?.classList.remove("active");
+    const profileOption = document.querySelector(".option-profile");
     profileOption.style.display = "block";
-    let profileActive = document.querySelectorAll(".profile-title");
-    profileActive[0].classList.add("active");
-    let firstOptionFile = document.querySelectorAll(".option-file");
-    firstOptionFile[0].classList.add("active");
-    let address = document.querySelector(".div-parent-change-address-user");
-    address.classList.remove("active");
-    let password = document.querySelector(".div-parent-change-password-user");
-    password.classList.remove("active");
-    let bill = document.querySelector(".div-parent-bill-user");
-    bill.classList.remove("active");
-    let history = document.querySelector(".div-parent-history-user");
-    history.classList.remove("active");
-    let info = document.querySelector(".div-parent-change-info-user");
-    info.classList.add("active");
+    const profileActive = document.querySelectorAll(".profile-title");
+    profileActive[0]?.classList.add("active");
+    const firstOptionFile = document.querySelectorAll(".option-file");
+    firstOptionFile[0]?.classList.add("active");
+    const address = document.querySelector(".div-parent-change-address-user");
+    address?.classList.remove("active");
+    const password = document.querySelector(".div-parent-change-password-user");
+    password?.classList.remove("active");
+    const bill = document.querySelector(".div-parent-bill-user");
+    bill?.classList.remove("active");
+    const history = document.querySelector(".div-parent-history-user");
+    history?.classList.remove("active");
+    const info = document.querySelector(".div-parent-change-info-user");
+    info?.classList.add("active");
   }
 
   function clickToSelectProfile(e) {
-    let optionActive = document.querySelector(".option-file.active");
-    optionActive.classList.remove("active");
-    let profileRemove = document.querySelector(".profile-title.active");
-    profileRemove.classList.remove("active");
-    let profileActive = document.querySelectorAll(".profile-title");
-    profileActive[0].classList.add("active");
-    let elementTarget = e.target;
-    elementTarget.classList.add("active");
-    let address = document.querySelector(".div-parent-change-address-user");
-    address.classList.remove("active");
-    let password = document.querySelector(".div-parent-change-password-user");
-    password.classList.remove("active");
-    let bill = document.querySelector(".div-parent-bill-user");
-    bill.classList.remove("active");
-    let history = document.querySelector(".div-parent-history-user");
-    history.classList.remove("active");
-    let info = document.querySelector(".div-parent-change-info-user");
-    info.classList.add("active");
+    const optionActive = document.querySelector(".option-file.active");
+    optionActive?.classList.remove("active");
+    const profileRemove = document.querySelector(".profile-title.active");
+    profileRemove?.classList.remove("active");
+    const profileActive = document.querySelectorAll(".profile-title");
+    profileActive[0]?.classList.add("active");
+    const elementTarget = e.target;
+    elementTarget?.classList.add("active");
+    const address = document.querySelector(".div-parent-change-address-user");
+    address?.classList.remove("active");
+    const password = document.querySelector(".div-parent-change-password-user");
+    password?.classList.remove("active");
+    const bill = document.querySelector(".div-parent-bill-user");
+    bill?.classList.remove("active");
+    const history = document.querySelector(".div-parent-history-user");
+    history?.classList.remove("active");
+    const info = document.querySelector(".div-parent-change-info-user");
+    info?.classList.add("active");
   }
 
   function clickToSelectAddress(e) {
-    let optionActive = document.querySelector(".option-file.active");
-    optionActive.classList.remove("active");
-    let profileRemove = document.querySelector(".profile-title.active");
-    profileRemove.classList.remove("active");
-    let profileActive = document.querySelectorAll(".profile-title");
-    profileActive[0].classList.add("active");
-    let elementTarget = e.target;
-    elementTarget.classList.add("active");
-    let info = document.querySelector(".div-parent-change-info-user");
-    info.classList.remove("active");
-    let password = document.querySelector(".div-parent-change-password-user");
-    password.classList.remove("active");
-    let bill = document.querySelector(".div-parent-bill-user");
-    bill.classList.remove("active");
-    let history = document.querySelector(".div-parent-history-user");
-    history.classList.remove("active");
-    let address = document.querySelector(".div-parent-change-address-user");
-    address.classList.add("active");
+    const optionActive = document.querySelector(".option-file.active");
+    optionActive?.classList.remove("active");
+    const profileRemove = document.querySelector(".profile-title.active");
+    profileRemove?.classList.remove("active");
+    const profileActive = document.querySelectorAll(".profile-title");
+    profileActive[0]?.classList.add("active");
+    const elementTarget = e.target;
+    elementTarget?.classList.add("active");
+    const info = document.querySelector(".div-parent-change-info-user");
+    info?.classList.remove("active");
+    const password = document.querySelector(".div-parent-change-password-user");
+    password?.classList.remove("active");
+    const bill = document.querySelector(".div-parent-bill-user");
+    bill?.classList.remove("active");
+    const history = document.querySelector(".div-parent-history-user");
+    history?.classList.remove("active");
+    const address = document.querySelector(".div-parent-change-address-user");
+    address?.classList.add("active");
   }
 
   function clickToSelectChangePassword(e) {
-    let optionActive = document.querySelector(".option-file.active");
-    optionActive.classList.remove("active");
-    let profileRemove = document.querySelector(".profile-title.active");
-    profileRemove.classList.remove("active");
-    let profileActive = document.querySelectorAll(".profile-title");
-    profileActive[0].classList.add("active");
-    let elementTarget = e.target;
-    elementTarget.classList.add("active");
-    let info = document.querySelector(".div-parent-change-info-user");
-    info.classList.remove("active");
-    let address = document.querySelector(".div-parent-change-address-user");
-    address.classList.remove("active");
-    let bill = document.querySelector(".div-parent-bill-user");
-    bill.classList.remove("active");
-    let history = document.querySelector(".div-parent-history-user");
-    history.classList.remove("active");
-    let password = document.querySelector(".div-parent-change-password-user");
-    password.classList.add("active");
+    const optionActive = document.querySelector(".option-file.active");
+    optionActive?.classList.remove("active");
+    const profileRemove = document.querySelector(".profile-title.active");
+    profileRemove?.classList.remove("active");
+    const profileActive = document.querySelectorAll(".profile-title");
+    profileActive[0]?.classList.add("active");
+    const elementTarget = e.target;
+    elementTarget?.classList.add("active");
+    const info = document.querySelector(".div-parent-change-info-user");
+    info?.classList.remove("active");
+    const address = document.querySelector(".div-parent-change-address-user");
+    address?.classList.remove("active");
+    const bill = document.querySelector(".div-parent-bill-user");
+    bill?.classList.remove("active");
+    const history = document.querySelector(".div-parent-history-user");
+    history?.classList.remove("active");
+    const password = document.querySelector(".div-parent-change-password-user");
+    password?.classList.add("active");
   }
 
   function handleClickToSelectBill(e) {
-    let profileRemove = document.querySelector(".profile-title.active");
-    profileRemove.classList.remove("active");
-    let profileOption = document.querySelector(".option-profile");
+    const profileRemove = document.querySelector(".profile-title.active");
+    profileRemove?.classList.remove("active");
+    const profileOption = document.querySelector(".option-profile");
     profileOption.style.display = "none";
-    let elementTarget = e.target;
-    elementTarget.classList.add("active");
-    let info = document.querySelector(".div-parent-change-info-user");
-    info.classList.remove("active");
-    let address = document.querySelector(".div-parent-change-address-user");
-    address.classList.remove("active");
-    let history = document.querySelector(".div-parent-history-user");
-    history.classList.remove("active");
-    let password = document.querySelector(".div-parent-change-password-user");
-    password.classList.remove("active");
-    let bill = document.querySelector(".div-parent-bill-user");
-    bill.classList.add("active");
+    const elementTarget = e.target;
+    elementTarget?.classList.add("active");
+    const info = document.querySelector(".div-parent-change-info-user");
+    info?.classList.remove("active");
+    const address = document.querySelector(".div-parent-change-address-user");
+    address?.classList.remove("active");
+    const history = document.querySelector(".div-parent-history-user");
+    history?.classList.remove("active");
+    const password = document.querySelector(".div-parent-change-password-user");
+    password?.classList.remove("active");
+    const bill = document.querySelector(".div-parent-bill-user");
+    bill?.classList.add("active");
   }
 
   function handleClickToSelectHistory(e) {
-    let profileRemove = document.querySelector(".profile-title.active");
-    profileRemove.classList.remove("active");
-    let elementTarget = e.target;
-    elementTarget.classList.add("active");
-    let profileOption = document.querySelector(".option-profile");
+    const profileRemove = document.querySelector(".profile-title.active");
+    profileRemove?.classList.remove("active");
+    const elementTarget = e.target;
+    elementTarget?.classList.add("active");
+    const profileOption = document.querySelector(".option-profile");
     profileOption.style.display = "none";
-    let info = document.querySelector(".div-parent-change-info-user");
-    info.classList.remove("active");
-    let address = document.querySelector(".div-parent-change-address-user");
-    address.classList.remove("active");
-    let password = document.querySelector(".div-parent-change-password-user");
-    password.classList.remove("active");
-    let bill = document.querySelector(".div-parent-bill-user");
-    bill.classList.remove("active");
-    let history = document.querySelector(".div-parent-history-user");
-    history.classList.add("active");
+    const info = document.querySelector(".div-parent-change-info-user");
+    info?.classList.remove("active");
+    const address = document.querySelector(".div-parent-change-address-user");
+    address?.classList.remove("active");
+    const password = document.querySelector(".div-parent-change-password-user");
+    password?.classList.remove("active");
+    const bill = document.querySelector(".div-parent-bill-user");
+    bill?.classList.remove("active");
+    const history = document.querySelector(".div-parent-history-user");
+    history?.classList.add("active");
   }
 
   return (
@@ -1319,7 +1317,7 @@ function RenderDashBoard(props) {
               </Row>
             </div>
             {/* địa chỉ */}
-            <RenderFormAddAddress infoUser={infoUser} />
+            <RenderFormAddAddress />
             {/* mật khẩu */}
             <RenderChangePassword />
             {/* bill */}

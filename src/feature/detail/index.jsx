@@ -1,55 +1,57 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./detail.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import axios from "axios";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { hideLoading, showLoading } from "../../actions/loading";
 import BannerDetail from "./components/bannerDetail";
 import DetailTop from "./components/detailTop";
 import ProductDetail from "./components/productDetails";
-import { hideLoading, showLoading } from "../../actions/loading";
+import "./detail.scss";
 
 ItemDetail.propTypes = {};
 
-function ItemDetail(props) {
+function ItemDetail() {
   const dispatch = useDispatch();
   const [itemDetail, setItemDetail] = useState({});
   const [idSize, setIdSize] = useState("");
-  const item = useSelector((state) => state.itemDetail.itemDetail);
-  let id = "";
-  if (item[0] !== undefined) {
-    id = item[0].id;
-  } else {
-    id = localStorage.getItem("itemDetail");
-  }
+  const item = useSelector((state) => state.itemDetail);
+  const param = useParams();
+
   useEffect(() => {
-    dispatch(showLoading(true));
+    let isSubscribe = true;
+    dispatch(showLoading());
     async function getItem() {
       try {
         let response = await axios({
           method: "GET",
-          url: `https://thetuxedo.herokuapp.com/products/${id}`,
+          url: `https://thetuxedo.herokuapp.com/products/${param.param}`,
         });
-
-        if (response.status === 200) {
-          localStorage.setItem("itemDetail", response.data.id);
-          setItemDetail(response.data);
+        const { status, data } = response;
+        if (isSubscribe && status === 200) {
+          setItemDetail(data);
         }
-        if (response.status === 200 && response.status === 200) {
-          dispatch(hideLoading(false));
+        if (isSubscribe && status === 200) {
+          dispatch(hideLoading());
         }
       } catch (error) {
         console.log(error);
       }
     }
     getItem();
-    return () => getItem();
+    return () => (isSubscribe = false);
   }, [item]);
 
   function handleSizeSelected(size) {
     setIdSize(size.id);
   }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.keyCode === 27) {
+      const element = document.querySelector(".window__zoom");
+      element.style.display = "none";
+    }
+  });
+
   return (
     <div>
       <BannerDetail itemDetail={itemDetail} />

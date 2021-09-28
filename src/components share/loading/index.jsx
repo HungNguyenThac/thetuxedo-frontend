@@ -1,9 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { Col } from "antd";
+import React from "react";
+import { useSelector } from "react-redux";
 import loadingImage from "../../assets/images/suspen.png";
 import "./loading.scss";
-import { useSelector } from "react-redux";
 
 LoadingMain.propTypes = {};
 

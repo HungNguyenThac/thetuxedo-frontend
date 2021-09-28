@@ -1,18 +1,16 @@
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Row } from "antd";
-import axios from "axios";
-import firebase from "firebase";
 import "font-awesome/css/font-awesome.min.css";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { addItemToCart } from "../../../../actions/itemCart";
 import ButtonShare from "../../../../components share/Button";
-import { getCookie } from "../../../../shareFunction/checkCookies";
+import convertListAnhtoArray from "../../../../shareFunction/listAnhToArray";
 import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
-import "./detailTop.scss";
+import ImageList from "../listItemStar";
 
 DetailTop.propTypes = {
   itemDetail: PropTypes.object,
@@ -25,19 +23,6 @@ DetailTop.defaultProps = {
   activeSize: null,
   idSize: null,
 };
-
-function convertListAnhtoArray(list) {
-  const listAnhLength = list.length;
-  let newArray = [];
-  for (let i = 0; i < listAnhLength; i++) {
-    let object = {
-      id: i,
-      url: list[i],
-    };
-    newArray.push(object);
-  }
-  return newArray;
-}
 
 function convertSizeToArray(listSize) {
   const listSizeLength = listSize.length;
@@ -52,140 +37,23 @@ function convertSizeToArray(listSize) {
   return newArray;
 }
 
-function checkWindowInnerWidth(e) {
-  if (window.innerWidth >= 768) {
-    imageZoom(e);
-  }
-}
-
-function imageZoom(e) {
-  var img, lens, result, cx, cy, blockZoom;
-  img = e.target;
-  blockZoom = document.querySelector(".window__zoom");
-  blockZoom.style.display = "block";
-  result = document.getElementById("myresult");
-  result.style.display = "block";
-  // result.style.height = (result.clientWidth * 3) / 2 - 4 + "px";
-  /*create lens:*/
-  var deleteElement = document.querySelector(".img-zoom-lens");
-  if (deleteElement !== null) {
-    deleteElement.remove();
-  }
-  lens = document.createElement("DIV");
-
-  lens.setAttribute("class", "img-zoom-lens");
-  /*insert lens:*/
-  img.parentElement.insertBefore(lens, img);
-  lens.style.display = "block";
-  cx = result.offsetWidth / lens.offsetWidth;
-  cy = result.offsetHeight / lens.offsetHeight;
-  /*set background properties for the result DIV:*/
-  result.style.backgroundImage = "url('" + img.src + "')";
-  result.style.backgroundSize = img.width * cx + "px " + img.height * cy + "px";
-  /*execute a function when someone moves the cursor over the image, or the lens:*/
-  lens.addEventListener("mousemove", moveLens);
-  img.addEventListener("mousemove", moveLens);
-  lens.addEventListener("mouseout", displayNone);
-
-  /*and also for touch screens:*/
-  lens.addEventListener("touchmove", moveLens);
-  img.addEventListener("touchmove", moveLens);
-  function moveLens(e) {
-    var pos, x, y;
-    /*prevent any other actions that may occur when moving over the image:*/
-    e.preventDefault();
-    /*get the cursor's x and y positions:*/
-    pos = getCursorPos(e);
-    /*calculate the position of the lens:*/
-    x = pos.x - lens.offsetWidth / 2;
-    y = pos.y - lens.offsetHeight / 2;
-    /*prevent the lens from being positioned outside the image:*/
-    if (x > img.width - lens.offsetWidth) {
-      x = img.width - lens.offsetWidth;
-    }
-    if (x < 0) {
-      x = 0;
-    }
-    if (y > img.height - lens.offsetHeight) {
-      y = img.height - lens.offsetHeight;
-    }
-    if (y < 0) {
-      y = 0;
-    }
-    /*set the position of the lens:*/
-    lens.style.left = x + "px";
-    lens.style.top = y + "px";
-    /*display what the lens "sees":*/
-    result.style.backgroundPosition = "-" + x * cx + "px -" + y * cy + "px";
-  }
-  function getCursorPos(e) {
-    var a,
-      x = 0,
-      y = 0;
-    e = e || window.event;
-    /*get the x and y positions of the image:*/
-    a = img.getBoundingClientRect();
-    /*calculate the cursor's x and y coordinates, relative to the image:*/
-    x = e.pageX - a.left;
-    y = e.pageY - a.top;
-    /*consider any page scrolling:*/
-    x = x - window.pageXOffset;
-    y = y - window.pageYOffset;
-    return { x: x, y: y };
-  }
-}
-
-function displayNone() {
-  var lens, result, windowZoom;
-  result = document.getElementById("myresult");
-  result.style.display = "none";
-  lens = document.querySelector(".img-zoom-lens");
-  lens.style.display = "none";
-  windowZoom = document.querySelector(".window__zoom");
-  windowZoom.style.display = "none";
-}
-
 function DetailTop(props) {
   const { itemDetail, activeSize, idSize } = props;
-  const cartForUser = useSelector((state) => state.itemCart.itemCart);
   const { tenSP, phanLoai, maSP, size, listAnh, gia, giamGia } = itemDetail;
   const [numberItemSelected, setNumberItemSelected] = useState(1);
   const [sizeSelected, setSizeSelected] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(() => {
-    let sendRequestUpdateCart = async () => {
-      if (!firebase.apps.length) {
-        firebase.initializeApp({});
-      }
-      let user = firebase.auth().currentUser;
-      if (user) {
-        try {
-          const cookies = getCookie("user");
-          let response = await axios({
-            method: "PUT",
-            url: "http://localhost:9527/user/addcart",
-            headers: { Authorization: cookies },
-            data: {
-              cartForUser: { cartForUser },
-            },
-          });
-          if (response.data.status === 200) {
-          }
-        } catch (error) {
-          console.log(error.message);
-        }
-      }
-    };
-    sendRequestUpdateCart();
-    return () => sendRequestUpdateCart();
-  }, [cartForUser]);
-
   //tạo list ảnh
   var arrayAnh = [];
   if (listAnh !== undefined) {
     arrayAnh = convertListAnhtoArray(itemDetail.listAnh);
+  }
+
+  function handleShowImageList() {
+    const element = document.querySelector(".window__zoom");
+    element.style.display = "block";
   }
 
   // tạo list size
@@ -272,9 +140,8 @@ function DetailTop(props) {
         size: sizeSelected,
         soLuong: numberItemSelected,
       };
-      let element = addItemToCart(itemSelected);
-      dispatch(element);
-      history.push("/feature/payPage");
+      dispatch(addItemToCart(itemSelected));
+      history.push("/payPage");
     } else {
       notificationToSelectSize();
     }
@@ -295,7 +162,7 @@ function DetailTop(props) {
                           className="detail-img_img myImage"
                           src={anh.url}
                           alt=""
-                          onMouseOver={checkWindowInnerWidth}
+                          onClick={handleShowImageList}
                         />
                       </li>
                     </Col>
@@ -319,7 +186,7 @@ function DetailTop(props) {
                           className="detail-img_img myImage"
                           src={anh.url}
                           alt=""
-                          onMouseOver={checkWindowInnerWidth}
+                          onClick={handleShowImageList}
                         />
                       </li>
                     </Col>
@@ -451,11 +318,7 @@ function DetailTop(props) {
             xs={24}
             className="padding-none"
           >
-            <div className="window__zoom">
-              <div className="window__zoom_overlay">
-                <div id="myresult" className="img-zoom-result"></div>
-              </div>
-            </div>
+            <ImageList itemDetail={itemDetail} listAnh={listAnh} />
           </Col>
         </Col>
       </Row>

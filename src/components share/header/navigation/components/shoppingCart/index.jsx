@@ -1,46 +1,65 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./shoppingCart.scss";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addItemToDetail } from "../../../../../actions/itemDetail";
+import { useHistory } from "react-router";
 import { themDauChamVaoGiaTien } from "../../../../../shareFunction/numberToString";
+import { useSelector } from "react-redux";
+import userApi from "../../../../../api/userApi";
+import { hideLoading, showLoading } from "../../../../../actions/loading";
 
 CartPopup.propTypes = {
-  lisiItems: PropTypes.array,
+  listItems: PropTypes.array,
 };
 CartPopup.defaultProps = {
-  lisiItems: null,
+  listItems: null,
 };
 
 function CartPopup(props) {
-  const { lisiItems } = props;
+  const { listItems } = props;
+  const cartForUser = useSelector((state) => state.itemCart.itemCart);
+  const [boolean, setBoolean] = useState(true);
+  const history = useHistory();
   const dispatch = useDispatch();
   function handleClickSendItemToDetailPage(item) {
-    const itemSelected = addItemToDetail(item);
-    dispatch(itemSelected);
+    const action = addItemToDetail(item);
+    dispatch(action);
+    history.push(`/${item.phanLoai}/detail/${item.id}`);
+    window.scrollTo(0, 186);
   }
+  const handleClickToScrollBackToCart = () => {
+    window.scrollTo(0, 186);
+    setBoolean((x) => !x);
+  };
+  const handleClickToSendrequest = () => {
+    setBoolean((x) => !x);
+  };
 
-  return lisiItems.length !== 0 ? (
+  useEffect(() => {
+    showLoading();
+    let sendRequestUpdateCart = async () => {
+      try {
+        let response = await userApi.putAddNewCart(cartForUser);
+        if (response.status === 200) {
+          hideLoading();
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    sendRequestUpdateCart();
+  }, [boolean]);
+
+  return listItems.length !== 0 ? (
     <div className="cart-popup">
       <header className="cart-popup_header">
         <span className="cart-popup_header_title">Sản phẩm đã chọn</span>
       </header>
       <body className="cart-popup_body">
         <ul className="list-item">
-          {lisiItems.map((item) => {
-            // tạo dấu . trong giá tiền
-            let Gia = "";
-            if (item.gia !== undefined) {
-              Gia = themDauChamVaoGiaTien(item.gia);
-            }
-
-            // tạo dấu . trong giảm giá tiền
-            let giamGiaString = "";
-            if (item.giamGia !== undefined) {
-              giamGiaString = themDauChamVaoGiaTien(item.giamGia);
-            }
-
+          {listItems.map((item) => {
             // tạo dấu . trong tổng giá tiền
             let tongGia = "";
             if (item.gia !== undefined) {
@@ -59,7 +78,7 @@ function CartPopup(props) {
                 className="item-selected"
                 onClick={() => handleClickSendItemToDetailPage(item)}
               >
-                <Link className="item-selected_link" to="/feature/detail">
+                <Link className="item-selected_link">
                   <div className="item-selected_left">
                     <img
                       className="item-selected_left_img"
@@ -110,10 +129,19 @@ function CartPopup(props) {
         </ul>
       </body>
       <footer className="cart-popup_footer">
-        <Link to="/feature/cartPage" className="cart-popup_footer-link-left">
+        <Link
+          to="/cartPage"
+          className="cart-popup_footer-link-left"
+          onClick={handleClickToScrollBackToCart}
+        >
           <span className="cart-popup_footer-right_title">Xem Giỏ Hàng</span>
         </Link>
-        <Link to="/feature/payPage" className="cart-popup_footer-link-right">
+
+        <Link
+          to="/payPage"
+          className="cart-popup_footer-link-right"
+          onClick={handleClickToSendrequest}
+        >
           <span className="cart-popup_footer-right_title">
             Tiến Hành Thanh Toán
           </span>

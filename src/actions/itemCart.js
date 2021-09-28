@@ -5,9 +5,9 @@ export const addItemToCart = (item) => {
   };
 };
 
-export const changeAllItemInCart = (items) => {
+export const changeQuantityItemInCart = (items) => {
   return {
-    type: "CHANGE_ALL_ITEM_IN_CART",
+    type: "CHANGE_QUANTITY_ITEM_IN_CART",
     payload: items,
   };
 };

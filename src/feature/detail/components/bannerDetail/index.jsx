@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./bannerDetail.scss";
 import banner from "../../../../assets/banner/banner7.png";
 
 BannerDetail.propTypes = {
@@ -16,8 +15,11 @@ BannerDetail.defaultProps = {
 function BannerDetail(props) {
   const { backgroundBannerURL, itemDetail } = props;
   const { tenSP } = itemDetail;
-
-  const title = tenSP ? tenSP : "BST ÁO SƠ MI CAO CẤP";
+  let tenSpUpperCase = "";
+  if (tenSP !== undefined) {
+    tenSpUpperCase = tenSP.toUpperCase();
+  }
+  const title = tenSpUpperCase ? tenSpUpperCase : "BST ÁO SƠ MI CAO CẤP";
   const background = backgroundBannerURL ? backgroundBannerURL : banner;
 
   return (

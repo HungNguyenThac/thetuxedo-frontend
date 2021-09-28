@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import "./cartPage.scss";
+import React from "react";
 import { useSelector } from "react-redux";
+import "./cartPage.scss";
 import BannerCartPage from "./components/bannerCartPage";
 import RenderCartPage from "./components/renderCart";
 

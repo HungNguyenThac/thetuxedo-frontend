@@ -1,16 +1,13 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./quanAu.scss";
-import { useEffect, useState } from "react";
 import axios from "axios";
-import RenderQuanAu from "./components/renderQuanAu";
-import BannerQuanAu from "./components/banner";
 import queryString from "query-string";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../../actions/loading";
+import BannerQuanAu from "./components/banner";
+import RenderQuanAu from "./components/renderQuanAu";
 AoSoMi.propTypes = {};
 
-function AoSoMi(props) {
+function AoSoMi() {
   const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
   const [totalItem, setTotalItem] = useState(0);
@@ -23,6 +20,7 @@ function AoSoMi(props) {
 
   useEffect(() => {
     dispatch(showLoading(true));
+    let isSubscrible = true;
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -34,13 +32,17 @@ function AoSoMi(props) {
           method: "GET",
           url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=quanau",
         });
-        if (responseItems.status === 200) {
+        if (isSubscrible && responseItems.status === 200) {
           setListItem(responseItems.data);
         }
-        if (responseCount.status === 200) {
+        if (isSubscrible && responseCount.status === 200) {
           setTotalItem(responseCount.data);
         }
-        if (responseItems.status === 200 && responseCount.status === 200) {
+        if (
+          isSubscrible &&
+          responseItems.status === 200 &&
+          responseCount.status === 200
+        ) {
           dispatch(hideLoading(false));
         }
       } catch (error) {
@@ -48,9 +50,7 @@ function AoSoMi(props) {
       }
     }
     getData();
-    return () => {
-      getData();
-    };
+    return () => (isSubscrible = false);
   }, [filters]);
 
   function handlePageChange1(Page) {

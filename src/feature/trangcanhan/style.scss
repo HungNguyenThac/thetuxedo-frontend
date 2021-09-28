@@ -1,0 +1,120 @@
+.modal-moreInformation {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
+  will-change: opacity, transform;
+  animation: hiddenShow linear 0.1s;
+  z-index: 99;
+}
+
+.modal-moreInformation_overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.update-info-user {
+  width: 22%;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0 12px;
+  border-radius: 6px;
+}
+
+.update-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  & span {
+    line-height: 48px;
+    font-size: 1.2rem;
+    color: rgb(255, 132, 0);
+  }
+}
+
+.form-input-update {
+  display: flex;
+  flex-direction: column;
+  & input {
+    padding-left: 12px;
+    color: black;
+    font-size: 1rem;
+  }
+  & button {
+    font-size: 1.2rem;
+    background-color: black;
+    color: rgb(245, 166, 47);
+    cursor: pointer;
+    transition: all 0.25s ease-in-out 0s;
+    &:hover {
+      background-color: rgb(55, 53, 53);
+      border: 0.5px solid rgb(55, 53, 53);
+      color: rgb(255, 153, 0);
+    }
+  }
+}
+
+.block-input {
+  margin-bottom: 16px;
+  height: 45px;
+  outline: none;
+  border: 0.5px solid black;
+  border-radius: 2px;
+}
+
+.form-signUp-parent {
+  position: relative;
+  & input {
+    width: 100%;
+  }
+}
+
+.form-signUp-parent.success input {
+  border-color: #2ecc71;
+}
+
+.form-signUp-parent.error input {
+  border-color: #e74c3c;
+}
+
+.form-signUp-parent small {
+  color: #e74c3c;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  visibility: hidden;
+  padding-left: 12px;
+}
+
+.form-signUp-parent.error small {
+  visibility: visible;
+}
+
+.notification-signUp-succes {
+  height: 42px;
+  margin-bottom: 6px;
+  text-align: center;
+  line-height: 42px;
+  font-size: 1.2rem;
+  color: black;
+  display: none;
+  user-select: text;
+}
+
+.notification-signUp-failed {
+  height: 42px;
+  margin-bottom: 6px;
+  text-align: center;
+  line-height: 42px;
+  font-size: 1.2rem;
+  color: rgb(255, 0, 0);
+  display: none;
+  user-select: text;
+}

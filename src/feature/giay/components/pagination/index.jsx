@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./pagination.scss";
-import uuid from "uuid/dist/v4";
 
 PaginationHanmade.propTypes = {
   onPageChange1: PropTypes.func,
@@ -23,7 +22,7 @@ function makeArrayPages(totalPages) {
   let arrayPages = [];
   for (let i = 1; i <= totalPages; i++) {
     const object = {
-      id: uuid(),
+      id: i + 1,
       number: i,
     };
     arrayPages.push(object);
@@ -46,15 +45,15 @@ function PaginationHanmade(props) {
   function handleClickPage(page) {
     if (onPageChange1) {
       onPageChange1(page);
+      window.scrollTo(0, 472);
     }
-    window.scrollTo(0, 472);
   }
 
   function handleClickButtonChangePage(newPage) {
     if (onPageChange2) {
       onPageChange2(newPage);
+      window.scrollTo(0, 472);
     }
-    window.scrollTo(0, 0);
   }
   const prevStyle = _page <= 1 ? { display: "none" } : { display: "block" };
   const nextStyle =

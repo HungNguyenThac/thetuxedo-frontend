@@ -566,6 +566,18 @@
   }
 }
 
+.icon__times__close {
+  position: absolute;
+  right: -28px;
+  top: -18px;
+  font-size: 36px;
+  transition: all 0.25s ease-in-out;
+  &:hover {
+    cursor: pointer;
+    color: #e7a33c;
+  }
+}
+
 .modal-moreAddress_overlay {
   position: absolute;
   width: 100%;
@@ -653,12 +665,12 @@
   border-radius: 4px;
 }
 
-.btn-fix,
-.btn-save {
+.btn-fix-paypage,
+.btn-save-paypage {
   outline: none;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 0px;
+  top: 0px;
   margin-top: 8px;
   margin-right: 12px;
   border: none;
@@ -666,7 +678,7 @@
   background-color: transparent;
 }
 
-.btn-save {
+.btn-save-paypage {
   display: none;
 }
 

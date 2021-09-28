@@ -3,12 +3,8 @@ import "./tranglienhe.scss";
 
 TrangLienHe.propTypes = {};
 
-function TrangLienHe(props) {
-  return (
-    <div>
-      <p>ĐÂY LÀ TRANG LIÊN HỆ</p>
-    </div>
-  );
+function TrangLienHe() {
+  return <div className="margin-top-connect"></div>;
 }
 
 export default TrangLienHe;

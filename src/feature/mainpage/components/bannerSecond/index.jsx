@@ -1,10 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./bannerSecond.scss";
 import { Col, Row } from "antd";
+import React from "react";
+import { Link } from "react-router-dom";
 import banner1 from "../../../../assets/banner/banner11.jpeg";
 import banner2 from "../../../../assets/banner/banner12.png";
-import { Link } from "react-router-dom";
+import "./bannerSecond.scss";
 
 BannerSecond.propTypes = {};
 
@@ -31,7 +30,7 @@ function BannerSecond(props) {
                 nhỏ trên logo để cho xứng tầm đẳng cấp của thương hiệu....
               </p>
               <Link>
-                <span className="banner-top_right-detail title after">
+                <span className="banner-top_right-detail title first after">
                   Xem thêm
                 </span>
               </Link>
@@ -55,7 +54,7 @@ function BannerSecond(props) {
                 bộ Suit trong lịch sử...
               </p>
               <Link>
-                <span className="banner-top_right-detail title after">
+                <span className="banner-top_right-detail title first after">
                   Xem thêm
                 </span>
               </Link>

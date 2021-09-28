@@ -11,26 +11,10 @@ Vest.propTypes = {};
 function Vest(props) {
   return (
     <Switch>
-      <Route
-        exact
-        path="/feature/vestcollection/vestcollection"
-        component={vestCollection}
-      />
-      <Route
-        exact
-        path="/feature/vestcollection/vestcuoi"
-        component={vestcuoi}
-      />
-      <Route
-        exact
-        path="/feature/vestcollection/vestcongso"
-        component={vestcongso}
-      />
-      <Route
-        exact
-        path="/feature/vestcollection/vestdahoi"
-        component={vestdahoi}
-      />
+      <Route exact path="/vestcollection/listItem" component={vestCollection} />
+      <Route exact path="/vestcollection/vestcuoi" component={vestcuoi} />
+      <Route exact path="/vestcollection/vestcongso" component={vestcongso} />
+      <Route exact path="/vestcollection/vestdahoi" component={vestdahoi} />
     </Switch>
   );
 }

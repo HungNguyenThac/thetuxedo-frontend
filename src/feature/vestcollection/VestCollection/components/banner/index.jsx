@@ -1,7 +1,7 @@
-import React from "react";
 import PropTypes from "prop-types";
-import "./bannerVestCollection.scss";
+import React from "react";
 import banner from "../../../../../assets/banner/banner5.png";
+import "./bannerVestCollection.scss";
 
 BannerVestCollectiion.propTypes = {
   backgroundBannerURL: PropTypes.string,

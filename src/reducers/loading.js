@@ -1,20 +1,18 @@
 const initialState = {
-  loading: null,
+  loading: false,
 };
 
 const loading = (state = initialState, action) => {
   switch (action.type) {
     case "SHOW_LOADING": {
-      let newLoading = action.payload;
       return {
-        loading: newLoading,
+        loading: true,
       };
     }
 
     case "HIDE_LOADING": {
-      let newLoading = action.payload;
       return {
-        loading: newLoading,
+        loading: false,
       };
     }
     default:

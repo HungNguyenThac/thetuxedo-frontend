@@ -1,26 +1,23 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./renderThanhToan.scss";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Row } from "antd";
-import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import uuid from "uuid/dist/v4";
-import { useState } from "react";
-import { DeleteAllItemAndStorage } from "../../../../actions/itemCart";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import uuid from "uuid/dist/v4";
+import {
+  setAddressUser,
+  setInfoUser,
+  setNameUser,
+  setPhoneUser,
+} from "../../../../actions/infoUser";
+import { DeleteAllItemAndStorage } from "../../../../actions/itemCart";
 import { hideLoading, showLoading } from "../../../../actions/loading";
-import { useRef } from "react";
-import { setAddressUser, setInfoUser } from "../../../../actions/infoUser";
-import { getCookie } from "../../../../shareFunction/checkCookies";
+import userApi from "../../../../api/userApi";
 import ButtonShare from "../../../../components share/Button/index";
-RenderThanhToan.propTypes = {
-  listItems: PropTypes.array,
-};
-
-RenderThanhToan.defaultProps = {
-  listItems: [],
-};
+import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
+import "./renderThanhToan.scss";
 
 function checkInputs() {
   var userName = document.querySelector(".userName");
@@ -102,14 +99,13 @@ function formatTimeString(date) {
   return `${day}/${month}/${year}`;
 }
 
-function RenderThanhToan(props) {
+function RenderThanhToan() {
   const dispatch = useDispatch();
-  const { listItems } = props;
+  const listItems = useSelector((state) => state.itemCart.itemCart);
   const { infoUser } = useSelector((state) => state.GetInfoUser);
+  const { name, phoneNumber } = infoUser;
   const totalPricePayPage = sumPriceOfTotalItems(listItems);
   const converNumberToString = themDauChamVaoGiaTien(totalPricePayPage);
-  const [name, setName] = useState(infoUser.name);
-  const [phone, setPhone] = useState(infoUser.phoneNumber);
   const [diaChi, setDiaChi] = useState("Công Ty");
   const [time, setTime] = useState("Giờ Hành Chính");
   const [valueTextArea, setValueTextArea] = useState("");
@@ -117,10 +113,26 @@ function RenderThanhToan(props) {
   const [index, setIndex] = useState("");
   const [addressSelected, setAddressSelected] = useState();
   const cloneUser = useRef(infoUser);
+  const cartForUser = useSelector((state) => state.itemCart.itemCart);
+
+  useEffect(() => {
+    showLoading();
+    let sendRequestUpdateCart = async () => {
+      try {
+        let response = await userApi.putAddNewCart(cartForUser);
+        if (response.status === 200) {
+          hideLoading();
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    sendRequestUpdateCart();
+  }, []);
 
   function handleChangePhone(e) {
     let value = e.target.value;
-    setPhone(value);
+    dispatch(setPhoneUser(value));
     let element = e.target.parentElement;
     let number = value.trim().length;
     if (number === 0) {
@@ -139,7 +151,7 @@ function RenderThanhToan(props) {
 
   function handleChangeName(e) {
     let value = e.target.value;
-    setName(value);
+    dispatch(setNameUser(value));
     let element = e.target.parentElement;
     let number = value.trim().length;
     if (number === 0) {
@@ -271,9 +283,9 @@ function RenderThanhToan(props) {
     let input = element.querySelector(".input-address-user");
     input.disabled = false;
     element.className = "div-info-user error";
-    let fix = element.querySelector(".btn-fix");
+    let fix = element.querySelector(".btn-fix-paypage");
     fix.style.display = "none";
-    let save = element.querySelector(".btn-save");
+    let save = element.querySelector(".btn-save-paypage");
     save.style.display = "block";
     let small = element.querySelector("small");
     small.style.display = "none";
@@ -292,7 +304,10 @@ function RenderThanhToan(props) {
     let input = element.querySelector(".input-address-user");
     if (input.value === name || input.value === changeAddress.name) {
       checkInputName();
-    } else if (input.value === phone || input.value === changeAddress.phone) {
+    } else if (
+      input.value === phoneNumber ||
+      input.value === changeAddress.phone
+    ) {
       checkInputPhone(e);
     }
     function checkInputName() {
@@ -302,9 +317,9 @@ function RenderThanhToan(props) {
       } else if (emailValue.length >= 2) {
         setSuccessForSignUP(input);
         input.disabled = true;
-        let save = element.querySelector(".btn-save");
+        let save = element.querySelector(".btn-save-paypage");
         save.style.display = "none";
-        let fix = element.querySelector(".btn-fix");
+        let fix = element.querySelector(".btn-fix-paypage");
         fix.style.display = "block";
       }
     }
@@ -323,9 +338,9 @@ function RenderThanhToan(props) {
       } else {
         setSuccessForSignUP(input);
         input.disabled = true;
-        let save = element.querySelector(".btn-save");
+        let save = element.querySelector(".btn-save-paypage");
         save.style.display = "none";
-        let fix = element.querySelector(".btn-fix");
+        let fix = element.querySelector(".btn-fix-paypage");
         fix.style.display = "block";
       }
     }
@@ -353,7 +368,7 @@ function RenderThanhToan(props) {
       let object = {
         id: uuid(),
         name: name,
-        phone: phone,
+        phone: phoneNumber,
         Address: valueTextArea,
         diaChi: diaChi,
         time: time,
@@ -363,8 +378,8 @@ function RenderThanhToan(props) {
       dispatch(setAddressUser(cloneArray));
       let element = document.querySelector(".modal-moreAddress");
       element.style.display = "none";
-      setName(infoUser.name);
-      setPhone(infoUser.phoneNumber);
+      setNameUser(infoUser.name);
+      setPhoneUser(infoUser.phoneNumber);
       setValueTextArea("");
       setDiaChi("Công Ty");
       setTime("Giờ Hành Chính");
@@ -398,52 +413,41 @@ function RenderThanhToan(props) {
     dispatch(setAddressUser(cloneArray));
   }
 
-  function handleClickToSaveAllAddress() {
+  async function handleClickToSaveAllAddress() {
     if (JSON.stringify(cloneUser.current) !== JSON.stringify(infoUser)) {
-      sendRequestToUpdateAddress();
+      let address = infoUser.address;
+      let notification = document.querySelector(
+        ".notification-for-save-all-address"
+      );
+      let element = document.querySelector(
+        ".notification-for-forget-save-address"
+      );
+      try {
+        let response = await userApi.putUpdateAddres(address);
+        const { status, user } = response;
+        if (status === 200) {
+          dispatch(setInfoUser(user));
+          cloneUser.current = user;
+          element.style.display = "none";
+          notification.style.display = "block";
+        } else if (status === 400) {
+          notification.innerText = "Một lỗi đã xảy ra";
+          notification.style.display = "block";
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+
+      setTimeout(() => {
+        notification.style.display = "none";
+      }, 3000);
     }
   }
-
-  let sendRequestToUpdateAddress = async () => {
-    let array = infoUser.address;
-    let notification = document.querySelector(
-      ".notification-for-save-all-address"
-    );
-    let element = document.querySelector(
-      ".notification-for-forget-save-address"
-    );
-    try {
-      const cookies = getCookie("user");
-      let response = await axios({
-        method: "PUT",
-        url: "http://localhost:9527/user/dashboard",
-        headers: { Authorization: cookies },
-        data: {
-          address: { array },
-        },
-      });
-      if (response.data.status === 200) {
-        dispatch(setInfoUser(response.data.user));
-        cloneUser.current = response.data.user;
-        element.style.display = "none";
-        notification.style.display = "block";
-      } else if (response.data.status === 400) {
-        notification.innerText = "Một lỗi đã xảy ra";
-        notification.style.display = "block";
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-
-    setTimeout(() => {
-      notification.style.display = "none";
-    }, 3000);
-  };
 
   function handleClick() {
     if (infoUser.avatar.length >= 1) {
       if (addressSelected !== undefined) {
-        postBillForUserModol();
+        postBillForUserModel();
         dispatch(showLoading(true));
       } else {
         let element = document.querySelector(
@@ -476,7 +480,7 @@ function RenderThanhToan(props) {
     dispatch(array);
   }
 
-  const postBillForUserModol = async () => {
+  const postBillForUserModel = async () => {
     let nameUser = addressSelected.name;
     let phoneuser = addressSelected.phone;
     let address = addressSelected.Address;
@@ -484,7 +488,8 @@ function RenderThanhToan(props) {
     let time = addressSelected.time;
     let now = new Date();
     let newTimeString = formatTimeString(now);
-    let bill = {
+
+    let donHang = {
       HoVaTen: nameUser,
       SoDienThoai: phoneuser,
       DiaChi: address,
@@ -494,21 +499,20 @@ function RenderThanhToan(props) {
       TongTien: totalPricePayPage,
       products: { listItems },
     };
-    let cloneBill = [...infoUser.bill];
-    cloneBill.push(bill);
+
+    let cloneBill = infoUser.bill;
+    console.log(cloneBill);
+    cloneBill.unshift(donHang);
+
+    const emptyCart = [];
     try {
-      const cookies = getCookie("user");
-      let response = await axios({
-        method: "PUT",
-        url: "http://localhost:9527/user/addbill",
-        headers: { Authorization: cookies },
-        data: {
-          bill: { cloneBill },
-        },
-      });
-      if (response.data.status === 200) {
-        dispatch(hideLoading(false));
+      let response = await userApi.putAddCurrentBill(cloneBill);
+      let responseCart = await userApi.putAddNewCart(emptyCart);
+      const { status, user } = response;
+      if (responseCart.status === 200 && status === 200) {
+        dispatch(setInfoUser(user));
         showModalAndClearLocalStorage();
+        dispatch(hideLoading(false));
       }
     } catch (error) {
       console.log(error.message);
@@ -582,6 +586,11 @@ function RenderThanhToan(props) {
       }, 3000);
     }
   }
+
+  const handleClickToCloseModalSelectAddress = () => {
+    const element = document.querySelector(".modal-select-Address-for-buy");
+    element.style.display = "none";
+  };
 
   return (
     <body className="body-payPage">
@@ -932,7 +941,7 @@ function RenderThanhToan(props) {
               </span>
             </div>
             <div className="footer-cartPage_bottom">
-              <Link to="/feature/cartPage">
+              <Link to="/cartPage">
                 <ButtonShare
                   title="QUAY LẠI GIỎ HÀNG"
                   subString=" Thêm nhiều sản phẩm"
@@ -1004,6 +1013,11 @@ function RenderThanhToan(props) {
               >
                 Thêm Địa Chỉ
               </button>
+              <FontAwesomeIcon
+                className="icon__times__close"
+                onClick={handleClickToCloseModalSelectAddress}
+                icon={faTimes}
+              />
             </div>
 
             <Col
@@ -1091,13 +1105,13 @@ function RenderThanhToan(props) {
 
                             <small>Error message</small>
                             <button
-                              className="btn-fix"
+                              className="btn-fix-paypage"
                               onClick={handleClickToFix}
                             >
                               Sửa
                             </button>
                             <button
-                              className="btn-save"
+                              className="btn-save-paypage"
                               onClick={handleClickToSave}
                             >
                               Lưu
@@ -1109,7 +1123,7 @@ function RenderThanhToan(props) {
                             <input
                               className="input-address-user"
                               type="text"
-                              value={phone}
+                              value={phoneNumber}
                               placeholder="Số điện thoại"
                               onChange={handleChangePhone}
                               disabled
@@ -1117,13 +1131,13 @@ function RenderThanhToan(props) {
                             />
                             <small>Error message</small>
                             <button
-                              className="btn-fix"
+                              className="btn-fix-paypage"
                               onClick={handleClickToFix}
                             >
                               Sửa
                             </button>
                             <button
-                              className="btn-save"
+                              className="btn-save-paypage"
                               onClick={handleClickToSave}
                             >
                               Lưu
@@ -1296,10 +1310,10 @@ function RenderThanhToan(props) {
                         disabled
                       />
                       <small>Error message</small>
-                      <button className="btn-fix" onClick={handleClickToFix}>
+                      <button className="btn-fix-paypage" onClick={handleClickToFix}>
                         Sửa
                       </button>
-                      <button className="btn-save" onClick={handleClickToSave}>
+                      <button className="btn-save-paypage" onClick={handleClickToSave}>
                         Lưu
                       </button>
                     </div>
@@ -1315,10 +1329,10 @@ function RenderThanhToan(props) {
                         disabled
                       />
                       <small>Error message</small>
-                      <button className="btn-fix" onClick={handleClickToFix}>
+                      <button className="btn-fix-paypage" onClick={handleClickToFix}>
                         Sửa
                       </button>
-                      <button className="btn-save" onClick={handleClickToSave}>
+                      <button className="btn-save-paypage" onClick={handleClickToSave}>
                         Lưu
                       </button>
                     </div>

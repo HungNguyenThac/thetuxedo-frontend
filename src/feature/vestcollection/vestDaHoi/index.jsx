@@ -1,13 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./vestDaHoi.scss";
-import { useEffect, useState } from "react";
 import axios from "axios";
-import RenderAo from "./components/renderVestDaHoi";
-import BannerAoSoMi from "./components/banner";
 import queryString from "query-string";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../../../actions/loading";
+import BannerAoSoMi from "./components/banner";
+import RenderAo from "./components/renderVestDaHoi";
+import "./vestDaHoi.scss";
 VestDaHoi.propTypes = {};
 
 function VestDaHoi(props) {
@@ -23,7 +21,7 @@ function VestDaHoi(props) {
 
   useEffect(() => {
     dispatch(showLoading(true));
-
+    let isSubscribe = true;
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -35,13 +33,17 @@ function VestDaHoi(props) {
           method: "GET",
           url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=vestdahoi",
         });
-        if (responseItems.status === 200) {
+        if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);
         }
-        if (responseCount.status === 200) {
+        if (isSubscribe && responseCount.status === 200) {
           setTotalItem(responseCount.data);
         }
-        if (responseItems.status === 200 && responseCount.status === 200) {
+        if (
+          isSubscribe &&
+          responseItems.status === 200 &&
+          responseCount.status === 200
+        ) {
           dispatch(hideLoading(false));
         }
       } catch (error) {
@@ -49,9 +51,7 @@ function VestDaHoi(props) {
       }
     }
     getData();
-    return () => {
-      getData();
-    };
+    return () => (isSubscribe = false);
   }, [filters]);
 
   function handlePageChange1(Page) {

@@ -15,7 +15,7 @@ BannerCaVat.defaultProps = {
 
 function BannerCaVat(props) {
   const { backgroundBannerURL, titleBanner } = props;
-  const title = titleBanner ? titleBanner : "BST CÀ VẠT CAO CẤP";
+  const title = titleBanner ? titleBanner : "BST NƠ CÀI CỔ CAO CẤP";
   const background = backgroundBannerURL ? backgroundBannerURL : banner;
 
   return (

@@ -15,7 +15,6 @@ function BannerMainPage(props) {
     autoplay: true,
     autoplaySpeed: 2500,
     pauseOnHover: false,
-    lazyLoad: true,
   };
   return (
     <div className="banner-parent">

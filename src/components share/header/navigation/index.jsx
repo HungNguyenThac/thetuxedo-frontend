@@ -23,10 +23,10 @@ import "./navigation.scss";
 
 Navigation.propTypes = {};
 
-function Navigation(props) {
-  const lisiItems = useSelector((state) => state.itemCart.itemCart);
+function Navigation() {
+  const listItems = useSelector((state) => state.itemCart.itemCart);
   const location = useLocation();
-  const numbersItemInCart = lisiItems.length;
+  const numbersItemInCart = listItems.length;
   const handleClickSearch = () => {
     const search = document.querySelector(".SearchForm");
     search.classList.toggle("active");
@@ -44,30 +44,31 @@ function Navigation(props) {
     const phukien = document.querySelector(".phukien");
     const vest = document.querySelector(".vest");
     if (
-      location.pathname === "/feature/vestcollection" ||
-      location.pathname === "/feature/vestcollection/vestcollection" ||
-      location.pathname === "/feature/vestcollection/vestcuoi" ||
-      location.pathname === "/feature/vestcollection/vestcongso" ||
-      location.pathname === "/feature/vestcollection/vestdahoi"
+      location.pathname === "/vestcollection" ||
+      location.pathname === "/vestcollection/vestcollection" ||
+      location.pathname === "/vestcollection/vestcuoi" ||
+      location.pathname === "/vestcollection/vestcongso" ||
+      location.pathname === "/vestcollection/vestdahoi"
     ) {
       vest.classList.add("first99", "after99");
     } else {
       vest.classList.remove("first99", "after99");
     }
     if (
-      location.pathname === "/feature/phukien" ||
-      location.pathname === "/feature/phukien/combo" ||
-      location.pathname === "/feature/phukien/thatlung" ||
-      location.pathname === "/feature/phukien/cavat" ||
-      location.pathname === "/feature/phukien/nocaico" ||
-      location.pathname === "/feature/phukien/khancaiao" ||
-      location.pathname === "/feature/phukien/ghimcaiao"
+      location.pathname === "/phukien" ||
+      location.pathname === "/phukien/combo" ||
+      location.pathname === "/phukien/thatlung" ||
+      location.pathname === "/phukien/cavat" ||
+      location.pathname === "/phukien/nocaico" ||
+      location.pathname === "/phukien/khancaiao" ||
+      location.pathname === "/phukien/ghimcaiao"
     ) {
       phukien.classList.add("first99", "after99");
     } else {
       phukien.classList.remove("first99", "after99");
     }
   }, [location]);
+
   return (
     <div className="navigation">
       <div className="navigation__top"></div>
@@ -93,7 +94,7 @@ function Navigation(props) {
                 <NavLink
                   exact
                   className="link__navigation--mid1 vest"
-                  to="/feature/vestcollection/vestcollection"
+                  to="/vestcollection/listItem"
                   activeClassName="first99 after99"
                 >
                   <span className="vest--dropdown first98 after98">
@@ -106,7 +107,7 @@ function Navigation(props) {
               <li>
                 <NavLink
                   className="link__navigation--mid"
-                  to="/feature/aosomi"
+                  to="/aosomi"
                   activeClassName="first68 after68"
                 >
                   <span className="first after">ÁO SƠMI</span>
@@ -115,7 +116,7 @@ function Navigation(props) {
               <li>
                 <NavLink
                   className="link__navigation--mid"
-                  to="/feature/quanau"
+                  to="/quanau"
                   activeClassName="first68 after68"
                 >
                   <span className="first after">QUẦN ÂU</span>
@@ -124,7 +125,7 @@ function Navigation(props) {
               <li>
                 <NavLink
                   className="link__navigation--mid"
-                  to="/feature/giaytay"
+                  to="/giaytay"
                   activeClassName="first68 after68"
                 >
                   <span className="first after">GIÀY TÂY</span>
@@ -133,7 +134,7 @@ function Navigation(props) {
               <li>
                 <NavLink
                   className="link__navigation--mid"
-                  to="/feature/uudai"
+                  to="/uudai"
                   activeClassName="first68 after68"
                 >
                   <span className="first after">GIÁ ƯU ĐÃI</span>
@@ -143,7 +144,7 @@ function Navigation(props) {
                 <NavLink
                   exact
                   className="link__navigation--mid1 phukien"
-                  to="/feature/phukien"
+                  to="/phukien"
                   activeClassName="first99 after99"
                 >
                   <span className="phukien--dropdown first98 after98">
@@ -176,7 +177,7 @@ function Navigation(props) {
               <li>
                 <NavLink
                   className="link__right"
-                  to="/feature/connectwithus"
+                  to="/connectwithus"
                   activeClassName="first68-2 after68-2"
                 >
                   <span className="gach-chan_right first69 after69">
@@ -191,10 +192,10 @@ function Navigation(props) {
               <li>
                 <UserAvarterNavigation />
               </li>
-              <li>
+              <li className="scale-icon-on-hover">
                 <NavLink
                   exact
-                  to="/feature/cartPage"
+                  to="/cartPage"
                   className="link__right-icon"
                   activeClassName="first68-4 after68-4"
                 >
@@ -203,9 +204,11 @@ function Navigation(props) {
                       className="icon-navigation_scale"
                       icon={faShoppingCart}
                     />
-                    <CartPopup lisiItems={lisiItems} />
+                    <CartPopup listItems={listItems} />
                   </span>
-                  <span className="numbers-in-cart">({numbersItemInCart})</span>
+                  <span className="quantity-in-cart">
+                    ({numbersItemInCart})
+                  </span>
                 </NavLink>
               </li>
             </ul>
@@ -215,7 +218,7 @@ function Navigation(props) {
                 <NavLink
                   exact
                   className="link__right-icon"
-                  to="/feature/cartPage"
+                  to="/cartPage"
                   activeClassName="first68-4 after68-4"
                 >
                   <span className="gach-chan_right2 first86 after86">
@@ -223,9 +226,9 @@ function Navigation(props) {
                       className="icon-navigation_scale"
                       icon={faShoppingCart}
                     />
-                    <span className="numbers-in-cart">
+                    <small className="numbers-in-cart">
                       ({numbersItemInCart})
-                    </span>
+                    </small>
                   </span>
                 </NavLink>
               </div>

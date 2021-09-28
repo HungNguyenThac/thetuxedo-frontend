@@ -1,28 +1,21 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./renderFormAddress.scss";
-import { Row, Col } from "antd";
-import { useState } from "react";
-import uuid from "uuid/dist/v4";
-import { getCookie } from "../../../../shareFunction/checkCookies";
-import axios from "axios";
+import { Col, Row } from "antd";
+import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setAddressUser, setInfoUser } from "../../../../actions/infoUser";
-import { useRef } from "react";
+import uuid from "uuid/dist/v4";
+import {
+  setAddressUser,
+  setInfoUser,
+  setNameUser,
+  setPhoneUser,
+} from "../../../../actions/infoUser";
+import userApi from "../../../../api/userApi";
+import "./renderFormAddress.scss";
 
-RenderFormAddAddress.propTypes = {
-  infoUser: PropTypes.object,
-};
-
-RenderFormAddAddress.defaultProps = {
-  infoUser: {},
-};
-
-function RenderFormAddAddress(props) {
+function RenderFormAddAddress() {
   const dispatch = useDispatch();
-  const { infoUser } = props;
-  const [name, setName] = useState(infoUser.name);
-  const [phone, setPhone] = useState(infoUser.phoneNumber);
+  const { infoUser } = useSelector((state) => state.GetInfoUser);
+  const { name, phoneNumber } = infoUser;
   const [diaChi, setDiaChi] = useState("Công Ty");
   const [time, setTime] = useState("Giờ Hành Chính");
   const [valueTextArea, setValueTextArea] = useState("");
@@ -32,7 +25,7 @@ function RenderFormAddAddress(props) {
 
   function handleChangePhone(e) {
     let value = e.target.value;
-    setPhone(value);
+    dispatch(setPhoneUser(value));
     let element = e.target.parentElement;
     let number = value.trim().length;
     if (number === 0) {
@@ -51,7 +44,7 @@ function RenderFormAddAddress(props) {
 
   function handleChangeName(e) {
     let value = e.target.value;
-    setName(value);
+    dispatch(setNameUser(value));
     let element = e.target.parentElement;
     let number = value.trim().length;
     if (number === 0) {
@@ -183,9 +176,9 @@ function RenderFormAddAddress(props) {
     let input = element.querySelector(".input-address-user");
     input.disabled = false;
     element.className = "div-info-user error";
-    let fix = element.querySelector(".btn-fix");
+    let fix = element.querySelector(".btn-fix_chageAddress");
     fix.style.display = "none";
-    let save = element.querySelector(".btn-save");
+    let save = element.querySelector(".btn-save_chageAddress");
     save.style.display = "block";
     let small = element.querySelector("small");
     small.style.display = "none";
@@ -204,7 +197,10 @@ function RenderFormAddAddress(props) {
     let input = element.querySelector(".input-address-user");
     if (input.value === name || input.value === changeAddress.name) {
       checkInputName();
-    } else if (input.value === phone || input.value === changeAddress.phone) {
+    } else if (
+      input.value === phoneNumber ||
+      input.value === changeAddress.phone
+    ) {
       checkInputPhone(e);
     }
     function checkInputName() {
@@ -214,9 +210,9 @@ function RenderFormAddAddress(props) {
       } else if (emailValue.length >= 2) {
         setSuccessForSignUP(input);
         input.disabled = true;
-        let save = element.querySelector(".btn-save");
+        let save = element.querySelector(".btn-save_chageAddress");
         save.style.display = "none";
-        let fix = element.querySelector(".btn-fix");
+        let fix = element.querySelector(".btn-fix_chageAddress");
         fix.style.display = "block";
       }
     }
@@ -235,9 +231,9 @@ function RenderFormAddAddress(props) {
       } else {
         setSuccessForSignUP(input);
         input.disabled = true;
-        let save = element.querySelector(".btn-save");
+        let save = element.querySelector(".btn-save_chageAddress");
         save.style.display = "none";
-        let fix = element.querySelector(".btn-fix");
+        let fix = element.querySelector(".btn-fix_chageAddress");
         fix.style.display = "block";
       }
     }
@@ -265,7 +261,7 @@ function RenderFormAddAddress(props) {
       let object = {
         id: uuid(),
         name: name,
-        phone: phone,
+        phone: phoneNumber,
         Address: valueTextArea,
         diaChi: diaChi,
         time: time,
@@ -275,8 +271,8 @@ function RenderFormAddAddress(props) {
       dispatch(setAddressUser(cloneArray));
       let element = document.querySelector(".modal-moreAddress");
       element.style.display = "none";
-      setName(infoUser.name);
-      setPhone(infoUser.phoneNumber);
+      setNameUser(name);
+      setPhoneUser(phoneNumber);
       setValueTextArea("");
       setDiaChi("Công Ty");
       setTime("Giờ Hành Chính");
@@ -317,25 +313,22 @@ function RenderFormAddAddress(props) {
   }
 
   let sendRequestToUpdateAddress = async () => {
-    let array = infoUser.address;
+    let address = infoUser.address;
     let notification = document.querySelector(
       ".notification-for-save-all-address"
     );
+    let isSubscribe = true;
+
     try {
-      const cookies = getCookie("user");
-      let response = await axios({
-        method: "PUT",
-        url: "http://localhost:9527/user/dashboard",
-        headers: { Authorization: cookies },
-        data: {
-          address: { array },
-        },
-      });
-      if (response.data.status === 200) {
-        dispatch(setInfoUser(response.data.user));
-        cloneAddress.current = response.data.user;
+      let response = await userApi.putUpdateAddres(address);
+
+      const { status, user } = response;
+
+      if (isSubscribe && status === 200) {
+        dispatch(setInfoUser(user));
+        cloneAddress.current = user;
         notification.style.display = "block";
-      } else if (response.data.status === 400) {
+      } else if (isSubscribe && status === 400) {
         notification.innerText = "Một lỗi đã xảy ra";
         notification.style.display = "block";
       }
@@ -451,10 +444,16 @@ function RenderFormAddAddress(props) {
                       />
 
                       <small>Error message</small>
-                      <button className="btn-fix" onClick={handleClickToFix}>
+                      <button
+                        className="btn-fix_chageAddress"
+                        onClick={handleClickToFix}
+                      >
                         Sửa
                       </button>
-                      <button className="btn-save" onClick={handleClickToSave}>
+                      <button
+                        className="btn-save_chageAddress"
+                        onClick={handleClickToSave}
+                      >
                         Lưu
                       </button>
                     </div>
@@ -464,17 +463,23 @@ function RenderFormAddAddress(props) {
                       <input
                         className="input-address-user"
                         type="text"
-                        value={phone}
+                        value={phoneNumber}
                         placeholder="Số điện thoại"
                         onChange={handleChangePhone}
                         disabled
                         id="phoneUser"
                       />
                       <small>Error message</small>
-                      <button className="btn-fix" onClick={handleClickToFix}>
+                      <button
+                        className="btn-fix_chageAddress"
+                        onClick={handleClickToFix}
+                      >
                         Sửa
                       </button>
-                      <button className="btn-save" onClick={handleClickToSave}>
+                      <button
+                        className="btn-save_chageAddress"
+                        onClick={handleClickToSave}
+                      >
                         Lưu
                       </button>
                     </div>
@@ -622,10 +627,16 @@ function RenderFormAddAddress(props) {
                         disabled
                       />
                       <small>Error message</small>
-                      <button className="btn-fix" onClick={handleClickToFix}>
+                      <button
+                        className="btn-fix_chageAddress"
+                        onClick={handleClickToFix}
+                      >
                         Sửa
                       </button>
-                      <button className="btn-save" onClick={handleClickToSave}>
+                      <button
+                        className="btn-save_chageAddress"
+                        onClick={handleClickToSave}
+                      >
                         Lưu
                       </button>
                     </div>
@@ -641,10 +652,16 @@ function RenderFormAddAddress(props) {
                         disabled
                       />
                       <small>Error message</small>
-                      <button className="btn-fix" onClick={handleClickToFix}>
+                      <button
+                        className="btn-fix_chageAddress"
+                        onClick={handleClickToFix}
+                      >
                         Sửa
                       </button>
-                      <button className="btn-save" onClick={handleClickToSave}>
+                      <button
+                        className="btn-save_chageAddress"
+                        onClick={handleClickToSave}
+                      >
                         Lưu
                       </button>
                     </div>

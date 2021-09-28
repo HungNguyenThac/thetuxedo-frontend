@@ -1,20 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./renderCart.scss";
-import { Col } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Col } from "antd";
+import PropTypes from "prop-types";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 import {
-  changeAllItemInCart,
+  changeQuantityItemInCart,
   DeleteItemInCart,
 } from "../../../../actions/itemCart";
-import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
-import { Link, useHistory } from "react-router-dom";
-import axios from "axios";
-import { getCookie } from "../../../../shareFunction/checkCookies";
-import { useEffect } from "react";
+import userApi from "../../../../api/userApi";
 import ButtonShare from "../../../../components share/Button";
+import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
+
 RenderCartPage.propTypes = {
   itemDetails: PropTypes.object,
 };
@@ -52,30 +50,21 @@ function RenderCartPage(props) {
       let notification = document.querySelector(".notificatrion-In-CartPage");
       notification.classList.add("active");
     } else {
-      history.push("/feature/payPage");
+      history.push("/payPage");
     }
   }
 
   useEffect(() => {
     let sendRequestUpdateCart = async () => {
       try {
-        const cookies = getCookie("user");
-        let response = await axios({
-          method: "PUT",
-          url: "http://localhost:9527/user/addcart",
-          headers: { Authorization: cookies },
-          data: {
-            cartForUser: { cartForUser },
-          },
-        });
-        if (response.data.status === 200) {
+        let response = await userApi.putAddNewCart(cartForUser);
+        if (response.status === 200) {
         }
       } catch (error) {
         console.log(error.message);
       }
     };
     sendRequestUpdateCart();
-    return () => sendRequestUpdateCart();
   }, [cartForUser]);
 
   return (
@@ -180,8 +169,9 @@ function RenderCartPage(props) {
 
             function handleClickNumberChange(number) {
               let items = itemDetails.slice();
+              console.log(items);
               items[number[1]].soLuong = number[0];
-              const listItemsChange = changeAllItemInCart(items);
+              const listItemsChange = changeQuantityItemInCart(items);
               disPatch(listItemsChange);
             }
 
@@ -454,7 +444,7 @@ function RenderCartPage(props) {
             </span>
           </div>
           <div className="footer-cartPage_bottom">
-            <Link to="/feature/vestcollection">
+            <Link to="/vestcollection">
               <ButtonShare
                 title="TIẾP TỤC MUA SẮM"
                 subString="Thêm nhiều sản phẩm"

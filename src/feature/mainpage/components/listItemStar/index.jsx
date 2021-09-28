@@ -1,28 +1,30 @@
-import React from "react";
-import "./listItemStar.scss";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "../../../../../node_modules/slick-carousel/slick/slick.css";
-import "../../../../../node_modules/slick-carousel/slick/slick-theme.css";
-import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
-import { useDispatch } from "react-redux";
-import { addItemToDetail } from "../../../../actions/itemDetail";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronCircleLeft,
   faChevronCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import "../../../../../node_modules/slick-carousel/slick/slick-theme.css";
+import "../../../../../node_modules/slick-carousel/slick/slick.css";
+import { addItemToDetail } from "../../../../actions/itemDetail";
+import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
+import "./listItemStar.scss";
 
 const ListItemStar = (props) => {
   const { listItem } = props;
   const dispatch = useDispatch();
+  const history = useHistory();
+
   function handleClickSendItem(item) {
-    let itemDetail = addItemToDetail(item);
+    const itemDetail = addItemToDetail(item);
     dispatch(itemDetail);
+    history.push(`/${item.phanLoai}/detail/${item.id}`);
     window.scrollTo(0, 186);
   }
   const ref = useRef({});
@@ -91,7 +93,6 @@ const ListItemStar = (props) => {
             <li className="item" key={item.id}>
               <Link
                 className="item-link"
-                to="/feature/detail"
                 onClick={() => handleClickSendItem(item)}
               >
                 <div className="item-main">

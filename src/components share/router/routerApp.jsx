@@ -18,28 +18,37 @@ const payPage = React.lazy(() => import("../../feature/thanhToan"));
 
 RouterApp.propTypes = {};
 
-function RouterApp(props) {
+function RouterApp() {
   return (
     <Switch>
       <Route exact path="/" component={main} />
-      <Redirect
-        from="/feature/vestcollection"
-        to="/feature/vestcollection/vestcollection/"
-        exact
-      />
-      <Route path="/feature/vestcollection/" component={vest} />
-      <Route exact path="/feature/aosomi" component={aosomi} />
-      <Route exact path="/feature/giaytay" component={giay} />
-      <Route exact path="/feature/quanau" component={quan} />
-      <Route exact path="/feature/uudai" component={sale} />
-      <Redirect from="/feature/phukien" to="/feature/phukien/combo" exact />
-      <Route path="/feature/phukien" component={phukien} />
-      <Route exact path="/feature/login" component={login} />
-      <Route exact path="/feature/dashboard" component={userpage} />
-      <Route exact path="/feature/connectwithus" component={lienhe} />
-      <Route exact path="/feature/detail" component={chitiet} />
-      <Route exact path="/feature/cartPage" component={cartPage} />
-      <Route exact path="/feature/payPage" component={payPage} />
+      <Redirect from="/vestcollection" to="/vestcollection/listItem" exact />
+      <Route path="/vestcollection/" component={vest} />
+      <Route exact path="/aosomi" component={aosomi} />
+      <Route exact path="/giaytay" component={giay} />
+      <Route exact path="/quanau" component={quan} />
+      <Route exact path="/uudai" component={sale} />
+      <Redirect from="/phukien" to="/phukien/combo" exact />
+      <Route path="/phukien" component={phukien} />
+      <Route exact path="/login" component={login} />
+      <Route exact path="/dashboard" component={userpage} />
+      <Route exact path="/connectwithus" component={lienhe} />
+      <Route path="/aosomi/detail/:param" component={chitiet} />
+      <Route path="/Handmade/detail/:param" component={chitiet} />
+      <Route path="/giaytay/detail/:param" component={chitiet} />
+      <Route path="/cavat/detail/:param" component={chitiet} />
+      <Route path="/ghimcaiao/detail/:param" component={chitiet} />
+      <Route path="/khancaiao/detail/:param" component={chitiet} />
+      <Route path="/nocaico/detail/:param" component={chitiet} />
+      <Route path="/thatlung/detail/:param" component={chitiet} />
+      <Route path="/combophukien/detail/:param" component={chitiet} />
+      <Route path="/quanau/detail/:param" component={chitiet} />
+      <Route path="/uudai/detail/:param" component={chitiet} />
+      <Route path="/vestdahoi/detail/:param" component={chitiet} />
+      <Route path="/vestcongso/detail/:param" component={chitiet} />
+      <Route path="/vestcuoi/detail/:param" component={chitiet} />
+      <Route exact path="/cartPage" component={cartPage} />
+      <Route exact path="/payPage" component={payPage} />
       <Route component={notFound} />
     </Switch>
   );

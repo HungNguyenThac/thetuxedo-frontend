@@ -1,15 +1,13 @@
-import React from "react";
-import "./renserChangePassword.scss";
-import { Col } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
-import { getCookie } from "../../../../shareFunction/checkCookies";
-import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Col } from "antd";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setInfoUser } from "../../../../actions/infoUser";
-import { useState } from "react";
+import accountApi from "../../../../api/accountApi";
+import "./renserChangePassword.scss";
 
-function RenderChangePassword(props) {
+function RenderChangePassword() {
   const [check, setCheck] = useState("");
   const [check1, setCheck1] = useState("");
   const [oldPassword, setOldPassword] = useState("");
@@ -124,6 +122,7 @@ function RenderChangePassword(props) {
     let formControl = input.parentElement;
     formControl.className = "td-password-user success";
   }
+  // send request
 
   const sendRequestCheckAndUpdatePassword = async () => {
     let oldPassword = document.getElementById("oldPassword");
@@ -131,25 +130,21 @@ function RenderChangePassword(props) {
     let notification = document.querySelector(
       ".notification-for-save-password"
     );
-    let oldPasswordValue = oldPassword.value.trim();
     let passwordValue = password.value.trim();
+    let oldPasswordValue = oldPassword.value.trim();
+    let isSubscribe = true;
+
     try {
-      const cookies = getCookie("user");
-      let response = await axios({
-        method: "PUT",
-        url: "http://localhost:9527/user/changePassword",
-        headers: { Authorization: cookies },
-        data: {
-          oldPasswordValue,
-          passwordValue,
-        },
-      });
-      console.log(112, response);
-      if (response.data.status === 200) {
+      let response = await accountApi.UpdatePassword(
+        passwordValue,
+        oldPasswordValue
+      );
+      const { status, user, mess } = response;
+      if (isSubscribe && status === 200) {
         notification.style.display = "block";
-        dispatch(setInfoUser(response.data.user));
-      } else if (response.data.status === 400) {
-        notification.innerText = response.data.mess;
+        dispatch(setInfoUser(user));
+      } else if (isSubscribe && status === 400) {
+        notification.innerText = mess;
         notification.style.color = "red";
         notification.style.display = "block";
       }

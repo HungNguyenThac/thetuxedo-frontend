@@ -1,39 +1,37 @@
-import React from "react";
-import "./mainpage.scss";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "../../actions/loading";
 import BannerMainPage from "./components/banner";
 import BannerSecond from "./components/bannerSecond";
 import ListItemStart from "./components/listItemStar";
-import { useState } from "react";
-import { useEffect } from "react";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../actions/loading";
+import "./mainpage.scss";
 
 MainPage.propTypes = {};
-function MainPage(props) {
+function MainPage() {
   const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
+
   useEffect(() => {
-    if (listItem.length === 0) {
-      let value = showLoading(true);
-      dispatch(value);
-    }
+    dispatch(showLoading(true));
+    let isSubscribe = true;
     async function getData() {
       try {
         let responseItems = await axios({
           method: "GET",
           url: "https://thetuxedo.herokuapp.com/products?phanLoai_containss=Handmade",
         });
-        if (responseItems.status === 200) {
-          setListItem(responseItems.data);
-          let value = hideLoading(false);
-          dispatch(value);
+        const { status, data } = responseItems;
+        if (isSubscribe && status === 200) {
+          setListItem(data);
+          dispatch(hideLoading(false));
         }
       } catch (error) {
         console.log(error);
       }
     }
     getData();
+    return () => (isSubscribe = false);
   }, []);
 
   return (

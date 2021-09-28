@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { postBillToReducer } from "../../actions/billUser";
-import { dispatchHistory } from "../../actions/history";
 import { setInfoUser } from "../../actions/infoUser";
+import { hideLoading, showLoading } from "../../actions/loading";
 import userApi from "../../api/userApi";
 import { getCookie } from "../../shareFunction/checkCookies";
 import RenderDashBoard from "./components/renderDashBoard";
+import "./style.scss";
 
 function checkInputUpdateInfo() {
   let phoneNumber = document.getElementById("phonenumber");
@@ -56,10 +56,9 @@ function setSuccessForSignUP(input) {
   formControl.className = "form-signUp-parent success";
 }
 //----------------------------------------------props
-function TrangCaNhan(props) {
+function TrangCaNhan() {
   const dispatch = useDispatch();
   const history = useHistory();
-
   function handleClickToUpdate(e) {
     e.preventDefault();
     checkInputUpdateInfo();
@@ -74,12 +73,13 @@ function TrangCaNhan(props) {
     let passwordValue = password.value.trim();
     if (formSignup.length === 3) {
       try {
-        let response = await userApi.addInfor({
+        let response = await userApi.postAddInfoUser(
           phonenumber,
-          passwordValue,
-        });
-        if (response.data.status === 200) {
-          dispatch(setInfoUser(response.data.data));
+          passwordValue
+        );
+        const { status, user } = response;
+        if (status === 200) {
+          dispatch(setInfoUser(user));
           let element = document.querySelector(".modal-moreInformation");
           element.style.display = "none";
         }
@@ -91,35 +91,31 @@ function TrangCaNhan(props) {
 
   useEffect(() => {
     const cookies = getCookie("user");
-    async function checkCookies() {
-      if (cookies.length !== 0) {
+    const element = document.querySelector(".modal-moreInformation");
+    let isSubscribe = true;
+    const checkCookies = async () => {
+      if (cookies.length >= 1) {
+        showLoading();
         try {
-          let response = await userApi.dashboard();
-          let upCart = await userApi.addCart();
-          if (upCart.data.status === 200) {
-            let bill = postBillToReducer(upCart.data.user.bill);
-            dispatch(bill);
-            let history = dispatchHistory(upCart.data.user.history);
-            dispatch(history);
-          }
-          if (response.data.status === 200 && response.data.element === 9527) {
-            let element = document.querySelector(".modal-moreInformation");
+          const response = await userApi.postCheckInfoUser();
+          const { status, code } = response;
+          if (isSubscribe && status === 200 && code === 9527) {
             element.style.display = "block";
-          } else if (response.data.status === 400) {
-            history.push("/feature/login");
+            hideLoading();
+          } else if (isSubscribe && status === 400) {
+            history.push("/login");
+            hideLoading();
           }
         } catch (error) {
           console.log(error.message);
         }
       } else {
-        history.push("/feature/login");
+        history.push("/login");
       }
-    }
-    checkCookies();
-    return () => {
-      checkCookies();
     };
-  }, []);
+    checkCookies();
+    return () => (isSubscribe = false);
+  }, [dispatch, history]);
 
   return (
     <div className="container">

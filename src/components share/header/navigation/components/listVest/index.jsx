@@ -24,7 +24,7 @@ function ListVest(props) {
         <li className="li--vest">
           <NavLink
             className="navling-vest"
-            to="/feature/vestcollection/vestcuoi"
+            to="/vestcollection/vestcuoi"
             activeClassName="first2 after9"
             onClick={handleClickToHoverParentList}
           >
@@ -34,7 +34,7 @@ function ListVest(props) {
         <li className="li--vest">
           <NavLink
             className="navling-vest "
-            to="/feature/vestcollection/vestdahoi"
+            to="/vestcollection/vestdahoi"
             activeClassName="first2 after7"
             onClick={handleClickToHoverParentList}
           >
@@ -44,7 +44,7 @@ function ListVest(props) {
         <li className="li--vest">
           <NavLink
             className="navling-vest"
-            to="/feature/vestcollection/vestcongso"
+            to="/vestcollection/vestcongso"
             activeClassName="first2 after8"
             onClick={handleClickToHoverParentList}
           >

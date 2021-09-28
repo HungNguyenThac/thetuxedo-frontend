@@ -1,4 +1,3 @@
-import axios from "axios";
 import firebase from "firebase";
 import { createBrowserHistory } from "history";
 import React, { Suspense, useEffect } from "react";
@@ -8,6 +7,7 @@ import { postBillToReducer } from "./actions/billUser";
 import { dispatchHistory } from "./actions/history";
 import { setInfoUser } from "./actions/infoUser";
 import { addItemToCartFormDataUser } from "./actions/itemCart";
+import userApi from "./api/userApi";
 import "./App.scss";
 import Footer from "./components share/footer";
 import Header from "./components share/header";
@@ -25,25 +25,20 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     const cookies = getCookie("user");
-    if (cookies.length !== 0) {
+    if (cookies.length >= 1) {
       async function getDataUser() {
-        let responseDataUser = await axios({
-          method: "POST",
-          url: "http://localhost:9527/user/getData",
-          headers: { Authorization: cookies },
-        });
-        if (responseDataUser.status === 200) {
-          dispatch(setInfoUser(responseDataUser.data.data));
-          dispatch(addItemToCartFormDataUser(responseDataUser.data.data.cart));
-          let bill = postBillToReducer(responseDataUser.data.data.bill);
-          dispatch(bill);
-          let history = dispatchHistory(responseDataUser.data.data.history);
-          dispatch(history);
+        let response = await userApi.getDataUser();
+        const { status, user } = response;
+        if (status === 200) {
+          dispatch(setInfoUser(user));
+          dispatch(addItemToCartFormDataUser(user.cart));
+          dispatch(postBillToReducer(user.bill));
+          dispatch(dispatchHistory(user.history));
         }
       }
       getDataUser();
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="main-shop">

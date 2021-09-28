@@ -10,8 +10,10 @@ function VestCollection(props) {
   const [listVestCuoi, setListVestCuoi] = useState([]);
   const [listVestDaHoi, setListVestDaHoi] = useState([]);
   const [listVestCongSo, setListVestCongSo] = useState([]);
+
   useEffect(() => {
     dispatch(showLoading(true));
+    let isSubscribe = true;
     async function getDataVest() {
       try {
         let responseVestDaHoi = await axios({
@@ -27,16 +29,17 @@ function VestCollection(props) {
           url: "https://thetuxedo.herokuapp.com/products?phanLoai_containss=vestcuoi",
         });
 
-        if (responseVestDaHoi.status === 200) {
+        if (isSubscribe && responseVestDaHoi.status === 200) {
           setListVestCuoi(responseVestDaHoi.data);
         }
-        if (responseVestCongSo.status === 200) {
+        if (isSubscribe && responseVestCongSo.status === 200) {
           setListVestDaHoi(responseVestCongSo.data);
         }
-        if (responseVestCuoi.status === 200) {
+        if (isSubscribe && responseVestCuoi.status === 200) {
           setListVestCongSo(responseVestCuoi.data);
         }
         if (
+          isSubscribe &&
           responseVestDaHoi.status === 200 &&
           responseVestCongSo.status === 200 &&
           responseVestCuoi.status === 200
@@ -48,7 +51,7 @@ function VestCollection(props) {
       }
     }
     getDataVest();
-    return () => getDataVest();
+    return () => (isSubscribe = false);
   }, []);
 
   return (

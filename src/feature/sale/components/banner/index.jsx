@@ -15,7 +15,7 @@ BannerSale.defaultProps = {
 
 function BannerSale(props) {
   const { backgroundBannerURL, titleBanner } = props;
-  const title = titleBanner ? titleBanner : "DANH SÁCH SẢN PHẨM ƯU ĐÃI";
+  const title = titleBanner ? titleBanner : "DANH SÁCH SẢN PHẨM ƯU ĐÃI GIÁ";
   const background = backgroundBannerURL ? backgroundBannerURL : banner;
 
   return (

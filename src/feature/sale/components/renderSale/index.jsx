@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./renderSale.scss";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Col, Row } from "antd";
 import PaginationHanmade from "../pagination";
 import { useState } from "react";
@@ -30,6 +30,7 @@ RenderSale.defaultProps = {
 };
 
 function RenderSale(props) {
+  const history = useHistory();
   const dispatch = useDispatch();
   const {
     items,
@@ -40,7 +41,6 @@ function RenderSale(props) {
     onPageChange2,
     totalItem,
   } = props;
-
   const [idActive, setIdActive] = useState("");
   function handlePageChange1(Page) {
     if (onPageChange1) {
@@ -59,6 +59,7 @@ function RenderSale(props) {
     let value = e.target.value;
     if (onSelectFilter) {
       onSelectFilter(value);
+      window.scrollTo(0, 472);
     }
   }
 
@@ -66,12 +67,15 @@ function RenderSale(props) {
     let value = e.target.value;
     if (onSelectSort) {
       onSelectSort(value);
+      window.scrollTo(0, 472);
     }
   }
 
   function handleClickSendItem(item) {
     const action = addItemToDetail(item);
     dispatch(action);
+    history.push(`/uudai/detail/${item.id}`);
+    window.scrollTo(0, 186);
   }
   return (
     <body className="Body">
@@ -165,57 +169,53 @@ function RenderSale(props) {
 
                 return (
                   <Col xxl={8} xl={8} lg={8} md={8} sm={12} xs={24}>
-                    <li className="item" key={item.id}>
-                      <Link
-                        className="item-link"
-                        to="/feature/detail"
-                        onClick={() => handleClickSendItem(item)}
-                      >
-                        <div className="item-main">
-                          <div className="item-main_div-img">
-                            <img
-                              className="item-main_img"
-                              src={item.anhBia}
-                              alt="ảnh bìa"
-                            />
+                    <li
+                      className="item item-link"
+                      key={item.id}
+                      onClick={() => handleClickSendItem(item)}
+                    >
+                      <div className="item-main">
+                        <div className="item-main_div-img">
+                          <img
+                            className="item-main_img"
+                            src={item.anhBia}
+                            alt="ảnh bìa"
+                          />
+                          {item.giamGia ? (
+                            <div className="notification-sale">
+                              <span className="notification-sale_content">
+                                <span>{phanTram}%</span>
+                              </span>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                        <div className="item-detail">
+                          <div className="item-detail_flex">
+                            <div className="item-detail_name">{item.tenSP}</div>
                             {item.giamGia ? (
-                              <div className="notification-sale">
-                                <span className="notification-sale_content">
-                                  <span>{phanTram}%</span>
+                              <div className="item-detail_price">
+                                <span className="item-detail_price-sale">
+                                  {giamGiaString}
+                                  <span className="price">đ</span>
                                 </span>
+                                <div>
+                                  <span className="item-detail_price-real_sale">
+                                    {Gia}
+                                    <span className="price-sale">đ</span>
+                                  </span>
+                                </div>
                               </div>
                             ) : (
-                              ""
+                              <p className="item-detail_price-real">
+                                {Gia}
+                                <span className="price">đ</span>
+                              </p>
                             )}
                           </div>
-                          <div className="item-detail">
-                            <div className="item-detail_flex">
-                              <div className="item-detail_name">
-                                {item.tenSP}
-                              </div>
-                              {item.giamGia ? (
-                                <div className="item-detail_price">
-                                  <span className="item-detail_price-sale">
-                                    {giamGiaString}
-                                    <span className="price">đ</span>
-                                  </span>
-                                  <div>
-                                    <span className="item-detail_price-real_sale">
-                                      {Gia}
-                                      <span className="price-sale">đ</span>
-                                    </span>
-                                  </div>
-                                </div>
-                              ) : (
-                                <p className="item-detail_price-real">
-                                  {Gia}
-                                  <span className="price">đ</span>
-                                </p>
-                              )}
-                            </div>
-                          </div>
                         </div>
-                      </Link>
+                      </div>
                     </li>
                   </Col>
                 );

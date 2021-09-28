@@ -50,6 +50,7 @@
   flex-wrap: wrap;
 }
 .item-link:hover {
+  cursor: pointer;
   .item-detail {
     display: block;
   }

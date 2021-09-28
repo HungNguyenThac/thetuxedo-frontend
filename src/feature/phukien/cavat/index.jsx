@@ -21,7 +21,7 @@ function CaVat(props) {
 
   useEffect(() => {
     dispatch(showLoading(true));
-
+    let isSubscribe = true;
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -33,23 +33,26 @@ function CaVat(props) {
           method: "GET",
           url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=cavat",
         });
-        if (responseItems.status === 200) {
+        console.log(responseItems);
+        if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);
+          dispatch(hideLoading(false));
         }
-        if (responseCount.status === 200) {
+        if (isSubscribe && responseCount.status === 200) {
           setTotalItem(responseCount.data);
         }
-        if (responseItems.status === 200 && responseCount.status === 200) {
-          dispatch(hideLoading(false));
+        if (
+          isSubscribe &&
+          responseItems.status === 200 &&
+          responseCount.status === 200
+        ) {
         }
       } catch (error) {
         console.log(error);
       }
     }
     getData();
-    return () => {
-      getData();
-    };
+    return () => (isSubscribe = false);
   }, [filters]);
 
   function handlePageChange1(Page) {

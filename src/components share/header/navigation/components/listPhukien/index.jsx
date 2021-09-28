@@ -24,7 +24,7 @@ function ListPhuKien(props) {
         <li className="li-phukien">
           <NavLink
             className="navling-phukien"
-            to="/feature/phukien/cavat"
+            to="/phukien/cavat"
             activeClassName="first2 after2"
             onClick={handleClickToHoverParentList}
           >
@@ -34,7 +34,7 @@ function ListPhuKien(props) {
         <li className="li-phukien">
           <NavLink
             className="navling-phukien"
-            to="/feature/phukien/thatlung"
+            to="/phukien/thatlung"
             activeClassName="first2 after3"
             onClick={handleClickToHoverParentList}
           >
@@ -44,7 +44,7 @@ function ListPhuKien(props) {
         <li className="li-phukien">
           <NavLink
             className="navling-phukien"
-            to="/feature/phukien/nocaico"
+            to="/phukien/nocaico"
             activeClassName="first2 after4"
             onClick={handleClickToHoverParentList}
           >
@@ -54,7 +54,7 @@ function ListPhuKien(props) {
         <li className="li-phukien">
           <NavLink
             className="navling-phukien"
-            to="/feature/phukien/khancaiao"
+            to="/phukien/khancaiao"
             onClick={handleClickToHoverParentList}
             activeClassName="first2 after5"
           >
@@ -64,7 +64,7 @@ function ListPhuKien(props) {
         <li className="li-phukien">
           <NavLink
             className="navling-phukien"
-            to="/feature/phukien/ghimcaiao"
+            to="/phukien/ghimcaiao"
             onClick={handleClickToHoverParentList}
             activeClassName="first2 after6"
           >

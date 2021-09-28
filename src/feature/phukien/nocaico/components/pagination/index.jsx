@@ -1,8 +1,7 @@
-import React from "react";
 import PropTypes from "prop-types";
-import "./pagination.scss";
+import React from "react";
 import uuid from "uuid/dist/v4";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./pagination.scss";
 
 PaginationHanmade.propTypes = {
   onPageChange1: PropTypes.func,
@@ -47,15 +46,15 @@ function PaginationHanmade(props) {
   function handleClickPage(page) {
     if (onPageChange1) {
       onPageChange1(page);
+      window.scrollTo(0, 472);
     }
-    window.scrollTo(0, 472);
   }
 
   function handleClickButtonChangePage(newPage) {
     if (onPageChange2) {
       onPageChange2(newPage);
+      window.scrollTo(0, 472);
     }
-    window.scrollTo(0, 0);
   }
   const prevStyle = _page <= 1 ? { display: "none" } : { display: "block" };
   const nextStyle =

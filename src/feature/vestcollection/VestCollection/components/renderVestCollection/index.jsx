@@ -1,22 +1,21 @@
-import React from "react";
-import "./renderVestCollection.scss";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "../../../../../../node_modules/slick-carousel/slick/slick.css";
-import "../../../../../../node_modules/slick-carousel/slick/slick-theme.css";
-import { themDauChamVaoGiaTien } from "../../../../../shareFunction/numberToString";
-import { useDispatch } from "react-redux";
-import { addItemToDetail } from "../../../../../actions/itemDetail";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col } from "antd";
 import {
   faChevronCircleLeft,
   faChevronCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Col } from "antd";
+import PropTypes from "prop-types";
+import React, { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import "../../../../../../node_modules/slick-carousel/slick/slick-theme.css";
+import "../../../../../../node_modules/slick-carousel/slick/slick.css";
+import { addItemToDetail } from "../../../../../actions/itemDetail";
+import { themDauChamVaoGiaTien } from "../../../../../shareFunction/numberToString";
+import "./renderVestCollection.scss";
 
 RenderVestCollection.propTypes = {
   listVestCuoi: PropTypes.array,
@@ -32,9 +31,12 @@ RenderVestCollection.defaultProps = {
 function RenderVestCollection(props) {
   const { listVestCuoi, listVestDaHoi, listVestCongSo } = props;
   const dispatch = useDispatch();
+  const history = useHistory();
+
   function handleClickSendItem(item) {
-    let itemDetail = addItemToDetail(item);
-    dispatch(itemDetail);
+    const action = addItemToDetail(item);
+    dispatch(action);
+    history.push(`/${item.phanLoai}/detail/${item.id}`);
     window.scrollTo(0, 186);
   }
 
@@ -177,55 +179,53 @@ function RenderVestCollection(props) {
               (100 - (item.giamGia / item.gia) * 100).toFixed(2)
             );
             return (
-              <li className="item" key={item.id}>
-                <Link
-                  className="item-link"
-                  to="/feature/detail"
-                  onClick={() => handleClickSendItem(item)}
-                >
-                  <div className="item-main">
-                    <div className="item-main_div-img">
-                      <img
-                        className="item-main_img"
-                        src={item.anhBia}
-                        alt="ảnh bìa"
-                      />
+              <li
+                className="item item-link"
+                key={item.id}
+                onClick={() => handleClickSendItem(item)}
+              >
+                <div className="item-main">
+                  <div className="item-main_div-img">
+                    <img
+                      className="item-main_img"
+                      src={item.anhBia}
+                      alt="ảnh bìa"
+                    />
+                    {item.giamGia ? (
+                      <div className="notification-sale">
+                        <span className="notification-sale_content">
+                          <span>{phanTram}%</span>
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className="item-detail">
+                    <div className="item-detail_flex">
+                      <div className="item-detail_name">{item.tenSP}</div>
                       {item.giamGia ? (
-                        <div className="notification-sale">
-                          <span className="notification-sale_content">
-                            <span>{phanTram}%</span>
+                        <div className="item-detail_price">
+                          <span className="item-detail_price-sale">
+                            {giamGiaString}
+                            <span className="price">đ</span>
                           </span>
+                          <div>
+                            <span className="item-detail_price-real_sale">
+                              {Gia}
+                              <span className="price-sale">đ</span>
+                            </span>
+                          </div>
                         </div>
                       ) : (
-                        ""
+                        <p className="item-detail_price-real">
+                          {Gia}
+                          <span className="price">đ</span>
+                        </p>
                       )}
                     </div>
-                    <div className="item-detail">
-                      <div className="item-detail_flex">
-                        <div className="item-detail_name">{item.tenSP}</div>
-                        {item.giamGia ? (
-                          <div className="item-detail_price">
-                            <span className="item-detail_price-sale">
-                              {giamGiaString}
-                              <span className="price">đ</span>
-                            </span>
-                            <div>
-                              <span className="item-detail_price-real_sale">
-                                {Gia}
-                                <span className="price-sale">đ</span>
-                              </span>
-                            </div>
-                          </div>
-                        ) : (
-                          <p className="item-detail_price-real">
-                            {Gia}
-                            <span className="price">đ</span>
-                          </p>
-                        )}
-                      </div>
-                    </div>
                   </div>
-                </Link>
+                </div>
               </li>
             );
           })}

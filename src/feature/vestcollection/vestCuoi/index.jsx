@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../../../actions/loading";
 import BannerVestCuoi from "./components/banner";
 import RenderVestCuoi from "./components/renderVestCuoi";
-import "./vestCuoi.scss";
 VestCuoi.propTypes = {};
 
 function VestCuoi(props) {
@@ -21,6 +20,7 @@ function VestCuoi(props) {
 
   useEffect(() => {
     dispatch(showLoading(true));
+    let isSubscribe = true;
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -32,13 +32,17 @@ function VestCuoi(props) {
           method: "GET",
           url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=vestcuoi",
         });
-        if (responseItems.status === 200) {
+        if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);
         }
-        if (responseCount.status === 200) {
+        if (isSubscribe && responseCount.status === 200) {
           setTotalItem(responseCount.data);
         }
-        if (responseItems.status === 200 && responseCount.status === 200) {
+        if (
+          isSubscribe &&
+          responseItems.status === 200 &&
+          responseCount.status === 200
+        ) {
           dispatch(hideLoading(false));
         }
       } catch (error) {
@@ -46,9 +50,7 @@ function VestCuoi(props) {
       }
     }
     getData();
-    return () => {
-      getData();
-    };
+    return () => (isSubscribe = false);
   }, [filters]);
 
   function handlePageChange1(Page) {

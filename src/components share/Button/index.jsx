@@ -35,7 +35,6 @@ function ButtonShare(props) {
   function handleMouseOver() {
     const backgroundColor =
       document.querySelector(".button--share").style.backgroundColor;
-    console.log(backgroundColor);
     if (backgroundColor !== "black") {
       setColor("black");
     }
