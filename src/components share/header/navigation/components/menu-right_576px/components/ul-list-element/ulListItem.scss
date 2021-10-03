@@ -7,7 +7,9 @@
   border-radius: 3px;
   display: none;
   will-change: opacity;
+  -webkit-animation: animation-for-list-menu 0.5s ease-in-out;
   animation: animation-for-list-menu 0.5s ease-in-out;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   &::after {
     content: "";
@@ -21,6 +23,19 @@
   &_ul {
     background-color: rgb(245, 240, 227);
     margin: 6px 0;
+  }
+}
+
+@-webkit-keyframes animation-for-list-menu {
+  0% {
+    opacity: 0;
+    right: -20px;
+    top: 56px;
+  }
+  100% {
+    opacity: 1;
+    right: 0;
+    top: 56px;
   }
 }
 
@@ -44,6 +59,8 @@
   font-size: 1rem;
   padding: 4px 11px;
   cursor: pointer;
+  -webkit-transition: all 0.25s ease-in-out 0s;
+  -o-transition: all 0.25s ease-in-out 0s;
   transition: all 0.25s ease-in-out 0s;
   &:hover {
     color: black;

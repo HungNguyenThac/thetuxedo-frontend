@@ -2,8 +2,8 @@ import axios from "axios";
 import { queryString } from "query-string";
 
 const axiosClient = axios.create({
-  // baseURL: "http://thetuxedo-dev.herokuapp.com/",
-  baseURL: "http://localhost:9527/",
+  baseURL: "http://thetuxedo-dev.herokuapp.com/",
+  // baseURL: "http://localhost:9527/",
   paramsSerializer: (params) => queryString.queryString(params),
   headers: {
     "Content-Type": "application/json",

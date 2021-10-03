@@ -7,7 +7,9 @@
   top: -2px;
   display: none;
   will-change: opacity;
+  -webkit-animation: animation-for-list-sanpham 0.5s ease-in-out;
   animation: animation-for-list-sanpham 0.5s ease-in-out;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
   &::after {
@@ -22,6 +24,19 @@
   &_ul {
     background-color: rgb(245, 240, 227);
     margin: 0 6px;
+  }
+}
+
+@-webkit-keyframes animation-for-list-sanpham {
+  0% {
+    opacity: 0;
+    left: -189px;
+    top: 22px;
+  }
+  100% {
+    opacity: 1;
+    left: -170px;
+    top: -2px;
   }
 }
 
@@ -40,6 +55,8 @@
 
 .after38:after {
   content: "";
+  -webkit-transition: 0.5s all ease;
+  -o-transition: 0.5s all ease;
   transition: 0.5s all ease;
   position: absolute;
   bottom: -0.25em;
@@ -61,6 +78,8 @@
   font-size: 1rem;
   padding: 4px 14px;
   cursor: pointer;
+  -webkit-transition: all 0.25s ease-in-out 0s;
+  -o-transition: all 0.25s ease-in-out 0s;
   transition: all 0.25s ease-in-out 0s;
 
   &_link {

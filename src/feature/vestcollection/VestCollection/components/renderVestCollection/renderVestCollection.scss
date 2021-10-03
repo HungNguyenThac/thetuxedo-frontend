@@ -2,6 +2,7 @@
   margin-top: 16px;
   position: relative;
   border-radius: 4px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
@@ -20,15 +21,25 @@
     &_img {
       width: 100%;
       height: 100%;
+      -o-object-fit: cover;
       object-fit: cover;
     }
   }
 }
 
 .carousel-title-VestColection {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   & h3 {
     font-size: 1.6rem;
@@ -47,6 +58,8 @@
 
 .link-in-vestCollection-content {
   color: black;
+  -webkit-transition: all 0.25s ease-in-out 0s;
+  -o-transition: all 0.25s ease-in-out 0s;
   transition: all 0.25s ease-in-out 0s;
 }
 
@@ -59,8 +72,14 @@
   left: 0;
   border-radius: 0 16% 16% 0;
   margin-left: 4px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   &_content {
     color: white;
@@ -80,6 +99,7 @@
   left: 0px;
   bottom: 0;
   display: none;
+  -webkit-animation: show-detail 0.5s ease-in-out 0s;
   animation: show-detail 0.5s ease-in-out 0s;
 
   &_name {
@@ -92,8 +112,14 @@
     font-size: 1.2rem;
     color: black;
     font-weight: 300;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     &-sale {
       margin-right: 18px;
@@ -102,6 +128,7 @@
     }
     &-real_sale {
       font-style: italic;
+      -webkit-text-decoration-line: line-through;
       text-decoration-line: line-through;
       font-size: 0.8rem;
     }
@@ -115,10 +142,12 @@
 }
 
 .price {
+  -webkit-text-decoration-line: underline;
   text-decoration-line: underline;
 
   &-sale {
     font-style: italic;
+    -webkit-text-decoration-line: underline;
     text-decoration-line: underline;
     font-size: 0.8rem;
   }
@@ -126,10 +155,32 @@
 .item-detail_flex {
   height: 100%;
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+}
+
+@-webkit-keyframes show-detail {
+  0% {
+    bottom: -96px;
+    left: 0;
+    opacity: 0;
+  }
+  100% {
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+  }
 }
 
 @keyframes show-detail {
@@ -189,8 +240,14 @@
 }
 
 .carousel-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   font-weight: 700;
   font-size: 1.2rem;

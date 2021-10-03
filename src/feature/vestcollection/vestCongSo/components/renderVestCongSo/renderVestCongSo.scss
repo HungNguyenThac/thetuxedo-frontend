@@ -11,6 +11,7 @@
   height: 100%;
   background-color: white;
   border-radius: 4px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 .body-top {
@@ -18,15 +19,27 @@
   width: 1024px;
   max-width: 100%;
   margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
   justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 
 .body-top_form-left,
 .body-top_form-right {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -46,7 +59,10 @@
 }
 
 .grid__row {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 .item-link:hover {
@@ -78,6 +94,7 @@
     &_img {
       width: 100%;
       height: 100%;
+      -o-object-fit: cover;
       object-fit: cover;
     }
   }
@@ -92,8 +109,14 @@
   left: 0;
   border-radius: 0 16% 16% 0;
   margin-left: 4px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   &_content {
     color: white;
@@ -108,6 +131,7 @@
   left: 0px;
   bottom: 0;
   display: none;
+  -webkit-animation: show-detail 0.5s ease-in-out 0s;
   animation: show-detail 0.5s ease-in-out 0s;
 
   &_name {
@@ -120,8 +144,14 @@
     font-size: 18px;
     color: black;
     font-weight: 300;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     &-sale {
       margin-right: 18px;
@@ -129,6 +159,7 @@
     }
     &-real_sale {
       font-style: italic;
+      -webkit-text-decoration-line: line-through;
       text-decoration-line: line-through;
       font-size: 0.8rem;
     }
@@ -142,10 +173,12 @@
 }
 
 .price {
+  -webkit-text-decoration-line: underline;
   text-decoration-line: underline;
 
   &-sale {
     font-style: italic;
+    -webkit-text-decoration-line: underline;
     text-decoration-line: underline;
     font-size: 0.8rem;
   }
@@ -153,10 +186,32 @@
 .item-detail_flex {
   height: 100%;
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+}
+
+@-webkit-keyframes show-detail {
+  0% {
+    bottom: -96px;
+    left: 0;
+    opacity: 0;
+  }
+  100% {
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+  }
 }
 
 @keyframes show-detail {

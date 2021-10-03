@@ -1,11 +1,22 @@
 .bottom-pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   margin-top: 20px;
 }
 .button-pagination {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
+  -webkit-transition: all 0.25s ease-in-out 0s;
+  -o-transition: all 0.25s ease-in-out 0s;
   transition: all 0.25s ease-in-out 0s;
   border: 1px solid black;
   background-color: white;
@@ -20,7 +31,11 @@
   }
 }
 .pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
 }
 .pagination-number {
@@ -29,8 +44,15 @@
   padding: 2px 8px;
   border-radius: 4px;
 
+  -webkit-transition: all 0.25s ease-in-out 0s;
+
+  -o-transition: all 0.25s ease-in-out 0s;
+
   transition: all 0.25s ease-in-out 0s;
   cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   &:hover {
     background-color: black;

@@ -1,44 +1,43 @@
 import React from "react";
-import PropTypes from "prop-types";
-import "./listSanpham.scss";
 import { Link } from "react-router-dom";
+import "./listSanpham.scss";
 
 ListSanPham.propTypes = {};
 
-function ListSanPham(props) {
+function ListSanPham() {
   return (
     <div className="list-sanpham">
       <ul className="list-sanpham_ul">
         <li className="list-sanpham_item">
-          <Link className="list-sanpham_item_link" to="/feature/vestcollection">
+          <Link className="list-sanpham_item_link" to="/vestcollection">
             <span className="list-sanpham_item_content first38 after38">
               Bộ Sưu Tập Vest
             </span>
           </Link>
         </li>
         <li className="list-sanpham_item">
-          <Link className="list-sanpham_item_link" to="/feature/aosomi">
+          <Link className="list-sanpham_item_link" to="/aosomi">
             <span className="list-sanpham_item_content first38 after38">
               Áo Sơ Mi
             </span>
           </Link>
         </li>
         <li className="list-sanpham_item">
-          <Link className="list-sanpham_item_link" to="/feature/quanau">
+          <Link className="list-sanpham_item_link" to="/quanau">
             <span className="list-sanpham_item_content first38 after38">
               Quần Âu
             </span>
           </Link>
         </li>
         <li className="list-sanpham_item">
-          <Link className="list-sanpham_item_link" to="/feature/giaytay">
+          <Link className="list-sanpham_item_link" to="/giaytay">
             <span className="list-sanpham_item_content first38 after38">
               Giày Tây
             </span>
           </Link>
         </li>
         <li className="list-sanpham_item">
-          <Link className="list-sanpham_item_link" to="/feature/phukien">
+          <Link className="list-sanpham_item_link" to="/phukien">
             <span className="list-sanpham_item_content first38 after38">
               Phụ Kiện
             </span>

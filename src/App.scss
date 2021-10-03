@@ -1,4 +1,5 @@
 * {
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -23,6 +24,7 @@
   left: 0;
   display: none;
   will-change: opacity, transform;
+  -webkit-animation: hiddenShow linear 0.1s;
   animation: hiddenShow linear 0.1s;
 }
 .modal__overlay {
@@ -35,14 +37,28 @@
   width: 64px;
   height: 64px;
   will-change: transform;
+  -webkit-animation: rotate 2s linear infinite;
   animation: rotate 2s linear infinite;
+}
+
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes rotate {
   0% {
+    -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
   100% {
+    -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }

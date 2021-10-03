@@ -34,6 +34,7 @@ function ItemDetail() {
           dispatch(hideLoading());
         }
       } catch (error) {
+        dispatch(hideLoading());
         console.log(error);
       }
     }
