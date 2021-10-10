@@ -7,6 +7,7 @@ import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString"
 import { addItemToCartToolkit } from "../../../product-toolkit/itemCart.slice";
 import PaginationHanmade from "../pagination";
 import SkeletonProductList from "../../../../components share/skeletonProductList/index";
+import { addItemToDetail } from "../../../../actions/itemDetail";
 
 RenderAo.propTypes = {
   items: PropTypes.array,
@@ -74,7 +75,7 @@ function RenderAo(props) {
   }
 
   function handleClickSendItem(item) {
-    const action = addItemToCartToolkit(item);
+    const action = addItemToDetail(item);
     dispatch(action);
     history.push(`/${item.phanLoai}/detail/${item.id}`);
     window.scrollTo(0, 186);

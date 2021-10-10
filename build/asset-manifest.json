@@ -1,0 +1,38 @@
+{
+  "files": {
+    "main.css": "/static/css/main.be45f1fe.chunk.css",
+    "main.js": "/static/js/main.daab67b0.chunk.js",
+    "main.js.map": "/static/js/main.daab67b0.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.f367ff13.js",
+    "runtime-main.js.map": "/static/js/runtime-main.f367ff13.js.map",
+    "static/css/2.92fd7f28.chunk.css": "/static/css/2.92fd7f28.chunk.css",
+    "static/js/2.3119a1dd.chunk.js": "/static/js/2.3119a1dd.chunk.js",
+    "static/js/2.3119a1dd.chunk.js.map": "/static/js/2.3119a1dd.chunk.js.map",
+    "static/js/3.3c2a4ce1.chunk.js": "/static/js/3.3c2a4ce1.chunk.js",
+    "static/js/3.3c2a4ce1.chunk.js.map": "/static/js/3.3c2a4ce1.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.92fd7f28.chunk.css.map": "/static/css/2.92fd7f28.chunk.css.map",
+    "static/css/main.be45f1fe.chunk.css.map": "/static/css/main.be45f1fe.chunk.css.map",
+    "static/js/2.3119a1dd.chunk.js.LICENSE.txt": "/static/js/2.3119a1dd.chunk.js.LICENSE.txt",
+    "static/media/banner10.006fb739.png": "/static/media/banner10.006fb739.png",
+    "static/media/banner11.80a7c976.jpeg": "/static/media/banner11.80a7c976.jpeg",
+    "static/media/banner12.8856b469.png": "/static/media/banner12.8856b469.png",
+    "static/media/banner5.149cfa04.png": "/static/media/banner5.149cfa04.png",
+    "static/media/banner6.66ea684a.jpeg": "/static/media/banner6.66ea684a.jpeg",
+    "static/media/banner7.7a29df8b.png": "/static/media/banner7.7a29df8b.png",
+    "static/media/banner8.d0fc364d.png": "/static/media/banner8.d0fc364d.png",
+    "static/media/banner9.86489818.png": "/static/media/banner9.86489818.png",
+    "static/media/font-awesome.min.css": "/static/media/fontawesome-webfont.f691f37e.woff",
+    "static/media/shoppingCart.scss": "/static/media/logo__right--board.9bdd8040.png",
+    "static/media/logo1.63dd83ad.png": "/static/media/logo1.63dd83ad.png",
+    "static/media/slick-theme.css": "/static/media/slick.c94f7671.ttf",
+    "static/media/suspen.4526cfee.png": "/static/media/suspen.4526cfee.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f367ff13.js",
+    "static/css/2.92fd7f28.chunk.css",
+    "static/js/2.3119a1dd.chunk.js",
+    "static/css/main.be45f1fe.chunk.css",
+    "static/js/main.daab67b0.chunk.js"
+  ]
+}

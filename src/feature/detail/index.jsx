@@ -14,33 +14,37 @@ function ItemDetail() {
   const dispatch = useDispatch();
   const [itemDetail, setItemDetail] = useState({});
   const [idSize, setIdSize] = useState("");
-  const item = useSelector((state) => state.itemDetail);
+  const item = useSelector((state) => state.itemDetail.itemDetail);
   const param = useParams();
-
+  console.log(item);
   useEffect(() => {
     let isSubscribe = true;
-    dispatch(showLoading());
-    async function getItem() {
-      try {
-        let response = await axios({
-          method: "GET",
-          url: `https://thetuxedo.herokuapp.com/products/${param.param}`,
-        });
-        const { status, data } = response;
-        if (isSubscribe && status === 200) {
-          setItemDetail(data);
-        }
-        if (isSubscribe && status === 200) {
+    if (item.length) {
+      setItemDetail(item[0]);
+    } else {
+      dispatch(showLoading());
+      async function getItem() {
+        try {
+          let response = await axios({
+            method: "GET",
+            url: `https://thetuxedo.herokuapp.com/products/${param.param}`,
+          });
+          const { status, data } = response;
+          if (isSubscribe && status === 200) {
+            setItemDetail(data);
+          }
+          if (isSubscribe && status === 200) {
+            dispatch(hideLoading());
+          }
+        } catch (error) {
           dispatch(hideLoading());
+          console.log(error);
         }
-      } catch (error) {
-        dispatch(hideLoading());
-        console.log(error);
       }
+      getItem();
     }
-    getItem();
     return () => (isSubscribe = false);
-  }, [item]);
+  }, []);
 
   function handleSizeSelected(size) {
     setIdSize(size.id);
