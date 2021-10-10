@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../../actions/loading";
 import BannerVestCollectiion from "./components/banner";
 import RenderVestCollection from "./components/renderVestCollection";
 
@@ -9,11 +8,12 @@ function VestCollection(props) {
   const dispatch = useDispatch();
   const [listVestCuoi, setListVestCuoi] = useState([]);
   const [listVestDaHoi, setListVestDaHoi] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [listVestCongSo, setListVestCongSo] = useState([]);
 
   useEffect(() => {
-    dispatch(showLoading(true));
     let isSubscribe = true;
+    setLoading(true);
     async function getDataVest() {
       try {
         let responseVestDaHoi = await axios({
@@ -44,7 +44,7 @@ function VestCollection(props) {
           responseVestCongSo.status === 200 &&
           responseVestCuoi.status === 200
         ) {
-          dispatch(hideLoading(false));
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -58,6 +58,7 @@ function VestCollection(props) {
     <div className="container">
       <BannerVestCollectiion />
       <RenderVestCollection
+        loading={loading}
         listVestCuoi={listVestCuoi}
         listVestDaHoi={listVestDaHoi}
         listVestCongSo={listVestCongSo}

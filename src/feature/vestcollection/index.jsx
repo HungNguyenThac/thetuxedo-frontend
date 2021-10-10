@@ -1,10 +1,15 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-const vestCollection = React.lazy(() => import("./VestCollection"));
-const vestcuoi = React.lazy(() => import("./vestCuoi"));
-const vestcongso = React.lazy(() => import("./vestCongSo"));
-const vestdahoi = React.lazy(() => import("./vestDaHoi"));
+import vestCollection from "./VestCollection";
+import vestcuoi from "./vestCuoi";
+import vestcongso from "./vestCongSo";
+import vestdahoi from "./vestDaHoi";
+
+// const vestCollection = React.lazy(() => import("./VestCollection"));
+// const vestcuoi = React.lazy(() => import("./vestCuoi"));
+// const vestcongso = React.lazy(() => import("./vestCongSo"));
+// const vestdahoi = React.lazy(() => import("./vestDaHoi"));
 
 Vest.propTypes = {};
 

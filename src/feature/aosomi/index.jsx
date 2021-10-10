@@ -1,17 +1,15 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../actions/loading";
 import "./aosomi.scss";
 import BannerAoSoMi from "./components/banner";
 import RenderAo from "./components/renderAo";
 AoSoMi.propTypes = {};
 
 function AoSoMi() {
-  const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
   const [totalItem, setTotalItem] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     _limit: 12,
     _start: 0,
@@ -20,16 +18,15 @@ function AoSoMi() {
   });
 
   useEffect(() => {
-    dispatch(showLoading());
     let isSubscribe = true;
     async function getData() {
       try {
+        setLoading(true);
         const pagination = queryString.stringify(filters);
         let responseItems = await axios({
           method: "GET",
           url: `https://thetuxedo.herokuapp.com/products?phanLoai_containss=aosomi&${pagination}`,
         });
-        console.log(responseItems);
         let responseCount = await axios({
           method: "GET",
           url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=aosomi",
@@ -45,7 +42,7 @@ function AoSoMi() {
           responseItems.status === 200 &&
           responseCount.status === 200
         ) {
-          dispatch(hideLoading());
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -97,6 +94,7 @@ function AoSoMi() {
     <div className="container">
       <BannerAoSoMi />
       <RenderAo
+        loading={loading}
         totalItem={totalItem}
         items={listItem}
         pagination={filters}

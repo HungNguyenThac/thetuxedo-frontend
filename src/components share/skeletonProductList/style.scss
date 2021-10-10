@@ -1,0 +1,15 @@
+.ul-item {
+  padding: 0 36px;
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  .ul-item {
+    padding: 0 16px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .ul-item {
+    padding: 0 8px;
+  }
+}

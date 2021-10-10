@@ -1,16 +1,14 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../../actions/loading";
 import BannerVestCongSo from "./components/banner";
 import RenderVestCongSo from "./components/renderVestCongSo";
 
 VestCongSo.propTypes = {};
 
 function VestCongSo(props) {
-  const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [totalItem, setTotalItem] = useState(0);
   const [filters, setFilters] = useState({
     _limit: 12,
@@ -20,7 +18,7 @@ function VestCongSo(props) {
   });
 
   useEffect(() => {
-    dispatch(showLoading(true));
+    setLoading(true);
     let isSubscribe = true;
     async function getData() {
       try {
@@ -44,7 +42,7 @@ function VestCongSo(props) {
           responseItems.status === 200 &&
           responseCount.status === 200
         ) {
-          dispatch(hideLoading(false));
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -96,6 +94,7 @@ function VestCongSo(props) {
     <div className="container">
       <BannerVestCongSo />
       <RenderVestCongSo
+        loading={loading}
         totalItem={totalItem}
         items={listItem}
         pagination={filters}

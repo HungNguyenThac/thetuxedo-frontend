@@ -5,7 +5,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col } from "antd";
 import PropTypes from "prop-types";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import Slider from "react-slick";
@@ -14,6 +14,7 @@ import "slick-carousel/slick/slick.css";
 import "../../../../../../node_modules/slick-carousel/slick/slick-theme.css";
 import "../../../../../../node_modules/slick-carousel/slick/slick.css";
 import { addItemToDetail } from "../../../../../actions/itemDetail";
+import SkeletonProductList from "../../../../../components share/skeletonProductList";
 import { themDauChamVaoGiaTien } from "../../../../../shareFunction/numberToString";
 import "./renderVestCollection.scss";
 
@@ -21,16 +22,19 @@ RenderVestCollection.propTypes = {
   listVestCuoi: PropTypes.array,
   listVestDaHoi: PropTypes.array,
   listVestCongSo: PropTypes.array,
+  loading: PropTypes.bool,
 };
 RenderVestCollection.defaultProps = {
   listVestCuoi: [],
   listVestDaHoi: [],
   listVestCongSo: [],
+  loading: true,
 };
 
 function RenderVestCollection(props) {
-  const { listVestCuoi, listVestDaHoi, listVestCongSo } = props;
+  const { listVestCuoi, listVestDaHoi, listVestCongSo, loading } = props;
   const dispatch = useDispatch();
+  const [width, setWidth] = useState();
   const history = useHistory();
 
   function handleClickSendItem(item) {
@@ -137,6 +141,19 @@ function RenderVestCollection(props) {
       },
     ],
   };
+  window.addEventListener("resize", function reportWindowSize() {
+    setWidth(window.innerWidth);
+  });
+
+  let quantity = "";
+  if (width > 768 || window.innerWidth > 768) {
+    quantity = 3;
+  } else if (width <= 768 || window.innerWidth <= 768) {
+    quantity = 2;
+  } else if (width <= 576 || window.innerWidth <= 576) {
+    quantity = 1;
+  }
+
   return (
     <div>
       {/* carousel Vest Cuoi */}
@@ -146,7 +163,7 @@ function RenderVestCollection(props) {
             xxl={{ span: 10, offset: 12 }}
             xl={{ span: 10, offset: 12 }}
             lg={{ span: 10, offset: 12 }}
-            md={{ span: 9, offset: 12 }}
+            md={{ span: 9, offset: 10 }}
             sm={{ span: 14, offset: 6 }}
             xs={{ span: 16, offset: 4 }}
           >
@@ -163,85 +180,95 @@ function RenderVestCollection(props) {
             </Link>
           </Col>
         </div>
-        <Slider ref={refVestCuoi} {...settings}>
-          {listVestCuoi.map((item) => {
-            // tạo dấu . trong giá tiền
-            let Gia = themDauChamVaoGiaTien(item.gia);
+        {loading ? (
+          <SkeletonProductList quantity={quantity} />
+        ) : (
+          <Slider ref={refVestCuoi} {...settings}>
+            {listVestCuoi.map((item) => {
+              // tạo dấu . trong giá tiền
+              let Gia = themDauChamVaoGiaTien(item.gia);
 
-            // tạo dấu . trong giảm giá tiền
-            let giamGiaString = "";
-            if (item.giamGia) {
-              giamGiaString = themDauChamVaoGiaTien(item.giamGia);
-            }
+              // tạo dấu . trong giảm giá tiền
+              let giamGiaString = "";
+              if (item.giamGia) {
+                giamGiaString = themDauChamVaoGiaTien(item.giamGia);
+              }
 
-            //tạo % giảm giá
-            const phanTram = Math.round(
-              (100 - (item.giamGia / item.gia) * 100).toFixed(2)
-            );
-            return (
-              <li
-                className="item item-link"
-                key={item.id}
-                onClick={() => handleClickSendItem(item)}
-              >
-                <div className="item-main">
-                  <div className="item-main_div-img">
-                    <img
-                      className="item-main_img"
-                      src={item.anhBia}
-                      alt="ảnh bìa"
-                    />
-                    {item.giamGia ? (
-                      <div className="notification-sale">
-                        <span className="notification-sale_content">
-                          <span>{phanTram}%</span>
-                        </span>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="item-detail">
-                    <div className="item-detail_flex">
-                      <div className="item-detail_name">{item.tenSP}</div>
+              //tạo % giảm giá
+              const phanTram = Math.round(
+                (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+              );
+              return (
+                <li
+                  className="item item-link"
+                  key={item.id}
+                  onClick={() => handleClickSendItem(item)}
+                >
+                  <div className="item-main">
+                    <div className="item-main_div-img">
+                      <img
+                        className="item-main_img"
+                        src={item.anhBia}
+                        alt="ảnh bìa"
+                      />
                       {item.giamGia ? (
-                        <div className="item-detail_price">
-                          <span className="item-detail_price-sale">
-                            {giamGiaString}
-                            <span className="price">đ</span>
+                        <div className="notification-sale">
+                          <span className="notification-sale_content">
+                            <span>{phanTram}%</span>
                           </span>
-                          <div>
-                            <span className="item-detail_price-real_sale">
-                              {Gia}
-                              <span className="price-sale">đ</span>
-                            </span>
-                          </div>
                         </div>
                       ) : (
-                        <p className="item-detail_price-real">
-                          {Gia}
-                          <span className="price">đ</span>
-                        </p>
+                        ""
                       )}
                     </div>
+                    <div className="item-detail">
+                      <div className="item-detail_flex">
+                        <div className="item-detail_name">{item.tenSP}</div>
+                        {item.giamGia ? (
+                          <div className="item-detail_price">
+                            <span className="item-detail_price-sale">
+                              {giamGiaString}
+                              <span className="price">đ</span>
+                            </span>
+                            <div>
+                              <span className="item-detail_price-real_sale">
+                                {Gia}
+                                <span className="price-sale">đ</span>
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="item-detail_price-real">
+                            {Gia}
+                            <span className="price">đ</span>
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </li>
-            );
-          })}
-        </Slider>
-        <button className="button-carousel-left" onClick={PreviousVestCuoi}>
-          <FontAwesomeIcon
-            className="button-carousel-icon"
-            icon={faChevronCircleLeft}
-          />
-        </button>
-        <button className="button-carousel-right" onClick={NextVestCuoi}>
-          <FontAwesomeIcon
-            className="button-carousel-icon"
-            icon={faChevronCircleRight}
-          />
-        </button>
+                </li>
+              );
+            })}
+          </Slider>
+        )}
+        {loading ? (
+          ""
+        ) : (
+          <>
+            <button className="button-carousel-left" onClick={PreviousVestCuoi}>
+              <FontAwesomeIcon
+                className="button-carousel-icon"
+                icon={faChevronCircleLeft}
+              />
+            </button>
+            <button className="button-carousel-right" onClick={NextVestCuoi}>
+              <FontAwesomeIcon
+                className="button-carousel-icon"
+                icon={faChevronCircleRight}
+              />
+            </button>
+          </>
+        )}
       </ul>
 
       {/* carousel vest Da Hoi */}
@@ -251,7 +278,7 @@ function RenderVestCollection(props) {
             xxl={{ span: 10, offset: 12 }}
             xl={{ span: 10, offset: 12 }}
             lg={{ span: 10, offset: 12 }}
-            md={{ span: 9, offset: 12 }}
+            md={{ span: 9, offset: 10 }}
             sm={{ span: 14, offset: 6 }}
             xs={{ span: 16, offset: 4 }}
           >
@@ -268,87 +295,100 @@ function RenderVestCollection(props) {
             </Link>
           </Col>
         </div>
-        <Slider ref={refVestDaHoi} {...setting1}>
-          {listVestDaHoi.map((item) => {
-            // tạo dấu . trong giá tiền
-            let Gia = themDauChamVaoGiaTien(item.gia);
+        {loading ? (
+          <SkeletonProductList quantity={quantity} />
+        ) : (
+          <Slider ref={refVestDaHoi} {...setting1}>
+            {listVestDaHoi.map((item) => {
+              // tạo dấu . trong giá tiền
+              let Gia = themDauChamVaoGiaTien(item.gia);
 
-            // tạo dấu . trong giảm giá tiền
-            let giamGiaString = "";
-            if (item.giamGia) {
-              giamGiaString = themDauChamVaoGiaTien(item.giamGia);
-            }
+              // tạo dấu . trong giảm giá tiền
+              let giamGiaString = "";
+              if (item.giamGia) {
+                giamGiaString = themDauChamVaoGiaTien(item.giamGia);
+              }
 
-            //tạo % giảm giá
-            const phanTram = Math.round(
-              (100 - (item.giamGia / item.gia) * 100).toFixed(2)
-            );
-            return (
-              <li className="item" key={item.id}>
-                <Link
-                  className="item-link"
-                  to="/feature/detail"
-                  onClick={() => handleClickSendItem(item)}
-                >
-                  <div className="item-main">
-                    <div className="item-main_div-img">
-                      <img
-                        className="item-main_img"
-                        src={item.anhBia}
-                        alt="ảnh bìa"
-                      />
-                      {item.giamGia ? (
-                        <div className="notification-sale">
-                          <span className="notification-sale_content">
-                            <span>{phanTram}%</span>
-                          </span>
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                    <div className="item-detail">
-                      <div className="item-detail_flex">
-                        <div className="item-detail_name">{item.tenSP}</div>
+              //tạo % giảm giá
+              const phanTram = Math.round(
+                (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+              );
+              return (
+                <li className="item" key={item.id}>
+                  <Link
+                    className="item-link"
+                    to="/feature/detail"
+                    onClick={() => handleClickSendItem(item)}
+                  >
+                    <div className="item-main">
+                      <div className="item-main_div-img">
+                        <img
+                          className="item-main_img"
+                          src={item.anhBia}
+                          alt="ảnh bìa"
+                        />
                         {item.giamGia ? (
-                          <div className="item-detail_price">
-                            <span className="item-detail_price-sale">
-                              {giamGiaString}
-                              <span className="price">đ</span>
+                          <div className="notification-sale">
+                            <span className="notification-sale_content">
+                              <span>{phanTram}%</span>
                             </span>
-                            <div>
-                              <span className="item-detail_price-real_sale">
-                                {Gia}
-                                <span className="price-sale">đ</span>
-                              </span>
-                            </div>
                           </div>
                         ) : (
-                          <p className="item-detail_price-real">
-                            {Gia}
-                            <span className="price">đ</span>
-                          </p>
+                          ""
                         )}
                       </div>
+                      <div className="item-detail">
+                        <div className="item-detail_flex">
+                          <div className="item-detail_name">{item.tenSP}</div>
+                          {item.giamGia ? (
+                            <div className="item-detail_price">
+                              <span className="item-detail_price-sale">
+                                {giamGiaString}
+                                <span className="price">đ</span>
+                              </span>
+                              <div>
+                                <span className="item-detail_price-real_sale">
+                                  {Gia}
+                                  <span className="price-sale">đ</span>
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="item-detail_price-real">
+                              {Gia}
+                              <span className="price">đ</span>
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </li>
-            );
-          })}
-        </Slider>
-        <button className="button-carousel-left" onClick={PreviousVestDaHoi}>
-          <FontAwesomeIcon
-            className="button-carousel-icon"
-            icon={faChevronCircleLeft}
-          />
-        </button>
-        <button className="button-carousel-right" onClick={NextVestDaHoi}>
-          <FontAwesomeIcon
-            className="button-carousel-icon"
-            icon={faChevronCircleRight}
-          />
-        </button>
+                  </Link>
+                </li>
+              );
+            })}
+          </Slider>
+        )}
+        {loading ? (
+          ""
+        ) : (
+          <>
+            <button
+              className="button-carousel-left"
+              onClick={PreviousVestDaHoi}
+            >
+              <FontAwesomeIcon
+                className="button-carousel-icon"
+                icon={faChevronCircleLeft}
+              />
+            </button>
+            <button className="button-carousel-right" onClick={NextVestDaHoi}>
+              <FontAwesomeIcon
+                className="button-carousel-icon"
+                icon={faChevronCircleRight}
+              />
+            </button>
+          </>
+        )}
       </ul>
 
       {/* carousel vest Cong So */}
@@ -358,7 +398,7 @@ function RenderVestCollection(props) {
             xxl={{ span: 10, offset: 12 }}
             xl={{ span: 10, offset: 12 }}
             lg={{ span: 10, offset: 12 }}
-            md={{ span: 9, offset: 12 }}
+            md={{ span: 9, offset: 10 }}
             sm={{ span: 14, offset: 6 }}
             xs={{ span: 16, offset: 4 }}
           >
@@ -375,87 +415,100 @@ function RenderVestCollection(props) {
             </Link>
           </Col>
         </div>
-        <Slider ref={refVestCongSo} {...settings}>
-          {listVestCongSo.map((item) => {
-            // tạo dấu . trong giá tiền
-            let Gia = themDauChamVaoGiaTien(item.gia);
+        {loading ? (
+          <SkeletonProductList quantity={quantity} />
+        ) : (
+          <Slider ref={refVestCongSo} {...settings}>
+            {listVestCongSo.map((item) => {
+              // tạo dấu . trong giá tiền
+              let Gia = themDauChamVaoGiaTien(item.gia);
 
-            // tạo dấu . trong giảm giá tiền
-            let giamGiaString = "";
-            if (item.giamGia) {
-              giamGiaString = themDauChamVaoGiaTien(item.giamGia);
-            }
+              // tạo dấu . trong giảm giá tiền
+              let giamGiaString = "";
+              if (item.giamGia) {
+                giamGiaString = themDauChamVaoGiaTien(item.giamGia);
+              }
 
-            //tạo % giảm giá
-            const phanTram = Math.round(
-              (100 - (item.giamGia / item.gia) * 100).toFixed(2)
-            );
-            return (
-              <li className="item" key={item.id}>
-                <Link
-                  className="item-link"
-                  to="/feature/detail"
-                  onClick={() => handleClickSendItem(item)}
-                >
-                  <div className="item-main">
-                    <div className="item-main_div-img">
-                      <img
-                        className="item-main_img"
-                        src={item.anhBia}
-                        alt="ảnh bìa"
-                      />
-                      {item.giamGia ? (
-                        <div className="notification-sale">
-                          <span className="notification-sale_content">
-                            <span>{phanTram}%</span>
-                          </span>
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                    <div className="item-detail">
-                      <div className="item-detail_flex">
-                        <div className="item-detail_name">{item.tenSP}</div>
+              //tạo % giảm giá
+              const phanTram = Math.round(
+                (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+              );
+              return (
+                <li className="item" key={item.id}>
+                  <Link
+                    className="item-link"
+                    to="/feature/detail"
+                    onClick={() => handleClickSendItem(item)}
+                  >
+                    <div className="item-main">
+                      <div className="item-main_div-img">
+                        <img
+                          className="item-main_img"
+                          src={item.anhBia}
+                          alt="ảnh bìa"
+                        />
                         {item.giamGia ? (
-                          <div className="item-detail_price">
-                            <span className="item-detail_price-sale">
-                              {giamGiaString}
-                              <span className="price">đ</span>
+                          <div className="notification-sale">
+                            <span className="notification-sale_content">
+                              <span>{phanTram}%</span>
                             </span>
-                            <div>
-                              <span className="item-detail_price-real_sale">
-                                {Gia}
-                                <span className="price-sale">đ</span>
-                              </span>
-                            </div>
                           </div>
                         ) : (
-                          <p className="item-detail_price-real">
-                            {Gia}
-                            <span className="price">đ</span>
-                          </p>
+                          ""
                         )}
                       </div>
+                      <div className="item-detail">
+                        <div className="item-detail_flex">
+                          <div className="item-detail_name">{item.tenSP}</div>
+                          {item.giamGia ? (
+                            <div className="item-detail_price">
+                              <span className="item-detail_price-sale">
+                                {giamGiaString}
+                                <span className="price">đ</span>
+                              </span>
+                              <div>
+                                <span className="item-detail_price-real_sale">
+                                  {Gia}
+                                  <span className="price-sale">đ</span>
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="item-detail_price-real">
+                              {Gia}
+                              <span className="price">đ</span>
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </li>
-            );
-          })}
-        </Slider>
-        <button className="button-carousel-left" onClick={PreviousVestCongSo}>
-          <FontAwesomeIcon
-            className="button-carousel-icon"
-            icon={faChevronCircleLeft}
-          />
-        </button>
-        <button className="button-carousel-right" onClick={NextVestCongSo}>
-          <FontAwesomeIcon
-            className="button-carousel-icon"
-            icon={faChevronCircleRight}
-          />
-        </button>
+                  </Link>
+                </li>
+              );
+            })}
+          </Slider>
+        )}
+        {loading ? (
+          ""
+        ) : (
+          <>
+            <button
+              className="button-carousel-left"
+              onClick={PreviousVestCongSo}
+            >
+              <FontAwesomeIcon
+                className="button-carousel-icon"
+                icon={faChevronCircleLeft}
+              />
+            </button>
+            <button className="button-carousel-right" onClick={NextVestCongSo}>
+              <FontAwesomeIcon
+                className="button-carousel-icon"
+                icon={faChevronCircleRight}
+              />
+            </button>
+          </>
+        )}
       </ul>
     </div>
   );

@@ -1,16 +1,13 @@
-import React from "react";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import queryString from "query-string";
-import RenderCaVat from "./components/renderCaVat";
+import React, { useEffect, useState } from "react";
 import BannerCaVat from "./components/banner/index";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../../actions/loading";
+import RenderCaVat from "./components/renderCaVat";
 CaVat.propTypes = {};
 
-function CaVat(props) {
-  const dispatch = useDispatch();
+function CaVat() {
   const [listItem, setListItem] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [totalItem, setTotalItem] = useState(0);
   const [filters, setFilters] = useState({
     _limit: 12,
@@ -20,8 +17,8 @@ function CaVat(props) {
   });
 
   useEffect(() => {
-    dispatch(showLoading(true));
     let isSubscribe = true;
+    setLoading(true);
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -36,7 +33,6 @@ function CaVat(props) {
         console.log(responseItems);
         if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);
-          dispatch(hideLoading(false));
         }
         if (isSubscribe && responseCount.status === 200) {
           setTotalItem(responseCount.data);
@@ -46,6 +42,7 @@ function CaVat(props) {
           responseItems.status === 200 &&
           responseCount.status === 200
         ) {
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -97,6 +94,7 @@ function CaVat(props) {
     <div className="container">
       <BannerCaVat />
       <RenderCaVat
+        loading={loading}
         totalItem={totalItem}
         items={listItem}
         pagination={filters}

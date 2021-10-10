@@ -9,8 +9,8 @@ import RenderComboPhuKien from "./components/renderCombo";
 NoCaiCo.propTypes = {};
 
 function NoCaiCo(props) {
-  const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [totalItem, setTotalItem] = useState(0);
   const [filters, setFilters] = useState({
     _limit: 12,
@@ -20,8 +20,8 @@ function NoCaiCo(props) {
   });
 
   useEffect(() => {
-    dispatch(showLoading(true));
     let isSubscribe = true;
+    setLoading(true);
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -44,7 +44,7 @@ function NoCaiCo(props) {
           responseItems.status === 200 &&
           responseCount.status === 200
         ) {
-          dispatch(hideLoading(false));
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -96,6 +96,7 @@ function NoCaiCo(props) {
     <div className="container">
       <BannerComboPhukien />
       <RenderComboPhuKien
+        loading={loading}
         totalItem={totalItem}
         items={listItem}
         pagination={filters}

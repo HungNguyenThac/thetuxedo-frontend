@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { setInfoUser } from "../../actions/infoUser";
@@ -8,7 +8,7 @@ import { getCookie } from "../../shareFunction/checkCookies";
 import RenderDashBoard from "./components/renderDashBoard";
 import "./style.scss";
 
-function checkInputUpdateInfo() {
+const checkInputUpdateInfo = () => {
   let phoneNumber = document.getElementById("phonenumber");
   let password = document.getElementById("password1");
   let password2 = document.getElementById("password2");
@@ -41,29 +41,32 @@ function checkInputUpdateInfo() {
   } else {
     setSuccessForSignUP(password2);
   }
-}
+};
 
-function setErrorForSignUP(input, message) {
+const setErrorForSignUP = (input, message) => {
   let formControl = input.parentElement;
   let small = formControl.querySelector("small");
   formControl.className = "form-signUp-parent error";
   small.innerText = message;
   small.style.display = "block";
-}
+};
 
-function setSuccessForSignUP(input) {
+const setSuccessForSignUP = (input) => {
   let formControl = input.parentElement;
   formControl.className = "form-signUp-parent success";
-}
+};
+
 //----------------------------------------------props
 function TrangCaNhan() {
   const dispatch = useDispatch();
   const history = useHistory();
-  function handleClickToUpdate(e) {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClickToUpdate = (e) => {
     e.preventDefault();
     checkInputUpdateInfo();
     SendRequestUpdateInfo();
-  }
+  };
 
   const SendRequestUpdateInfo = async () => {
     let formSignup = document.querySelectorAll(".form-signUp-parent.success");
@@ -91,7 +94,6 @@ function TrangCaNhan() {
 
   useEffect(() => {
     const cookies = getCookie("user");
-    const element = document.querySelector(".modal-moreInformation");
     let isSubscribe = true;
     const checkCookies = async () => {
       if (cookies.length >= 1) {
@@ -100,7 +102,7 @@ function TrangCaNhan() {
           const response = await userApi.postCheckInfoUser();
           const { status, code } = response;
           if (isSubscribe && status === 200 && code === 9527) {
-            element.style.display = "block";
+            setShowModal(true);
             hideLoading();
           } else if (isSubscribe && status === 400) {
             history.push("/login");
@@ -119,50 +121,52 @@ function TrangCaNhan() {
 
   return (
     <div className="container">
-      <div className="modal-moreInformation">
-        <div className="modal-moreInformation_overlay">
-          <div className="update-info-user">
-            <div className="update-title">
-              <span>Bổ Sung Thông Tin</span>
+      {showModal && (
+        <div className="modal-moreInformation">
+          <div className="modal-moreInformation_overlay">
+            <div className="update-info-user">
+              <div className="update-title">
+                <span>Bổ Sung Thông Tin</span>
+              </div>
+              <form className="form-input-update" action="">
+                <div className="form-signUp-parent">
+                  <input
+                    className="block-input"
+                    id="phonenumber"
+                    name="phoneNumber"
+                    placeholder="Sô điện thoại"
+                    type="text"
+                  />
+                  <small>Error message</small>
+                </div>
+                <div className="form-signUp-parent">
+                  <input
+                    className="block-input"
+                    id="password1"
+                    name="password1"
+                    placeholder="Mật khẩu"
+                    type="password"
+                  />
+                  <small>Error message</small>
+                </div>
+                <div className="form-signUp-parent">
+                  <input
+                    className="block-input"
+                    id="password2"
+                    name="password2"
+                    placeholder="Xác nhận mật khẩu"
+                    type="password"
+                  />
+                  <small>Error message</small>
+                </div>
+                <button className="block-input" onClick={handleClickToUpdate}>
+                  Cập Nhật
+                </button>
+              </form>
             </div>
-            <form className="form-input-update" action="">
-              <div className="form-signUp-parent">
-                <input
-                  className="block-input"
-                  id="phonenumber"
-                  name="phoneNumber"
-                  placeholder="Sô điện thoại"
-                  type="text"
-                />
-                <small>Error message</small>
-              </div>
-              <div className="form-signUp-parent">
-                <input
-                  className="block-input"
-                  id="password1"
-                  name="password1"
-                  placeholder="Mật khẩu"
-                  type="password"
-                />
-                <small>Error message</small>
-              </div>
-              <div className="form-signUp-parent">
-                <input
-                  className="block-input"
-                  id="password2"
-                  name="password2"
-                  placeholder="Xác nhận mật khẩu"
-                  type="password"
-                />
-                <small>Error message</small>
-              </div>
-              <button className="block-input" onClick={handleClickToUpdate}>
-                Cập Nhật
-              </button>
-            </form>
           </div>
         </div>
-      </div>
+      )}
       <RenderDashBoard />
     </div>
   );

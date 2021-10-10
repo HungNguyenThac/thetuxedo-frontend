@@ -1,20 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./ghimCaiAo.scss";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import queryString from "query-string";
-import RenderGhimCaiAo from "./components/renderGhimCaiAo";
+import React, { useEffect, useState } from "react";
 import BannerGhimCaiAo from "./components/banner/index";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../../actions/loading";
+import RenderGhimCaiAo from "./components/renderGhimCaiAo";
+import "./ghimCaiAo.scss";
 GhimCaiAo.propTypes = {};
 
 function GhimCaiAo(props) {
-  const dispatch = useDispatch();
-
   const [listItem, setListItem] = useState([]);
   const [totalItem, setTotalItem] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     _limit: 12,
     _start: 0,
@@ -23,7 +18,7 @@ function GhimCaiAo(props) {
   });
 
   useEffect(() => {
-    dispatch(showLoading(true));
+    setLoading(true);
     let isSubscribe = true;
     async function getData() {
       try {
@@ -47,7 +42,7 @@ function GhimCaiAo(props) {
           responseItems.status === 200 &&
           responseCount.status === 200
         ) {
-          dispatch(hideLoading(false));
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -99,6 +94,7 @@ function GhimCaiAo(props) {
     <div className="container">
       <BannerGhimCaiAo />
       <RenderGhimCaiAo
+        loading={loading}
         totalItem={totalItem}
         items={listItem}
         pagination={filters}

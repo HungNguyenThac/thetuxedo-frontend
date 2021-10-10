@@ -1,16 +1,14 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../actions/loading";
 import BannerQuanAu from "./components/banner";
 import RenderQuanAu from "./components/renderQuanAu";
 AoSoMi.propTypes = {};
 
 function AoSoMi() {
-  const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
   const [totalItem, setTotalItem] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     _limit: 12,
     _start: 0,
@@ -19,8 +17,8 @@ function AoSoMi() {
   });
 
   useEffect(() => {
-    dispatch(showLoading(true));
     let isSubscrible = true;
+    setLoading(true);
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -43,7 +41,7 @@ function AoSoMi() {
           responseItems.status === 200 &&
           responseCount.status === 200
         ) {
-          dispatch(hideLoading(false));
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -95,6 +93,7 @@ function AoSoMi() {
     <div className="container">
       <BannerQuanAu />
       <RenderQuanAu
+        loading={loading}
         totalItem={totalItem}
         items={listItem}
         pagination={filters}

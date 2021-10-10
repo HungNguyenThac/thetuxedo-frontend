@@ -1,15 +1,13 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../../actions/loading";
 import BannerCaVat from "./components/banner/index";
 import RenderCaVat from "./components/renderNoCaiCo";
 NoCaiCo.propTypes = {};
 
 function NoCaiCo(props) {
-  const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [totalItem, setTotalItem] = useState(0);
   const [filters, setFilters] = useState({
     _limit: 12,
@@ -19,7 +17,7 @@ function NoCaiCo(props) {
   });
 
   useEffect(() => {
-    dispatch(showLoading(true));
+    setLoading(true);
     let isSubscribe = true;
     async function getData() {
       try {
@@ -43,7 +41,7 @@ function NoCaiCo(props) {
           responseItems.status === 200 &&
           responseCount.status === 200
         ) {
-          dispatch(hideLoading(false));
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -95,6 +93,7 @@ function NoCaiCo(props) {
     <div className="container">
       <BannerCaVat />
       <RenderCaVat
+        loading={loading}
         totalItem={totalItem}
         items={listItem}
         pagination={filters}

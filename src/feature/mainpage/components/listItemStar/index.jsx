@@ -3,7 +3,7 @@ import {
   faChevronCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
@@ -13,11 +13,13 @@ import "slick-carousel/slick/slick.css";
 import "../../../../../node_modules/slick-carousel/slick/slick-theme.css";
 import "../../../../../node_modules/slick-carousel/slick/slick.css";
 import { addItemToDetail } from "../../../../actions/itemDetail";
+import SkeletonProductList from "../../../../components share/skeletonProductList";
 import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
 import "./listItemStar.scss";
 
 const ListItemStar = (props) => {
-  const { listItem } = props;
+  const { listItem, loading } = props;
+  const [width, setWidth] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -69,91 +71,115 @@ const ListItemStar = (props) => {
       },
     ],
   };
+
+  window.addEventListener("resize", function reportWindowSize() {
+    setWidth(window.innerWidth);
+  });
+
+  let quantity = "";
+  if (width > 768 || window.innerWidth > 768) {
+    quantity = 3;
+  } else if (width <= 768 || window.innerWidth <= 768) {
+    quantity = 2;
+  } else if (width <= 576 || window.innerWidth <= 576) {
+    quantity = 1;
+  }
+
   return (
     <ul className="carousel-mainPage">
       <div className="carousel-title">
         <h3>SẢN PHẨM HANDMADE</h3>
       </div>
-      <Slider ref={ref} {...settings}>
-        {listItem.map((item) => {
-          // tạo dấu . trong giá tiền
-          let Gia = themDauChamVaoGiaTien(item.gia);
+      {loading ? (
+        <SkeletonProductList quantity={quantity} />
+      ) : (
+        <Slider ref={ref} {...settings}>
+          {listItem.map((item) => {
+            // tạo dấu . trong giá tiền
+            let Gia = themDauChamVaoGiaTien(item.gia);
 
-          // tạo dấu . trong giảm giá tiền
-          let giamGiaString = "";
-          if (item.giamGia) {
-            giamGiaString = themDauChamVaoGiaTien(item.giamGia);
-          }
+            // tạo dấu . trong giảm giá tiền
+            let giamGiaString = "";
+            if (item.giamGia) {
+              giamGiaString = themDauChamVaoGiaTien(item.giamGia);
+            }
 
-          //tạo % giảm giá
-          const phanTram = Math.round(
-            (100 - (item.giamGia / item.gia) * 100).toFixed(2)
-          );
-          return (
-            <li className="item" key={item.id}>
-              <Link
-                className="item-link"
-                onClick={() => handleClickSendItem(item)}
-              >
-                <div className="item-main">
-                  <div className="item-main_div-img">
-                    <img
-                      className="item-main_img"
-                      src={item.anhBia}
-                      alt="ảnh bìa"
-                    />
-                    {item.giamGia ? (
-                      <div className="notification-sale">
-                        <span className="notification-sale_content">
-                          <span>{phanTram}%</span>
-                        </span>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="item-detail">
-                    <div className="item-detail_flex">
-                      <div className="item-detail_name">{item.tenSP}</div>
+            //tạo % giảm giá
+            const phanTram = Math.round(
+              (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+            );
+            return (
+              <li className="item" key={item.id}>
+                <Link
+                  className="item-link"
+                  onClick={() => handleClickSendItem(item)}
+                >
+                  <div className="item-main">
+                    <div className="item-main_div-img">
+                      <img
+                        className="item-main_img"
+                        src={item.anhBia}
+                        alt="ảnh bìa"
+                      />
                       {item.giamGia ? (
-                        <div className="item-detail_price">
-                          <span className="item-detail_price-sale">
-                            {giamGiaString}
-                            <span className="price">đ</span>
+                        <div className="notification-sale">
+                          <span className="notification-sale_content">
+                            <span>{phanTram}%</span>
                           </span>
-                          <div>
-                            <span className="item-detail_price-real_sale">
-                              {Gia}
-                              <span className="price-sale">đ</span>
-                            </span>
-                          </div>
                         </div>
                       ) : (
-                        <p className="item-detail_price-real">
-                          {Gia}
-                          <span className="price">đ</span>
-                        </p>
+                        ""
                       )}
                     </div>
+                    <div className="item-detail">
+                      <div className="item-detail_flex">
+                        <div className="item-detail_name">{item.tenSP}</div>
+                        {item.giamGia ? (
+                          <div className="item-detail_price">
+                            <span className="item-detail_price-sale">
+                              {giamGiaString}
+                              <span className="price">đ</span>
+                            </span>
+                            <div>
+                              <span className="item-detail_price-real_sale">
+                                {Gia}
+                                <span className="price-sale">đ</span>
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="item-detail_price-real">
+                            {Gia}
+                            <span className="price">đ</span>
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            </li>
-          );
-        })}
-      </Slider>
-      <button className="button-carousel-left" onClick={Previous}>
-        <FontAwesomeIcon
-          className="button-carousel-icon"
-          icon={faChevronCircleLeft}
-        />
-      </button>
-      <button className="button-carousel-right" onClick={Next}>
-        <FontAwesomeIcon
-          className="button-carousel-icon"
-          icon={faChevronCircleRight}
-        />
-      </button>
+                </Link>
+              </li>
+            );
+          })}
+        </Slider>
+      )}
+      {loading ? (
+        ""
+      ) : (
+        <>
+          <button className="button-carousel-left" onClick={Previous}>
+            <FontAwesomeIcon
+              className="button-carousel-icon"
+              icon={faChevronCircleLeft}
+            />
+          </button>
+          <button className="button-carousel-right" onClick={Next}>
+            <FontAwesomeIcon
+              className="button-carousel-icon"
+              icon={faChevronCircleRight}
+            />
+          </button>
+        </>
+      )}
     </ul>
   );
 };

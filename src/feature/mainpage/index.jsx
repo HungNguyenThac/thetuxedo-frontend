@@ -1,7 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../actions/loading";
 import BannerMainPage from "./components/banner";
 import BannerSecond from "./components/bannerSecond";
 import ListItemStart from "./components/listItemStar";
@@ -9,11 +7,10 @@ import "./mainpage.scss";
 
 MainPage.propTypes = {};
 function MainPage() {
-  const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(showLoading(true));
     let isSubscribe = true;
     async function getData() {
       try {
@@ -24,7 +21,7 @@ function MainPage() {
         const { status, data } = responseItems;
         if (isSubscribe && status === 200) {
           setListItem(data);
-          dispatch(hideLoading(false));
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -38,7 +35,7 @@ function MainPage() {
     <div>
       <BannerMainPage />
       <BannerSecond />
-      <ListItemStart listItem={listItem} />
+      <ListItemStart loading={loading} listItem={listItem} />
     </div>
   );
 }

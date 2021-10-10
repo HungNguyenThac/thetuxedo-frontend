@@ -1,15 +1,12 @@
-import React from "react";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import queryString from "query-string";
-import RenderThatLung from "./components/renderThatLung";
+import React, { useEffect, useState } from "react";
 import BannerThatLung from "./components/banner/index";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../../actions/loading";
+import RenderThatLung from "./components/renderThatLung";
 
 function ThatLung(props) {
-  const dispatch = useDispatch();
   const [listItem, setListItem] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [totalItem, setTotalItem] = useState(0);
   const [filters, setFilters] = useState({
     _limit: 12,
@@ -19,8 +16,8 @@ function ThatLung(props) {
   });
 
   useEffect(() => {
-    dispatch(showLoading(true));
     let isSubscribe = true;
+    setLoading(true);
     async function getData() {
       try {
         const pagination = queryString.stringify(filters);
@@ -43,7 +40,7 @@ function ThatLung(props) {
           responseItems.status === 200 &&
           responseCount.status === 200
         ) {
-          dispatch(hideLoading(false));
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -95,6 +92,7 @@ function ThatLung(props) {
     <div className="container">
       <BannerThatLung />
       <RenderThatLung
+        loading={loading}
         totalItem={totalItem}
         items={listItem}
         pagination={filters}

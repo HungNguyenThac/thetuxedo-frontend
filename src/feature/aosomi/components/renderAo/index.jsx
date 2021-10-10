@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
 import { addItemToCartToolkit } from "../../../product-toolkit/itemCart.slice";
 import PaginationHanmade from "../pagination";
+import SkeletonProductList from "../../../../components share/skeletonProductList/index";
 
 RenderAo.propTypes = {
   items: PropTypes.array,
@@ -15,6 +16,7 @@ RenderAo.propTypes = {
   onSelectFilter: PropTypes.func,
   onSelectSort: PropTypes.func,
   totalItem: PropTypes.number,
+  loading: PropTypes.bool,
 };
 
 RenderAo.defaultProps = {
@@ -25,6 +27,7 @@ RenderAo.defaultProps = {
   onSelectFilter: null,
   onSelectSort: null,
   totalItem: null,
+  loading: true,
 };
 
 function RenderAo(props) {
@@ -38,6 +41,7 @@ function RenderAo(props) {
     onPageChange1,
     onPageChange2,
     totalItem,
+    loading,
   } = props;
   const [idActive, setIdActive] = useState("");
   function handlePageChange1(Page) {
@@ -148,78 +152,84 @@ function RenderAo(props) {
           </Col>
         </div>
         <div className="body-bottom">
-          <ul className="ul-item">
-            <Row gutter={[8, 8]}>
-              {items.map((item) => {
-                // tạo dấu . trong giá tiền
-                let Gia = themDauChamVaoGiaTien(item.gia);
+          {loading ? (
+            <SkeletonProductList quantity={12} />
+          ) : (
+            <ul className="ul-item">
+              <Row gutter={[8, 8]}>
+                {items.map((item) => {
+                  // tạo dấu . trong giá tiền
+                  let Gia = themDauChamVaoGiaTien(item.gia);
 
-                // tạo dấu . trong giảm giá tiền
-                let giamGiaString = "";
-                if (item.giamGia) {
-                  giamGiaString = themDauChamVaoGiaTien(item.giamGia);
-                }
+                  // tạo dấu . trong giảm giá tiền
+                  let giamGiaString = "";
+                  if (item.giamGia) {
+                    giamGiaString = themDauChamVaoGiaTien(item.giamGia);
+                  }
 
-                //tạo % giảm giá
-                const phanTram = Math.round(
-                  (100 - (item.giamGia / item.gia) * 100).toFixed(2)
-                );
+                  //tạo % giảm giá
+                  const phanTram = Math.round(
+                    (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+                  );
 
-                return (
-                  <Col xxl={8} xl={8} lg={8} md={8} sm={12} xs={24}>
-                    <li
-                      className="item item-link"
-                      key={item.id}
-                      onClick={() => handleClickSendItem(item)}
-                    >
-                      <div className="item-main">
-                        <div className="item-main_div-img">
-                          <img
-                            className="item-main_img"
-                            src={item.anhBia}
-                            alt="ảnh bìa"
-                          />
-                          {item.giamGia ? (
-                            <div className="notification-sale">
-                              <span className="notification-sale_content">
-                                <span>{phanTram}%</span>
-                              </span>
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                        <div className="item-detail">
-                          <div className="item-detail_flex">
-                            <div className="item-detail_name">{item.tenSP}</div>
+                  return (
+                    <Col xxl={8} xl={8} lg={8} md={8} sm={12} xs={24}>
+                      <li
+                        className="item item-link"
+                        key={item.id}
+                        onClick={() => handleClickSendItem(item)}
+                      >
+                        <div className="item-main">
+                          <div className="item-main_div-img">
+                            <img
+                              className="item-main_img"
+                              src={item.anhBia}
+                              alt="ảnh bìa"
+                            />
                             {item.giamGia ? (
-                              <div className="item-detail_price">
-                                <span className="item-detail_price-sale">
-                                  {giamGiaString}
-                                  <span className="price">đ</span>
+                              <div className="notification-sale">
+                                <span className="notification-sale_content">
+                                  <span>{phanTram}%</span>
                                 </span>
-                                <div>
-                                  <span className="item-detail_price-real_sale">
-                                    {Gia}
-                                    <span className="price-sale">đ</span>
-                                  </span>
-                                </div>
                               </div>
                             ) : (
-                              <p className="item-detail_price-real">
-                                {Gia}
-                                <span className="price">đ</span>
-                              </p>
+                              ""
                             )}
                           </div>
+                          <div className="item-detail">
+                            <div className="item-detail_flex">
+                              <div className="item-detail_name">
+                                {item.tenSP}
+                              </div>
+                              {item.giamGia ? (
+                                <div className="item-detail_price">
+                                  <span className="item-detail_price-sale">
+                                    {giamGiaString}
+                                    <span className="price">đ</span>
+                                  </span>
+                                  <div>
+                                    <span className="item-detail_price-real_sale">
+                                      {Gia}
+                                      <span className="price-sale">đ</span>
+                                    </span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <p className="item-detail_price-real">
+                                  {Gia}
+                                  <span className="price">đ</span>
+                                </p>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </Col>
-                );
-              })}
-            </Row>
-          </ul>
+                      </li>
+                    </Col>
+                  );
+                })}
+              </Row>
+            </ul>
+          )}
           <PaginationHanmade
             onPageChange1={handlePageChange1}
             onPageChange2={handlePageChange2}
