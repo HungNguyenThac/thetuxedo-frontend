@@ -1,9 +1,8 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import BannerCaVat from "./components/banner/index";
-import RenderCaVat from "./components/renderCaVat";
-CaVat.propTypes = {};
+import RenderBanner from "../../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../../components share/RenderProduct/RenderListItem";
 
 function CaVat() {
   const [listItem, setListItem] = useState([]);
@@ -92,8 +91,8 @@ function CaVat() {
 
   return (
     <div className="container">
-      <BannerCaVat />
-      <RenderCaVat
+      <RenderBanner titleBanner="BỘ SƯU TẬP CÀ VẠT CAO CẤP" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

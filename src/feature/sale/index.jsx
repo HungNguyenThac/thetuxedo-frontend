@@ -1,8 +1,8 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import BannerSale from "./components/banner";
-import RenderSale from "./components/renderSale";
+import RenderBanner from "../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../components share/RenderProduct/RenderListItem";
 
 UuDaiSale.propTypes = {};
 
@@ -92,8 +92,8 @@ function UuDaiSale(props) {
 
   return (
     <div className="container">
-      <BannerSale />
-      <RenderSale
+      <RenderBanner titleBanner="TỔNG HỢP CÁC SẢN PHẨM ƯU ĐÃI" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

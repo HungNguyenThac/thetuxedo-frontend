@@ -1,8 +1,9 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import BannerCaVat from "./components/banner/index";
-import RenderCaVat from "./components/renderNoCaiCo";
+import RenderBanner from "../../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../../components share/RenderProduct/RenderListItem";
+
 NoCaiCo.propTypes = {};
 
 function NoCaiCo(props) {
@@ -91,8 +92,8 @@ function NoCaiCo(props) {
 
   return (
     <div className="container">
-      <BannerCaVat />
-      <RenderCaVat
+      <RenderBanner titleBanner="BỘ SƯU TẬP NƠ CÀI CỔ CAO CẤP" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

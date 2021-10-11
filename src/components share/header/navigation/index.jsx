@@ -40,11 +40,13 @@ function Navigation() {
     const element = document.querySelector(".phukien");
     element.classList.add("first99", "after99");
   }
+
   useEffect(() => {
     const phukien = document.querySelector(".phukien");
     const vest = document.querySelector(".vest");
     if (
       location.pathname === "/vestcollection" ||
+      location.pathname === "/vestcollection/listItem" ||
       location.pathname === "/vestcollection/vestcollection" ||
       location.pathname === "/vestcollection/vestcuoi" ||
       location.pathname === "/vestcollection/vestcongso" ||
@@ -54,6 +56,7 @@ function Navigation() {
     } else {
       vest.classList.remove("first99", "after99");
     }
+
     if (
       location.pathname === "/phukien" ||
       location.pathname === "/phukien/combo" ||

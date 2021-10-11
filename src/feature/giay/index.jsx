@@ -1,8 +1,8 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import BannerGiayTay from "./components/banner";
-import RenderGiayTay from "./components/renderGiayTay";
+import RenderBanner from "../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../components share/RenderProduct/RenderListItem";
 
 GiayTay.propTypes = {};
 
@@ -92,8 +92,8 @@ function GiayTay() {
 
   return (
     <div className="container">
-      <BannerGiayTay />
-      <RenderGiayTay
+      <RenderBanner titleBanner="BỐ SƯU TẬP GIÀY TÂY CAO CẤP" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

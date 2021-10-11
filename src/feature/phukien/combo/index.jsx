@@ -1,10 +1,8 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../../actions/loading";
-import BannerComboPhukien from "./components/banner";
-import RenderComboPhuKien from "./components/renderCombo";
+import RenderBanner from "../../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../../components share/RenderProduct/RenderListItem";
 
 NoCaiCo.propTypes = {};
 
@@ -94,8 +92,8 @@ function NoCaiCo(props) {
 
   return (
     <div className="container">
-      <BannerComboPhukien />
-      <RenderComboPhuKien
+      <RenderBanner titleBanner="COMBO SẢN PHẨM CAO CẤP" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

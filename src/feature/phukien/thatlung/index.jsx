@@ -1,8 +1,8 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import BannerThatLung from "./components/banner/index";
-import RenderThatLung from "./components/renderThatLung";
+import RenderBanner from "../../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../../components share/RenderProduct/RenderListItem";
 
 function ThatLung(props) {
   const [listItem, setListItem] = useState([]);
@@ -90,8 +90,8 @@ function ThatLung(props) {
 
   return (
     <div className="container">
-      <BannerThatLung />
-      <RenderThatLung
+      <RenderBanner titleBanner="BỘ SƯU TẬP THẮT LƯNG CAO CẤP" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

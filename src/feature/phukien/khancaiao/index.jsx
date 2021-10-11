@@ -1,8 +1,9 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import BannerKhanCaiAo from "./components/banner/index";
-import RenderKhanCaiAo from "./components/renderKhanCaiAo";
+import RenderBanner from "../../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../../components share/RenderProduct/RenderListItem";
+
 KhanCaiAo.propTypes = {};
 
 function KhanCaiAo(props) {
@@ -91,8 +92,8 @@ function KhanCaiAo(props) {
 
   return (
     <div className="container">
-      <BannerKhanCaiAo />
-      <RenderKhanCaiAo
+      <RenderBanner titleBanner="BỘ SƯU TẬP GHIM CÀI ÁO CAO CẤP" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

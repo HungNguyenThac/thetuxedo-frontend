@@ -1,11 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import BannerVestCollectiion from "./components/banner";
 import RenderVestCollection from "./components/renderVestCollection";
 
 function VestCollection(props) {
-  const dispatch = useDispatch();
   const [listVestCuoi, setListVestCuoi] = useState([]);
   const [listVestDaHoi, setListVestDaHoi] = useState([]);
   const [loading, setLoading] = useState(true);

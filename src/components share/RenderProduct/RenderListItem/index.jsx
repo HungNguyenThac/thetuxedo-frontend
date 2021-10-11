@@ -3,13 +3,12 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { addItemToDetail } from "../../../../actions/itemDetail";
-import SkeletonProductList from "../../../../components share/skeletonProductList";
-import { themDauChamVaoGiaTien } from "../../../../shareFunction/numberToString";
-import PaginationHanmade from "../pagination";
-import "./renderQuanAu.scss";
+import { addItemToDetail } from "../../../actions/itemDetail";
+import SkeletonProductList from "../../skeletonProductList/index";
+import RenderPagination from "../pagination";
+import "./style.scss";
 
-RenderQuanAu.propTypes = {
+RenderProductList.propTypes = {
   items: PropTypes.array,
   pagination: PropTypes.object,
   onPageChange1: PropTypes.func,
@@ -20,7 +19,7 @@ RenderQuanAu.propTypes = {
   loading: PropTypes.bool,
 };
 
-RenderQuanAu.defaultProps = {
+RenderProductList.defaultProps = {
   items: [],
   pagination: {},
   onPageChange1: null,
@@ -31,9 +30,9 @@ RenderQuanAu.defaultProps = {
   loading: true,
 };
 
-function RenderQuanAu(props) {
-  const history = useHistory();
+function RenderProductList(props) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const {
     items,
     pagination,
@@ -81,6 +80,7 @@ function RenderQuanAu(props) {
     history.push(`/${item.phanLoai}/detail/${item.id}`);
     window.scrollTo(0, 186);
   }
+
   return (
     <body className="Body">
       <div className="grid">
@@ -161,17 +161,20 @@ function RenderQuanAu(props) {
               <Row gutter={[8, 8]}>
                 {items.map((item) => {
                   // tạo dấu . trong giá tiền
-                  let Gia = themDauChamVaoGiaTien(item.gia);
+                  let Gia = new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(item?.gia);
 
                   // tạo dấu . trong giảm giá tiền
-                  let giamGiaString = "";
-                  if (item.giamGia) {
-                    giamGiaString = themDauChamVaoGiaTien(item.giamGia);
-                  }
+                  let giamGiaString = new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(item?.giamGia);
 
                   //tạo % giảm giá
                   const phanTram = Math.round(
-                    (100 - (item.giamGia / item.gia) * 100).toFixed(2)
+                    (100 - (item?.giamGia / item?.gia) * 100).toFixed(2)
                   );
 
                   return (
@@ -207,20 +210,15 @@ function RenderQuanAu(props) {
                                 <div className="item-detail_price">
                                   <span className="item-detail_price-sale">
                                     {giamGiaString}
-                                    <span className="price">đ</span>
                                   </span>
                                   <div>
                                     <span className="item-detail_price-real_sale">
                                       {Gia}
-                                      <span className="price-sale">đ</span>
                                     </span>
                                   </div>
                                 </div>
                               ) : (
-                                <p className="item-detail_price-real">
-                                  {Gia}
-                                  <span className="price">đ</span>
-                                </p>
+                                <p className="item-detail_price-real">{Gia}</p>
                               )}
                             </div>
                           </div>
@@ -232,7 +230,7 @@ function RenderQuanAu(props) {
               </Row>
             </ul>
           )}
-          <PaginationHanmade
+          <RenderPagination
             onPageChange1={handlePageChange1}
             onPageChange2={handlePageChange2}
             activeID={idActive}
@@ -245,4 +243,4 @@ function RenderQuanAu(props) {
   );
 }
 
-export default RenderQuanAu;
+export default RenderProductList;

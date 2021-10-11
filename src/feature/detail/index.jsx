@@ -16,7 +16,7 @@ function ItemDetail() {
   const [idSize, setIdSize] = useState("");
   const item = useSelector((state) => state.itemDetail.itemDetail);
   const param = useParams();
-  console.log(item);
+
   useEffect(() => {
     let isSubscribe = true;
     if (item.length) {
@@ -44,7 +44,7 @@ function ItemDetail() {
       getItem();
     }
     return () => (isSubscribe = false);
-  }, []);
+  }, [item]);
 
   function handleSizeSelected(size) {
     setIdSize(size.id);

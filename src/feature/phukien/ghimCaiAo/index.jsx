@@ -1,9 +1,9 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import BannerGhimCaiAo from "./components/banner/index";
-import RenderGhimCaiAo from "./components/renderGhimCaiAo";
-import "./ghimCaiAo.scss";
+import RenderBanner from "../../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../../components share/RenderProduct/RenderListItem";
+
 GhimCaiAo.propTypes = {};
 
 function GhimCaiAo(props) {
@@ -92,8 +92,8 @@ function GhimCaiAo(props) {
 
   return (
     <div className="container">
-      <BannerGhimCaiAo />
-      <RenderGhimCaiAo
+      <RenderBanner titleBanner="BỘ SƯU TẬP GHIM CÀI ÁO CAO CẤP" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

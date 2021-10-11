@@ -1,9 +1,9 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import "./aosomi.scss";
-import BannerAoSoMi from "./components/banner";
-import RenderAo from "./components/renderAo";
+import RenderBanner from "../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../components share/RenderProduct/RenderListItem";
+
 AoSoMi.propTypes = {};
 
 function AoSoMi() {
@@ -92,8 +92,8 @@ function AoSoMi() {
 
   return (
     <div className="container">
-      <BannerAoSoMi />
-      <RenderAo
+      <RenderBanner titleBanner="BỘ SƯU TẬP ÁO SƠ MI CAO CẤP" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

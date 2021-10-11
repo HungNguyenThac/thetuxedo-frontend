@@ -1,8 +1,8 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import BannerVestCuoi from "./components/banner";
-import RenderVestCuoi from "./components/renderVestCuoi";
+import RenderBanner from "../../../components share/RenderProduct/RenderBanner";
+import RenderProductList from "../../../components share/RenderProduct/RenderListItem";
 VestCuoi.propTypes = {};
 
 function VestCuoi(props) {
@@ -91,8 +91,8 @@ function VestCuoi(props) {
 
   return (
     <div className="container">
-      <BannerVestCuoi />
-      <RenderVestCuoi
+      <RenderBanner titleBanner="BỘ SƯU TẬP VEST CƯỚI CAO CẤP" />
+      <RenderProductList
         loading={loading}
         totalItem={totalItem}
         items={listItem}

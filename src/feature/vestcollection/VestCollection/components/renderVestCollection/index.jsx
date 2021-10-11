@@ -314,55 +314,53 @@ function RenderVestCollection(props) {
                 (100 - (item.giamGia / item.gia) * 100).toFixed(2)
               );
               return (
-                <li className="item" key={item.id}>
-                  <Link
-                    className="item-link"
-                    to="/feature/detail"
-                    onClick={() => handleClickSendItem(item)}
-                  >
-                    <div className="item-main">
-                      <div className="item-main_div-img">
-                        <img
-                          className="item-main_img"
-                          src={item.anhBia}
-                          alt="ảnh bìa"
-                        />
+                <li
+                  className="itemm item-link"
+                  key={item.id}
+                  onClick={() => handleClickSendItem(item)}
+                >
+                  <div className="item-main">
+                    <div className="item-main_div-img">
+                      <img
+                        className="item-main_img"
+                        src={item.anhBia}
+                        alt="ảnh bìa"
+                      />
+                      {item.giamGia ? (
+                        <div className="notification-sale">
+                          <span className="notification-sale_content">
+                            <span>{phanTram}%</span>
+                          </span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div className="item-detail">
+                      <div className="item-detail_flex">
+                        <div className="item-detail_name">{item.tenSP}</div>
                         {item.giamGia ? (
-                          <div className="notification-sale">
-                            <span className="notification-sale_content">
-                              <span>{phanTram}%</span>
+                          <div className="item-detail_price">
+                            <span className="item-detail_price-sale">
+                              {giamGiaString}
+                              <span className="price">đ</span>
                             </span>
+                            <div>
+                              <span className="item-detail_price-real_sale">
+                                {Gia}
+                                <span className="price-sale">đ</span>
+                              </span>
+                            </div>
                           </div>
                         ) : (
-                          ""
+                          <p className="item-detail_price-real">
+                            {Gia}
+                            <span className="price">đ</span>
+                          </p>
                         )}
                       </div>
-                      <div className="item-detail">
-                        <div className="item-detail_flex">
-                          <div className="item-detail_name">{item.tenSP}</div>
-                          {item.giamGia ? (
-                            <div className="item-detail_price">
-                              <span className="item-detail_price-sale">
-                                {giamGiaString}
-                                <span className="price">đ</span>
-                              </span>
-                              <div>
-                                <span className="item-detail_price-real_sale">
-                                  {Gia}
-                                  <span className="price-sale">đ</span>
-                                </span>
-                              </div>
-                            </div>
-                          ) : (
-                            <p className="item-detail_price-real">
-                              {Gia}
-                              <span className="price">đ</span>
-                            </p>
-                          )}
-                        </div>
-                      </div>
                     </div>
-                  </Link>
+                  </div>
                 </li>
               );
             })}
@@ -434,55 +432,53 @@ function RenderVestCollection(props) {
                 (100 - (item.giamGia / item.gia) * 100).toFixed(2)
               );
               return (
-                <li className="item" key={item.id}>
-                  <Link
-                    className="item-link"
-                    to="/feature/detail"
-                    onClick={() => handleClickSendItem(item)}
-                  >
-                    <div className="item-main">
-                      <div className="item-main_div-img">
-                        <img
-                          className="item-main_img"
-                          src={item.anhBia}
-                          alt="ảnh bìa"
-                        />
+                <li
+                  className="item item-link"
+                  key={item.id}
+                  onClick={() => handleClickSendItem(item)}
+                >
+                  <div className="item-main">
+                    <div className="item-main_div-img">
+                      <img
+                        className="item-main_img"
+                        src={item.anhBia}
+                        alt="ảnh bìa"
+                      />
+                      {item.giamGia ? (
+                        <div className="notification-sale">
+                          <span className="notification-sale_content">
+                            <span>{phanTram}%</span>
+                          </span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div className="item-detail">
+                      <div className="item-detail_flex">
+                        <div className="item-detail_name">{item.tenSP}</div>
                         {item.giamGia ? (
-                          <div className="notification-sale">
-                            <span className="notification-sale_content">
-                              <span>{phanTram}%</span>
+                          <div className="item-detail_price">
+                            <span className="item-detail_price-sale">
+                              {giamGiaString}
+                              <span className="price">đ</span>
                             </span>
+                            <div>
+                              <span className="item-detail_price-real_sale">
+                                {Gia}
+                                <span className="price-sale">đ</span>
+                              </span>
+                            </div>
                           </div>
                         ) : (
-                          ""
+                          <p className="item-detail_price-real">
+                            {Gia}
+                            <span className="price">đ</span>
+                          </p>
                         )}
                       </div>
-                      <div className="item-detail">
-                        <div className="item-detail_flex">
-                          <div className="item-detail_name">{item.tenSP}</div>
-                          {item.giamGia ? (
-                            <div className="item-detail_price">
-                              <span className="item-detail_price-sale">
-                                {giamGiaString}
-                                <span className="price">đ</span>
-                              </span>
-                              <div>
-                                <span className="item-detail_price-real_sale">
-                                  {Gia}
-                                  <span className="price-sale">đ</span>
-                                </span>
-                              </div>
-                            </div>
-                          ) : (
-                            <p className="item-detail_price-real">
-                              {Gia}
-                              <span className="price">đ</span>
-                            </p>
-                          )}
-                        </div>
-                      </div>
                     </div>
-                  </Link>
+                  </div>
                 </li>
               );
             })}

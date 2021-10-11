@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
 import React from "react";
-import "./pagination.scss";
+import PropTypes from "prop-types";
+import "./style.scss";
 
-PaginationHanmade.propTypes = {
+RenderPagination.propTypes = {
   onPageChange1: PropTypes.func,
   onPageChange2: PropTypes.func,
   activeID: PropTypes.string,
@@ -10,7 +10,7 @@ PaginationHanmade.propTypes = {
   totalItem: PropTypes.number,
 };
 
-PaginationHanmade.defaultProps = {
+RenderPagination.defaultProps = {
   onPageChange1: null,
   onPageChange2: null,
   activeID: "",
@@ -30,7 +30,7 @@ function makeArrayPages(totalPages) {
   return arrayPages;
 }
 
-function PaginationHanmade(props) {
+function RenderPagination(props) {
   const { onPageChange1, totalItem, onPageChange2, activeID, pagination } =
     props;
 
@@ -97,4 +97,4 @@ function PaginationHanmade(props) {
   );
 }
 
-export default PaginationHanmade;
+export default RenderPagination;
