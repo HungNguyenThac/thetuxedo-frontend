@@ -25,11 +25,11 @@ function AoSoMi() {
         const pagination = queryString.stringify(filters);
         let responseItems = await axios({
           method: "GET",
-          url: `https://thetuxedo.herokuapp.com/products?phanLoai_containss=aosomi&${pagination}`,
+          url: `https://strapi-thetuxedo.herokuapp.com/products?phanLoai_containss=aosomi&${pagination}`,
         });
         let responseCount = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=aosomi",
+          url: "https://strapi-thetuxedo.herokuapp.com/products/count?phanLoai_contains=aosomi",
         });
         if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);

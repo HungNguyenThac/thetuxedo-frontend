@@ -24,11 +24,11 @@ function VestCuoi(props) {
         const pagination = queryString.stringify(filters);
         let responseItems = await axios({
           method: "GET",
-          url: `https://thetuxedo.herokuapp.com/products?phanLoai_containss=vestcuoi&${pagination}`,
+          url: `https://strapi-thetuxedo.herokuapp.com/products?phanLoai_containss=vestcuoi&${pagination}`,
         });
         let responseCount = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=vestcuoi",
+          url: "https://strapi-thetuxedo.herokuapp.com/products/count?phanLoai_contains=vestcuoi",
         });
         if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);

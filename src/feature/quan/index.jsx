@@ -24,11 +24,11 @@ function AoSoMi() {
         const pagination = queryString.stringify(filters);
         let responseItems = await axios({
           method: "GET",
-          url: `https://thetuxedo.herokuapp.com/products?phanLoai_containss=quanau&${pagination}`,
+          url: `https://strapi-thetuxedo.herokuapp.com/products?phanLoai_containss=quanau&${pagination}`,
         });
         let responseCount = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=quanau",
+          url: "https://strapi-thetuxedo.herokuapp.com/products/count?phanLoai_contains=quanau",
         });
         if (isSubscrible && responseItems.status === 200) {
           setListItem(responseItems.data);

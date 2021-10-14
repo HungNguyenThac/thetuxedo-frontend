@@ -16,7 +16,7 @@ function MainPage() {
       try {
         let responseItems = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products?phanLoai_containss=Handmade",
+          url: "https://strapi-thetuxedo.herokuapp.com/products?phanLoai_containss=Handmade",
         });
         const { status, data } = responseItems;
         if (isSubscribe && status === 200) {

@@ -16,15 +16,15 @@ function VestCollection(props) {
       try {
         let responseVestDaHoi = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products?phanLoai_containss=vestdahoi",
+          url: "https://strapi-thetuxedo.herokuapp.com/products?phanLoai_containss=vestdahoi",
         });
         let responseVestCongSo = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products?phanLoai_containss=vestcongso",
+          url: "https://strapi-thetuxedo.herokuapp.com/products?phanLoai_containss=vestcongso",
         });
         let responseVestCuoi = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products?phanLoai_containss=vestcuoi",
+          url: "https://strapi-thetuxedo.herokuapp.com/products?phanLoai_containss=vestcuoi",
         });
 
         if (isSubscribe && responseVestDaHoi.status === 200) {

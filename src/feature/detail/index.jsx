@@ -27,7 +27,7 @@ function ItemDetail() {
         try {
           let response = await axios({
             method: "GET",
-            url: `https://thetuxedo.herokuapp.com/products/${param.param}`,
+            url: `https://strapi-thetuxedo.herokuapp.com/products/${param.param}`,
           });
           const { status, data } = response;
           if (isSubscribe && status === 200) {

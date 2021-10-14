@@ -25,11 +25,11 @@ function NoCaiCo(props) {
         const pagination = queryString.stringify(filters);
         let responseItems = await axios({
           method: "GET",
-          url: `https://thetuxedo.herokuapp.com/products?phanLoai_contains=combophukien&${pagination}`,
+          url: `https://strapi-thetuxedo.herokuapp.com/products?phanLoai_contains=combophukien&${pagination}`,
         });
         let responseCount = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=combophukien",
+          url: "https://strapi-thetuxedo.herokuapp.com/products/count?phanLoai_contains=combophukien",
         });
         if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);

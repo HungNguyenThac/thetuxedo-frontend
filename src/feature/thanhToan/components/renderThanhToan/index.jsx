@@ -532,7 +532,7 @@ function RenderThanhToan() {
     if (threeElement.length === 4) {
       try {
         let responseData = await axios.post(
-          "https://thetuxedo.herokuapp.com/bills",
+          "https://strapi-thetuxedo.herokuapp.com/bills",
           {
             HovaTen: usernameValue,
             Email: userEmail,
@@ -1310,10 +1310,16 @@ function RenderThanhToan() {
                         disabled
                       />
                       <small>Error message</small>
-                      <button className="btn-fix-paypage" onClick={handleClickToFix}>
+                      <button
+                        className="btn-fix-paypage"
+                        onClick={handleClickToFix}
+                      >
                         Sửa
                       </button>
-                      <button className="btn-save-paypage" onClick={handleClickToSave}>
+                      <button
+                        className="btn-save-paypage"
+                        onClick={handleClickToSave}
+                      >
                         Lưu
                       </button>
                     </div>
@@ -1329,10 +1335,16 @@ function RenderThanhToan() {
                         disabled
                       />
                       <small>Error message</small>
-                      <button className="btn-fix-paypage" onClick={handleClickToFix}>
+                      <button
+                        className="btn-fix-paypage"
+                        onClick={handleClickToFix}
+                      >
                         Sửa
                       </button>
-                      <button className="btn-save-paypage" onClick={handleClickToSave}>
+                      <button
+                        className="btn-save-paypage"
+                        onClick={handleClickToSave}
+                      >
                         Lưu
                       </button>
                     </div>

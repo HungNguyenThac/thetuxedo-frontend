@@ -25,11 +25,11 @@ function VestCongSo(props) {
         const pagination = queryString.stringify(filters);
         let responseItems = await axios({
           method: "GET",
-          url: `https://thetuxedo.herokuapp.com/products?phanLoai_containss=vestcongso&${pagination}`,
+          url: `https://strapi-thetuxedo.herokuapp.com/products?phanLoai_containss=vestcongso&${pagination}`,
         });
         let responseCount = await axios({
           method: "GET",
-          url: "https://thetuxedo.herokuapp.com/products/count?phanLoai_contains=vestcongso",
+          url: "https://strapi-thetuxedo.herokuapp.com/products/count?phanLoai_contains=vestcongso",
         });
         if (isSubscribe && responseItems.status === 200) {
           setListItem(responseItems.data);
