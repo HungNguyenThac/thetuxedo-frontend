@@ -2,7 +2,7 @@ import axios from "axios";
 import { queryString } from "query-string";
 
 const axiosClient = axios.create({
-  baseURL: "https://thetuxedo-dev.herokuapp.com/",
+  baseURL: "https://thetuxedo-backend.herokuapp.com/",
   // baseURL: "http://localhost:9527/",
   paramsSerializer: (params) => queryString.queryString(params),
   headers: {
