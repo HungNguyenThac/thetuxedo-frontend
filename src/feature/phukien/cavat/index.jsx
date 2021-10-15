@@ -1,6 +1,7 @@
 import axios from "axios";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import RenderBanner from "../../../components share/RenderProduct/RenderBanner";
 import RenderProductList from "../../../components share/RenderProduct/RenderListItem";
 
@@ -8,6 +9,7 @@ function CaVat() {
   const [listItem, setListItem] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalItem, setTotalItem] = useState(0);
+  const selector = useSelector();
   const [filters, setFilters] = useState({
     _limit: 12,
     _start: 0,
